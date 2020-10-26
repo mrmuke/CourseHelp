@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
 import { GiftedChat } from 'react-native-gifted-chat'; // 0.3.0
-
+import firebase from 'firebase'
 import Fire from '../Fire';
+import { View, Button } from 'react-native';
 
 
 
@@ -17,7 +18,7 @@ class Chat extends React.Component {
     
     return {
       
-      name: this.props.route.params.name,
+      name: firebase.auth().currentUser.displayName,
       _id: Fire.shared.uid,
     }
   }
@@ -26,6 +27,9 @@ class Chat extends React.Component {
   render() {
 
     return (
+      
+                        
+
       <GiftedChat
         messages={this.state.messages}
         onSend={Fire.shared.send}
@@ -41,9 +45,6 @@ class Chat extends React.Component {
         messages: GiftedChat.append(previousState.messages, message),
       }))
     );
-  }
-  componentWillUnmount() {
-    Fire.shared.off();
   }
 }
 

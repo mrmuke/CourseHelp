@@ -1,21 +1,34 @@
-// Import the screens
-import Main from './screens/Main';
-import Chat from './screens/Chat';
-// Import React Navigation
-import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack';
+
+import React from 'react';
+
+
+import LoginScreen from './screens/LoginScreen'
+import LoadingScreen from './screens/LoadingScreen'
+import BottomTabs from './components/BottomTabs'
+import { StyleSheet } from 'react-native';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation'
 import { NavigationContainer } from '@react-navigation/native';
 
-const Stack = createStackNavigator();
-
-export default function MyStack() {
-  return (
-    <NavigationContainer>
-    <Stack.Navigator>
-      <Stack.Screen name="Main" component={Main} />
-      <Stack.Screen name="Chat" component={Chat} />
-
-    </Stack.Navigator>
-    </NavigationContainer>
-  );
+export default class App extends React.Component {
+  render() {
+    return <NavigationContainer><AppNavigator /></NavigationContainer>
+  }
 }
+
+const AppSwitchNavigator = createSwitchNavigator({
+  LoadingScreen: LoadingScreen,
+  LoginScreen: LoginScreen,
+  BottomTabs: BottomTabs,
+});
+
+const AppNavigator = createAppContainer
+  (AppSwitchNavigator);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0000',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

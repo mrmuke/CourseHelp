@@ -6,7 +6,6 @@ class Fire {
       this.init();
       
     }
-    this.observeAuth();
     
     
   }
@@ -22,19 +21,6 @@ class Fire {
     appId: "1:192738333169:web:c84d0a5d65eae21425f450",
     measurementId: "G-8KE4X2NY85"
   })
-
-  observeAuth = () =>
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-
-  onAuthStateChanged = user => {
-    if (!user) {
-      try {
-        firebase.auth().signInAnonymously();
-      } catch ({ message }) {
-        alert(message);
-      }
-    }
-  };
 
   get uid() {
     
@@ -81,11 +67,6 @@ class Fire {
   append = message => this.ref.push(message);
 
   // close the connection to the Backend
-  off() {
-    firebase.auth().currentUser.delete()
-    this.ref.off();
-    
-  }
 }
 
 Fire.shared = new Fire();
