@@ -3,6 +3,10 @@ import { render } from 'react-dom';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import * as Google from 'expo-google-app-auth'
 import firebase from 'firebase'
+//import styles from "./style";
+import { Keyboard, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView } from 'react-native';
+
+
 
 class LoginScreen extends Component {
     isUserEqual = (googleUser, firebaseUser) => {
@@ -98,13 +102,32 @@ class LoginScreen extends Component {
     /*   iosClientId: '451006353013-ot4fj9fg8ijfrro6o7vj5l474205vtff.apps.googleusercontent.com', */
     render() {
         return (
-            <View style={styles.container}>
-                <Button
-                    title='Sign in With Google'
-                    onPress={() => this.signInWithGoogleAsync()}
-                />
-            </View>
+            <KeyboardAvoidingView style={styles.containerView} behavior="padding">
+
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={styles.loginScreenContainer}>
+                        <View style={styles.loginFormView}>
+                            <Text style={styles.logoText}>CourseHelp</Text>
+                            <TextInput placeholder="Username" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} />
+                            <TextInput placeholder="Password" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} />
+                            <Text style={styles.txt}>Login with Email</Text>
+                            <Text style={styles.txt}>or</Text>
+                            <Button
+                                buttonStyle={styles.loginButton}
+                                onPress={() => this.signInWithGoogleAsync()}
+                                title="Continue with Google"
+                            />
+
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         );
+    }
+    componentDidMount() {
+    }
+
+    componentWillUnmount() {
     }
 
 }
@@ -112,9 +135,54 @@ class LoginScreen extends Component {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-    container: {
+    containerView: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+    },
+
+    loginScreenContainer: {
+        flex: 1,
+        backgroundColor: '#59A8FB'
+    },
+    logoText: {
+        fontSize: 40,
+        color: 'white',
+        fontWeight: "900",
+        marginTop: 150,
+        marginBottom: 30,
+        textAlign: 'center',
+    },
+    loginFormView: {
+        flex: 1
+    },
+    loginFormTextInput: {
+        height: 43,
+        fontSize: 14,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#eaeaea',
+        backgroundColor: '#fafafa',
+        paddingLeft: 10,
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 15,
+        marginBottom: 15,
+
+    },
+    loginButton: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        textAlign: 'center',
+
+    },
+    txt: {
+        color: 'white',
+        fontSize: 18,
+        textAlign: 'center',
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 15,
+        marginBottom: 15,
+
     }
 })
+
