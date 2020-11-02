@@ -8,6 +8,7 @@ import Home from '../screens/Home'
 import Profile from '../screens/Profile';
 import Forum from '../screens/Forum';
 import { createStackNavigator } from '@react-navigation/stack';
+import Discover from '../screens/Discover';
 const Stack = createStackNavigator();
 
 
@@ -51,6 +52,19 @@ const MainTabScreen = () => (
           tabBarColor: '#59d0fb',
           tabBarIcon: ({ color }) => (
             <AntIcon name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Discover"
+      
+        component={Discover}
+        options={{
+          title:"Discover Study Groups",
+          tabBarLabel: 'Discover',
+          tabBarColor: '#59d0fb',
+          tabBarIcon: ({ color }) => (
+            <AntIcon name="search1" color={color} size={26} />
           ),
         }}
       />

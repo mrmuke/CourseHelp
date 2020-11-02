@@ -1,14 +1,72 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {Button} from 'react-native-paper'
+import { Button, Caption } from 'react-native-paper'
 import * as Google from 'expo-google-app-auth'
 import firebase from 'firebase'
 //import styles from "./style";
 import { Keyboard, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
 class LoginScreen extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = ({
+            email: '',
+            password: '',
+            signUp: false
+        })
+    }
+
+    signUpUser = (email, password) => {
+        try {
+            if (this.state.password.length < 6) {
+                alert("Password should be at least 6 characters")
+                return;
+            }
+            const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (!reg.test(this.state.email)) {
+                alert("Invalid email...")
+                return;
+            }
+                    firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then(result=>{
+                        firebase
+                            .database()
+                            .ref('/users/' + result.user.uid)
+                            .set({
+                                email: result.user.email,
+
+                                created_at: Date.now()
+                            })
+                    })
+                    .catch(()=>{
+                        alert("Email already exists!")
+                    })
+
+        }
+        catch (error) {
+            console.log(error.toString())
+        }
+    }
+
+    loginUser = (email, password) => {
+        try {
+            firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
+                firebase.database().ref('/users/' + result.user.uid).update({
+                    last_logged_in: Date.now(),
+
+                })
+            }).catch(e=>{
+                alert("Invalid login")
+            })
+        }
+        catch (error) {
+            console.log(error.toString())
+        }
+    }
     isUserEqual = (googleUser, firebaseUser) => {
         if (firebaseUser) {
             var providerData = firebaseUser.providerData;
@@ -44,7 +102,7 @@ class LoginScreen extends Component {
                                 .database()
                                 .ref('/users/' + result.user.uid)
                                 .set({
-                                    gmail: result.user.email,
+                                    email: result.user.email,
                                     profile_picture: result.additionalUserInfo.profile.picture,
                                     locale: result.additionalUserInfo.profile.locale,
                                     first_name: result.additionalUserInfo.profile.given_name,
@@ -107,30 +165,42 @@ class LoginScreen extends Component {
                     <View style={styles.loginScreenContainer}>
                         <View style={styles.loginFormView}>
                             <Text style={styles.logoText}>CourseHelp</Text>
-                            <TextInput placeholder="Username" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} />
-                            <TextInput placeholder="Password" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} />
-                            <Button
-                
-                                style={{marginLeft:15, marginRight:15, padding:8, borderColor:'white', borderWidth:1}}
+                            <TextInput placeholder="Username" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} onChangeText={text => this.setState({ email: text })} />
+                            <TextInput placeholder="Password" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} onChangeText={text => this.setState({ password: text })} />
+                            {this.state.signUp ? <Button
+                                onPress={() => this.signUpUser(this.state.email, this.state.password)}
+                                style={{ marginLeft: 15, marginRight: 15, padding: 8, borderColor: 'white', borderWidth: 1 }}
                                 color="white"
 
                                 icon="email"
-                                
-                                >
-                                <View/>
-                <Text>login with email</Text>
-                            </Button>
+
+                            >
+                                <View />
+                                <Text>signup with email</Text>
+                            </Button> : <Button
+
+                                style={{ marginLeft: 15, marginRight: 15, padding: 8, borderColor: 'white', borderWidth: 1 }}
+                                color="white"
+
+                                icon="email"
+                                onPress={() => this.loginUser(this.state.email, this.state.password)}
+                            >
+                                    <View />
+                                    <Text>login with email</Text>
+                                </Button>}
                             <Text style={styles.txt}>or</Text>
                             <Button
-                
-                                style={{marginLeft:15, marginRight:15, padding:8}}
+
+                                style={{ marginLeft: 15, marginRight: 15, padding: 8 }}
                                 color="white"
                                 mode="contained"
                                 icon="google"
-                                onPress={()=>this.signInWithGoogleAsync()}>
-                                <View/>
-                <Text>continue with google</Text>
+
+                                onPress={() => this.signInWithGoogleAsync()}>
+                                <View />
+                                <Text>continue with google</Text>
                             </Button>
+                            <TouchableOpacity onPress={() => this.setState({ signUp: !this.state.signUp })}><Caption style={{ textAlign: 'center', color: 'white', fontSize: 15, padding: 5 }} >{this.state.signUp?"Already have an account? Log In":"Don't have an account? Sign Up"}</Caption></TouchableOpacity>
 
 
                         </View>
