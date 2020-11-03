@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {Button} from 'react-native-paper'
+import { Button } from 'react-native-paper'
 import * as Google from 'expo-google-app-auth'
 import firebase from 'firebase'
 //import styles from "./style";
@@ -104,32 +104,32 @@ class LoginScreen extends Component {
             <KeyboardAvoidingView style={styles.containerView} behavior="padding">
 
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.loginScreenContainer}>
-                        <View style={styles.loginFormView}>
+                    <View style={styles.container}>
+                        <View style={styles.regform}>
                             <Text style={styles.logoText}>CourseHelp</Text>
-                            <TextInput placeholder="Username" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} />
-                            <TextInput placeholder="Password" placeholderColor="#c4c3cb" style={styles.loginFormTextInput} secureTextEntry={true} />
+                            <TextInput placeholder="Email" placeholderTextColor="#36485f" style={styles.textInput} />
+                            <TextInput placeholder="Password" placeholderTextColor="#36485f" style={styles.textInput} secureTextEntry={true} />
                             <Button
-                
-                                style={{marginLeft:15, marginRight:15, padding:8, borderColor:'white', borderWidth:1}}
-                                color="white"
 
+                                style={{ marginLeft: 15, marginRight: 15, padding: 8, borderWidth: 1 }}
+                                color="#36485f"
+                                mode="contained"
                                 icon="email"
-                                
-                                >
-                                <View/>
-                <Text>login with email</Text>
+
+                            >
+                                <View />
+                                <Text>login with email</Text>
                             </Button>
                             <Text style={styles.txt}>or</Text>
                             <Button
-                
-                                style={{marginLeft:15, marginRight:15, padding:8}}
+
+                                style={{ marginLeft: 15, marginRight: 15, padding: 8 }}
                                 color="white"
                                 mode="contained"
                                 icon="google"
-                                onPress={()=>this.signInWithGoogleAsync()}>
-                                <View/>
-                <Text>continue with google</Text>
+                                onPress={() => this.signInWithGoogleAsync()}>
+                                <View />
+                                <Text>continue with google</Text>
                             </Button>
 
 
@@ -145,20 +145,38 @@ class LoginScreen extends Component {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
+    textInput: {
+        color: '#36485f',
+        height: 40,
+        marginBottom: 50,
+        borderBottomColor: '#36485f',
+        borderBottomWidth: 1,
+        marginLeft: 30,
+        marginRight: 30,
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        paddingLeft: 30,
+        paddingRight: 30,
+    },
+    regform: {
+        alignSelf: 'stretch'
+    },
     containerView: {
         flex: 1,
     },
 
     loginScreenContainer: {
         flex: 1,
-        backgroundColor: '#59A8FB'
+        backgroundColor: 'white'
     },
     logoText: {
         fontSize: 40,
-        color: 'white',
+        color: '#36485f',
         fontWeight: "900",
-        marginTop: 150,
-        marginBottom: 30,
+        marginBottom: 50,
         textAlign: 'center',
     },
     loginFormView: {
@@ -180,7 +198,7 @@ const styles = StyleSheet.create({
     },
 
     txt: {
-        color: 'white',
+        color: '#36485f',
         fontSize: 18,
         textAlign: 'center',
         marginLeft: 15,
