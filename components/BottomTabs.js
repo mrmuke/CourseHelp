@@ -9,6 +9,7 @@ import Profile from '../screens/Profile';
 import Forum from '../screens/Forum';
 import { createStackNavigator } from '@react-navigation/stack';
 import Discover from '../screens/Discover';
+import CreateGroup from './CreateGroup';
 const Stack = createStackNavigator();
 
 
@@ -30,6 +31,10 @@ function Dashboard(){
       }} />
       <Stack.Screen name="Chat" component={Chat} options={{
       title:'Chat',
+      
+      }} />
+      <Stack.Screen name="CreateGroup" component={CreateGroup} options={{
+      title:'Create Group',
       
       }} />
 </Stack.Navigator>
