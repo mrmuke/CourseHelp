@@ -10,6 +10,7 @@ import Forum from '../screens/Forum';
 import { createStackNavigator } from '@react-navigation/stack';
 import Discover from '../screens/Discover';
 import CreateGroup from './CreateGroup';
+import Tools from '../screens/Tools';
 const Stack = createStackNavigator();
 
 
@@ -81,6 +82,17 @@ const MainTabScreen = () => (
           tabBarColor:'#59a8fb',
           tabBarIcon: ({ color }) => (
             <Icon name="forum" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="StudyTools"
+        component={Tools}
+        options={{
+          tabBarLabel: 'Study Tools',
+          tabBarColor:'#59a8fb',
+          tabBarIcon: ({ color }) => (
+            <Icon name="pencil" color={color} size={26} />
           ),
         }}
       />
