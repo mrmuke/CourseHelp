@@ -5,15 +5,13 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { Avatar, Button, Card, Title, Paragraph, Searchbar, Caption } from 'react-native-paper';
 import firebase from 'firebase'
 class Home extends Component {
-    state={showSearch:false}
+
     LeftContent = props => <Icon {...props} name="group" />
     render() {
         
         return (
             <ScrollView style={{padding:15}}>
-                <View style={{backgroundColor:'#59A8FB', padding:10, borderRadius:10}}>
-                <Searchbar onFocus={()=>this.setState({showSearch:true})} onBlur={()=>this.setState({showSearch:false})} placeholder={this.state.showSearch?"Optional Keyword...":"Discover..."}/></View>
-                {this.state.showSearch&&<View><Button>hi</Button></View>}
+                
                 <View style={{flex:1, flexDirection:'row', margin:10, justifyContent:'space-between'}}>
                 <Title>My Study Groups</Title>
                 <Button color="#59d0fb" mode="contained">+ Create</Button>

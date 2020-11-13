@@ -1,78 +1,55 @@
-import React, { useState, useEffect } from 'react';
-//import { render } from 'react-dom';
-import { View, Text, StyleSheet, Button, Image, Alert } from 'react-native';
+import React, { useState, useEffect, Component } from 'react';
+import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import * as firebase from 'firebase'
-import { TextInput } from 'react-native-paper'
+import { TextInput, Button, IconButton, Caption, Searchbar, Title } from 'react-native-paper'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import * as ImagePicker from 'expo-image-picker'
-import { Constants, Permissions } from 'expo';
-import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
+//import { Constants, Permissions } from 'expo';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import EditProfile from './EditProfile';
 
-export default function Profile() {
-    //const [image, setImage] = useState(null)
-
+export default function Profile(props) {
+    const [image, setImage] = useState(null)
+    const [user, setUser] = useState(null)
+    const [edit, setEdit] = useState(false)
+    //setURL('gs://coursehelp-8d1c8.appspot.com/profileimages/defaultprofilepic.jpg')
     useEffect(() => {
-        (async () => {
-            if (Platform.OS !== 'web') {
-                const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Sorry, we need camera roll permissions to make this work!');
-                }
-            }
-        })();
-    }, []);
+        getUser()
+    }, [])
 
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync();
-        //let result = await ImagePicker.launchImageLibraryAsync();
-        console.log(result)
-        if (!result.cancelled) {
-            uploadImage(result.uri)
-            console.log('success')
-        }
-    }
+    function getUser() {
 
-    const uploadImage = async (uri) => {
-
-        const response = await fetch(uri);
-        const blob = await response.blob();
-
-        var ref = firebase.storage().ref("/Profileimages/" + uri);
-
-        return ref.put(blob);
-
+        firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
+            setUser(snapshot.val())
+            console.log(snapshot.val())
+        })
 
     }
-    const [text, setText] = React.useState('');
-
+    if (user == null) {
+        return null
+    }
+    if (edit) {
+        return <EditProfile user={user} exit={() => { setEdit(false); getUser() }} />
+    }
     return (
-
         <View style={styles.container}>
-            <Text style={styles.topBar}>
+            <Button style={styles.button} mode="contained" color='#36485f' onPress={() => setEdit(true)}>
                 Edit Profile
-            </Text>
-            <TextInput
-                style={styles.inputbox}
-                mode='outlined'
-                label="Username"
-                dense="true"
-                value={text}
-                onChangeText={text => setText(text)}
-                underlineColor="#36485f"
+            </Button>
+            <Image
+                style={styles.profileImage}
+                source={{ uri: user.profile_picture }}
             />
-            <TextInput
-                style={styles.inputbox}
-                mode='outlined'
-                label="School"
-                dense="true"
-                value={text}
-                onChangeText={text => setText(text)}
-                underlineColor="#36485f"
-            />
-            <Button title='Upload Pic' onPress={pickImage} />
-            <Button title="Sign out" onPress={() => firebase.auth().signOut()} />
-
+            <Title style={styles.text} >Username: {user.username}</Title>
+            <Title style={styles.text}>School: {user.school}</Title>
+            <Title style={styles.text}>Grade: {user.grade}</Title>
+            <Title style={styles.text}>Bio: {user.bio}</Title>
+            <Button onPress={() => firebase.auth().signOut()}>
+                Sign Out
+            </Button>
 
         </View >
+
     );
 
 
@@ -80,29 +57,19 @@ export default function Profile() {
 }
 
 
+
 const styles = StyleSheet.create({
-    container: {
-        padding: 0
+    profileImage: {
+        width: 150,
+        height: 150,
+        borderRadius: 100,
+        margin: 10
+    },
+    button: {
+        margin: 50,
+
     },
     text: {
-        color: '#36485f',
-        fontSize: 30,
-        padding: 20
-    },
-    inputbox: {
-        padding: 20,
-        paddingLeft: 50,
-        paddingRight: 50,
-        fontSize: 12
-    },
-    topBar: {
-        color: 'white',
-        padding: 13,
-        paddingTop: 30,
-        marginBottom: 100,
-        fontSize: 18,
-        fontWeight: '700',
-        backgroundColor: '#36485f',
-        textAlign: 'center'
-    },
+        color: 'black'
+    }
 })
