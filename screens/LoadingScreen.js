@@ -14,7 +14,6 @@ class LoadingScreen extends Component {
         
         firebase.auth().onAuthStateChanged(
             function (user) {
-                console.log(user)
                 if (user) {
                     this.props.navigation.navigate('BottomTabs');
                 } else {

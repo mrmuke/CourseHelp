@@ -1,20 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 //import { render } from 'react-dom';
 import { View, Text, StyleSheet } from 'react-native';
-class Forum extends Component {
-
-    render() {
-        
+export default function Forum() {
         return (
             <View style={styles.container}>
                 <Text>Ask and Answer Questions</Text>
             </View>
         );
-    }
+    
 
 }
 
-export default Forum;
 
 const styles = StyleSheet.create({
     container: {

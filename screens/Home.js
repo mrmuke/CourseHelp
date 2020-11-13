@@ -1,24 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 //import { render } from 'react-dom';
 import { Text, ScrollView, View, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { Avatar, Button, Card, Title, Paragraph, Searchbar, Caption } from 'react-native-paper';
+import { Avatar, Button, Card, Title, Paragraph, Searchbar, Caption, TextInput, RadioButton } from 'react-native-paper';
 import firebase from 'firebase'
-class Home extends Component {
+export default function Home(props) {
+   
+    function leftContent (props){return <Icon {...props} name="group" />}
+    
 
-    LeftContent = props => <Icon {...props} name="group" />
-    render() {
-        
         return (
             <ScrollView style={{padding:15}}>
                 
+                
                 <View style={{flex:1, flexDirection:'row', margin:10, justifyContent:'space-between'}}>
                 <Title>My Study Groups</Title>
-                <Button color="#59d0fb" mode="contained">+ Create</Button>
+                <Button color="#59d0fb" mode="contained" onPress={()=>props.navigation.navigate('CreateGroup')}>+ Create</Button>
                 
                 </View>
                 <Card style={{margin:5}}>
-                    <Card.Title title="AP Physics C" subtitle="Physics Conquerers" left={this.LeftContent} />
+                    <Card.Title title="AP Physics C" subtitle="Physics Conquerers" left={leftContent} />
                     <Card.Content>
                     <Title>Surviving AP Physics</Title>
                     <Caption style={{marginBottom:10}}>Short Description of group.Short Description of group.Short Description of group.Short Description of group.Short Description of group.</Caption>
@@ -32,7 +33,7 @@ class Home extends Component {
                     </Card.Actions>
                 </Card>
                 <Card style={{margin:5}}>
-                    <Card.Title title="AP Physics C" subtitle="Physics Conquerers" left={this.LeftContent} />
+                    <Card.Title title="AP Physics C" subtitle="Physics Conquerers" left={leftContent} />
                     <Card.Content>
                     <Title>Surviving AP Physics</Title>
                     <Caption style={{marginBottom:10}}>Short Description of group.Short Description of group.Short Description of group.Short Description of group.Short Description of group.</Caption>
@@ -48,9 +49,6 @@ class Home extends Component {
             </ScrollView>
             
         );
-    }
+    
 
 }
-
-export default Home;
-
