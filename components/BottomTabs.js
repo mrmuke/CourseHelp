@@ -89,7 +89,7 @@ const MainTabScreen = () => (
         name="StudyTools"
         component={Tools}
         options={{
-          tabBarLabel: 'Study Tools',
+          tabBarLabel: 'Tools',
           tabBarColor:'#59a8fb',
           tabBarIcon: ({ color }) => (
             <Icon name="pencil" color={color} size={26} />

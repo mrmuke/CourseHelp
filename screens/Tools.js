@@ -7,13 +7,14 @@ import * as Permissions from 'expo-permissions'
 import { Audio } from 'expo-av';
 import { ActivityIndicator, Button, TextInput, Title } from 'react-native-paper';
 import * as FileSystem from 'expo-file-system';
+import ImageToText from './../components/ImageToText';
 
 export default function Tools() {
-    const [isRecording, setIsRecording] = useState(false)
-    const [recording, setRecording] = useState(null)
-    const [loading,setLoading]=useState(false)
-    const [notes, setNotes] = useState("")
-const recordingOptions = {
+  const [isRecording, setIsRecording] = useState(false)
+  const [recording, setRecording] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [notes, setNotes] = useState("")
+  const recordingOptions = {
     android: {
       extension: '.m4a',
       outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
@@ -42,8 +43,8 @@ const recordingOptions = {
     }
   }
 
-  
-  
+
+
   async function getTranscription() {
     setLoading(true)
     try {
@@ -56,7 +57,7 @@ const recordingOptions = {
         uri,
         type: Platform.OS === 'ios' ? 'audio/x-wav' : 'audio/m4a',
         // could be anything 
-        name: Platform.OS === 'ios' ? `${Date.now()}.wav` :`${Date.now()}.m4a`,
+        name: Platform.OS === 'ios' ? `${Date.now()}.wav` : `${Date.now()}.m4a`,
       });
       const response = await fetch("https://us-central1-coursehelp-8d1c8.cloudfunctions.net/audioToText", {
         method: 'POST',
@@ -68,20 +69,20 @@ const recordingOptions = {
       
       const data = await response.json();
       setNotes(data.transcript)
-    } catch(error) {
+    } catch (error) {
       console.log('There was an error', error);
       resetRecording()
     }
     setLoading(false)
   }
-  async function startRecording(){
+  async function startRecording() {
     // request permissions to record audio
     const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
     // if the user doesn't allow us to do so - return as we can't do anything further :(
     if (status !== 'granted') return
     // when status is granted - setting up our state
     setIsRecording(true)
-  
+
     // basic settings before we start recording,
     // you can read more about each of them in expo documentation on Audio
     await Audio.setAudioModeAsync({
@@ -99,9 +100,9 @@ const recordingOptions = {
       await reco.startAsync()
     } catch (error) {
       // we will take a closer look at stopRecording function further in this article
-     stopRecording()
+      stopRecording()
     }
-  
+
     // if recording was successful we store the result in variable, 
     // so we can refer to it from other functions of our component
     setRecording(reco)
@@ -117,7 +118,7 @@ const recordingOptions = {
       console.log(error)
     }
   }
-  function resetRecording(){
+  function resetRecording() {
     deleteRecordingFile()
     setRecording(null)
   }
@@ -134,13 +135,21 @@ const recordingOptions = {
         );
     
 
+
+  return (
+    <View style={styles.container}>
+      {loading ? <ActivityIndicator /> :
+        !isRecording ? <TouchableOpacity onPress={startRecording}><Icon size={100} name="microphone" /></TouchableOpacity> : <TouchableOpacity onPress={() => { stopRecording(); getTranscription() }} style={{ backgroundColor: 'red', borderRadius: 50, padding: 20 }}><Icon size={100} color="white" name="microphone-slash" /></TouchableOpacity>}
+      <ImageToText/>
+    </View>
+  );
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 })
