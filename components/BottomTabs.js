@@ -35,81 +35,15 @@ function Dashboard() {
         title: 'Chat',
 
       }} />
-<<<<<<< HEAD
-
-    </Stack.Navigator>
-
-=======
       <Stack.Screen name="CreateGroup" component={CreateGroup} options={{
       title:'Create Group',
       
       }} />
 </Stack.Navigator>
->>>>>>> f5927b0294bac1d37d5fba07984a822852648244
   )
 }
 
 const MainTabScreen = () => (
-<<<<<<< HEAD
-  <Tab.Navigator
-    initialRouteName="Home"
-    activeColor="#fff"
-    shifting={true}
-
-  >
-    <Tab.Screen
-      name="Home"
-
-      component={Dashboard}
-      options={{
-        title: "Home",
-        tabBarLabel: 'Home',
-        tabBarColor: '#59d0fb',
-        tabBarIcon: ({ color }) => (
-          <AntIcon name="home" color={color} size={26} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Discover"
-
-      component={Discover}
-      options={{
-        title: "Discover Study Groups",
-        tabBarLabel: 'Discover',
-        tabBarColor: '#59d0fb',
-        tabBarIcon: ({ color }) => (
-          <AntIcon name="search1" color={color} size={26} />
-        ),
-      }}
-    />
-    <Tab.Screen
-      name="Forum"
-      component={Forum}
-      options={{
-        tabBarLabel: 'Forum',
-        tabBarColor: '#59a8fb',
-        tabBarIcon: ({ color }) => (
-          <Icon name="forum" color={color} size={26} />
-        ),
-      }}
-    />
-
-    <Tab.Screen
-      name="Profile"
-      component={Profile}
-      options={{
-        tabBarLabel: 'Profile',
-        tabBarColor: '#5b59fb',
-        tabBarIcon: ({ color }) => (
-          <AntIcon name="user" color={color} size={26} />
-        ),
-      }}
-    />
-
-
-  </Tab.Navigator>
-=======
     <Tab.Navigator
       initialRouteName="Home"
       activeColor="#fff"
@@ -189,7 +123,6 @@ const MainTabScreen = () => (
       
       
     </Tab.Navigator>
->>>>>>> f5927b0294bac1d37d5fba07984a822852648244
 );
 
 export default MainTabScreen;
