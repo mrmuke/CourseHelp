@@ -65,7 +65,7 @@ export default function Tools() {
           'Content-Type': 'multipart/form-data',
         }, */
       });
-      
+
       const data = await response.json();
       setNotes(data.transcript)
     } catch (error) {
@@ -122,22 +122,22 @@ export default function Tools() {
     setRecording(null)
   }
   const copyToClipboard = () => {
-     Clipboard.setString(notes)
+    Clipboard.setString(notes)
   }
 
-        return (
-            <ScrollView contentContainerStyle={styles.container}>
-                {loading?<><ActivityIndicator/></>:
-                !isRecording?<TouchableOpacity onPress={startRecording}><Icon size={100} name="microphone"/></TouchableOpacity>:<TouchableOpacity onPress={()=>{stopRecording();getTranscription()}} style={{backgroundColor:'red', borderRadius:50, padding:20}}><Icon size={100} color="white" name="microphone-slash"/></TouchableOpacity>}
-                {notes.length>0 &&<>
-                <Title>Notes:</Title>
-                <TextInput style={{width:Dimensions.get('screen').width-50}} value={notes} onChangeText={text=>setNotes(text)}/>
-                <Button color="black" icon="pencil"  onPress={()=>copyToClipboard()}>Copy</Button></>}
-                {<ImageToText/>}
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      {loading ? <><ActivityIndicator /></> :
+        !isRecording ? <TouchableOpacity onPress={startRecording}><Icon size={100} name="microphone" /></TouchableOpacity> : <TouchableOpacity onPress={() => { stopRecording(); getTranscription() }} style={{ backgroundColor: 'red', borderRadius: 50, padding: 20 }}><Icon size={100} color="white" name="microphone-slash" /></TouchableOpacity>}
+      {notes.length > 0 && <>
+        <Title>Notes:</Title>
+        <TextInput style={{ width: Dimensions.get('screen').width - 50 }} value={notes} onChangeText={text => setNotes(text)} />
+        <Button color="black" icon="pencil" onPress={() => copyToClipboard()}>Copy</Button></>}
+      {<ImageToText />}
 
-            </ScrollView>
-        );
-    
+    </ScrollView>
+  );
+
 
 
 
@@ -149,6 +149,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    
+
   }
 })
