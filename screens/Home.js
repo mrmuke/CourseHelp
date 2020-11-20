@@ -3,7 +3,6 @@ import React, { Component, useState } from 'react';
 import { Text, ScrollView, View, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Avatar, Button, Card, Title, Paragraph, Searchbar, Caption, TextInput, RadioButton } from 'react-native-paper';
-import firebase from 'firebase'
 export default function Home(props) {
    
     function leftContent (props){return <Icon {...props} name="group" />}

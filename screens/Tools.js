@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-//import { render } from 'react-dom';
-import { View, Text, StyleSheet, Platform } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, StyleSheet, Platform, Dimensions, Clipboard } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Permissions from 'expo-permissions'
 import { Audio } from 'expo-av';
-import { ActivityIndicator, Button } from 'react-native-paper';
+import { ActivityIndicator, Button, TextInput, Title } from 'react-native-paper';
 import * as FileSystem from 'expo-file-system';
 import ImageToText from './../components/ImageToText';
 
@@ -51,6 +50,7 @@ export default function Tools() {
       const info = await FileSystem.getInfoAsync(recording.getURI());
       console.log(`FILE INFO: ${JSON.stringify(info)}`);
       const uri = info.uri;
+      console.log(uri)
       const formData = new FormData();
       formData.append('file', {
         uri,
@@ -58,15 +58,18 @@ export default function Tools() {
         // could be anything 
         name: Platform.OS === 'ios' ? `${Date.now()}.wav` : `${Date.now()}.m4a`,
       });
-      const response = await fetch("http://localhost:3005/speech", {
+      const response = await fetch("https://us-central1-coursehelp-8d1c8.cloudfunctions.net/audioToText", {
         method: 'POST',
-        body: formData
+        body/* body */: formData,
+        /* headers: {
+          'Content-Type': 'multipart/form-data',
+        }, */
       });
+      
       const data = await response.json();
       setNotes(data.transcript)
     } catch (error) {
       console.log('There was an error', error);
-      stopRecording()
       resetRecording()
     }
     setLoading(false)
@@ -88,21 +91,21 @@ export default function Tools() {
       interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
       playThroughEarpieceAndroid: true,
     })
-    const recording = new Audio.Recording()
+    const reco = new Audio.Recording()
     try {
       // here we pass our recording options
-      await recording.prepareToRecordAsync(recordingOptions)
+      await reco.prepareToRecordAsync(recordingOptions)
       // and finally start the record
-      await recording.startAsync()
+      await reco.startAsync()
     } catch (error) {
-      console.log(error)
       // we will take a closer look at stopRecording function further in this article
       stopRecording()
     }
 
     // if recording was successful we store the result in variable, 
     // so we can refer to it from other functions of our component
-    setRecording(recording)
+    setRecording(reco)
+
   }
   async function stopRecording() {
     // set our state to false, so the UI knows that we've stopped the recording
@@ -118,16 +121,26 @@ export default function Tools() {
     deleteRecordingFile()
     setRecording(null)
   }
-  console.log(notes)
+  const copyToClipboard = () => {
+     Clipboard.setString(notes)
+  }
+
+        return (
+            <ScrollView contentContainerStyle={styles.container}>
+                {loading?<><ActivityIndicator/></>:
+                !isRecording?<TouchableOpacity onPress={startRecording}><Icon size={100} name="microphone"/></TouchableOpacity>:<TouchableOpacity onPress={()=>{stopRecording();getTranscription()}} style={{backgroundColor:'red', borderRadius:50, padding:20}}><Icon size={100} color="white" name="microphone-slash"/></TouchableOpacity>}
+                {notes.length>0 &&<>
+                <Title>Notes:</Title>
+                <TextInput style={{width:Dimensions.get('screen').width-50}} value={notes} onChangeText={text=>setNotes(text)}/>
+                <Button color="black" icon="pencil"  onPress={()=>copyToClipboard()}>Copy</Button></>}
+                {<ImageToText/>}
+
+            </ScrollView>
+        );
+    
 
 
-  return (
-    <View style={styles.container}>
-      {loading ? <ActivityIndicator /> :
-        !isRecording ? <TouchableOpacity onPress={startRecording}><Icon size={100} name="microphone" /></TouchableOpacity> : <TouchableOpacity onPress={() => { stopRecording(); getTranscription() }} style={{ backgroundColor: 'red', borderRadius: 50, padding: 20 }}><Icon size={100} color="white" name="microphone-slash" /></TouchableOpacity>}
-      <ImageToText/>
-    </View>
-  );
+
 }
 
 
@@ -135,6 +148,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    
   }
 })
