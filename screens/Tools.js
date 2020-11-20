@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-//import { render } from 'react-dom';
-import { View, StyleSheet, Platform, Dimensions } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, StyleSheet, Platform, Dimensions, Clipboard } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Permissions from 'expo-permissions'
 import { Audio } from 'expo-av';
@@ -122,27 +121,26 @@ export default function Tools() {
     deleteRecordingFile()
     setRecording(null)
   }
+  const copyToClipboard = () => {
+     Clipboard.setString(notes)
+  }
 
         return (
-            <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.container}>
                 {loading?<><ActivityIndicator/></>:
                 !isRecording?<TouchableOpacity onPress={startRecording}><Icon size={100} name="microphone"/></TouchableOpacity>:<TouchableOpacity onPress={()=>{stopRecording();getTranscription()}} style={{backgroundColor:'red', borderRadius:50, padding:20}}><Icon size={100} color="white" name="microphone-slash"/></TouchableOpacity>}
+                {notes.length>0 &&<>
                 <Title>Notes:</Title>
                 <TextInput style={{width:Dimensions.get('screen').width-50}} value={notes} onChangeText={text=>setNotes(text)}/>
-                <Button icon="pencil" /*  onPress={()=>Clipboard.setString(notes)} */>Copy</Button>
+                <Button color="black" icon="pencil"  onPress={()=>copyToClipboard()}>Copy</Button></>}
+                {<ImageToText/>}
 
-            </View>
+            </ScrollView>
         );
     
 
 
-  return (
-    <View style={styles.container}>
-      {loading ? <ActivityIndicator /> :
-        !isRecording ? <TouchableOpacity onPress={startRecording}><Icon size={100} name="microphone" /></TouchableOpacity> : <TouchableOpacity onPress={() => { stopRecording(); getTranscription() }} style={{ backgroundColor: 'red', borderRadius: 50, padding: 20 }}><Icon size={100} color="white" name="microphone-slash" /></TouchableOpacity>}
-      <ImageToText/>
-    </View>
-  );
+
 }
 
 
@@ -150,6 +148,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    
   }
 })

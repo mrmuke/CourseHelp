@@ -87,16 +87,8 @@ export default function ImageToText() {
                 requests: [
                     {
                         features: [
-                            //{ type: "LABEL_DETECTION", maxResults: 10 },
-                            //{ type: "LANDMARK_DETECTION", maxResults: 5 },
-                            //{ type: "FACE_DETECTION", maxResults: 5 },
-                            //{ type: "LOGO_DETECTION", maxResults: 5 },
+
                             { type: "TEXT_DETECTION", maxResults: 5 },
-                            //{ type: "DOCUMENT_TEXT_DETECTION", maxResults: 5 },
-                            //{ type: "SAFE_SEARCH_DETECTION", maxResults: 5 },
-                            //{ type: "IMAGE_PROPERTIES", maxResults: 5 },
-                            //{ type: "CROP_HINTS", maxResults: 5 },
-                            //{ type: "WEB_DETECTION", maxResults: 5 }
                         ],
                         image: {
                             source: {

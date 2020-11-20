@@ -160,7 +160,7 @@ exports.audioToText = functions.https.onRequest((req, res) => {
             convertToText(tmpFilePath, audioConfig).then((response) => {
                 const transcript = response[0].results
                     .map(result => result.alternatives[0].transcript)
-                    .join('\n');
+                    .join('\n')
                 res.send({ transcript });
             });
             fs.unlinkSync(tmpFilePath);
