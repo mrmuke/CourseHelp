@@ -1,16 +1,13 @@
-import { Button } from 'react-native-paper';
+import { ActivityIndicator, Button, TextInput, Title } from 'react-native-paper';
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, View, Text } from 'react-native';
+import { View, Clipboard } from 'react-native';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
-import { WebView } from 'react-native-webview';
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
 
 export default function ImageToText() {
-    const [imageState, setImageState] = useState('');
     const [uploading, setUploading] = useState(false);
-    const [googleState, setGoogleState] = useState(null);
     const [text, setText] = useState('');
 
     async function takePhoto() {
@@ -72,8 +69,6 @@ export default function ImageToText() {
             .child('googleVision')
             .child(uuidv4());
         const snapshot = await ref.put(blob);
-
-        // We're done with the blob, close and release it
         blob.close();
 
         return await snapshot.ref.getDownloadURL();
@@ -81,7 +76,7 @@ export default function ImageToText() {
 
     async function submitToGoogle(uri) {
         try {
-            setUploading(true);
+            console.log(uri)
             let image = uri;
             let body = JSON.stringify({
                 requests: [
@@ -99,7 +94,7 @@ export default function ImageToText() {
                 ]
             });
             let response = await fetch(
-                "https://vision.googleapis.com/v1/images:annotate?key=" + 'AIzaSyAK1pRxa4qnSN1An_xUDuVvuzfabdWAuyQ',
+                "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyAK1pRxa4qnSN1An_xUDuVvuzfabdWAuyQ",
                 {
                     headers: {
                         Accept: "application/json",
@@ -110,62 +105,36 @@ export default function ImageToText() {
                 }
             );
             let responseJson = await response.json();
-            setGoogleState(responseJson);
-            let returnText = responseJson["responses"][0]["textAnnotations"][0]["description"];
+            console.log(responseJson.responses)
+            let returnText = responseJson["responses"][0]["textAnnotations"][0]["description"]
             setText(returnText);
-            setUploading(false);
         } catch (e) {
             console.log(e);
         }
     }
-
+if(uploading){
+    return <ActivityIndicator/>
+}
     return (
-        <View style={styles.container}>
-            <View style={{
-                height: 120,
-                flexDirection: 'row',
-            }}>
+            <View style={{padding:15}}>
                 <Button
-                    onPress={() => CameraPhoto()}
-                    title="Analyze!"
-                    style={styles.button}
+                    onPress={CameraPhoto}
                     color='white'
-                >Take Photo</Button>
-                <Button
-                    onPress={() => takePhoto()}
-                    title="Analyze!"
                     style={{
                         backgroundColor: '#59a8fb',
-                        marginTop: 30,
-                        marginLeft: 40,
-                        marginBottom: 30,
-                        width: Dimensions.get('screen').width * 0.3333,
-                        justifyContent: 'center'
+                    }}
+                >Take Photo</Button>
+                <Button
+                    onPress={takePhoto}                    
+                    style={{
+                        backgroundColor: '#59a8fb',
                     }}
                     color='white'
                 >Submit Photo</Button>
+                 
+                {text.length>0&&<View><Title>Notes:</Title><TextInput value={text}/><Button color="black" icon="pencil" onPress={() => Clipboard.setString(text)}>Copy</Button></View>}
             </View>
-            <View style={{ height: Dimensions.get('screen').height * 0.4 }}>
-                <WebView
-                    source={{ html: `<textArea style="width:100%; height:100%;">${text}</textArea>` }}
-                    style={{
-                        width: Dimensions.get('screen').width * 0.8,
-                    }}
-                />
-            </View>
-        </View>
+            
+
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#59a8fb',
-        marginTop: 30,
-        marginBottom: 30,
-        width: Dimensions.get('screen').width * 0.3333,
-        justifyContent: 'center'
-    }
-})
