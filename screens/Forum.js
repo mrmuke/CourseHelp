@@ -29,7 +29,7 @@ export default function Forum() {
         firebase.database().ref('forum/').once('value', snapshot => {
             snapshot.forEach(function (childSnapshot) {
                 let item = childSnapshot.val()
-                item['id'] = childSnapshot.key()
+                item['id'] = childSnapshot.key
                 posts.push(item)
             })
             setPostData(posts)
@@ -59,13 +59,14 @@ export default function Forum() {
             <FlatList
                 data={postData}
                 keyExtractor={(item) => uuidv4()}
-                renderItem={({ item, index }) => (
+                renderItem={({ item }) => (
                     <Card style={{ margin: 15 }}>
                         <Card.Title title={item.title} subtitle={"by " + item.postedby} />
                         <Card.Cover source={{ uri: item.image }} />
                         <Card.Content style={{ margin: 10 }}>
                             <Text>
-                                {item.post.substring(0, 1000)}...
+                                {item.post.substring(0, 300
+                                    )}...
                             </Text>
                         </Card.Content>
                         <Card.Actions>
@@ -75,14 +76,8 @@ export default function Forum() {
                         </Card.Actions>
                     </Card>
                 )
-
                 }
-
-
             />
-
-
-
         </View >
     );
 

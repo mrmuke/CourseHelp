@@ -17,13 +17,15 @@ export default function CommentForum({ user, forumPost, exit }) {
     function getForum() {
         var ref = firebase.database().ref("forum/" + forum.id + "/comments")
         ref.on('child_added', function (snapshot) {
-
+            //console.log(snapshot.val())
             var list = []
-            snapshot.forEach(item => {
-                console.log(item)
+            snapshot.forEach((item) => {
                 list.push(item.val())
+                //console.log(list)
             })
+            //console.log(list)
             setComments(list)
+            //console.log(comments)
         })
     }
 
@@ -91,7 +93,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                     </Card.Content>
                 </Card>
             </View>
-            <View style={{ height: 500 }}>
+            <View style={{ height: 400 }}>
                 <Title style={{ borderBottomColor: "#dcdde1", borderBottomWidth: 1, margin: 20, marginTop: 20 }}>Comments</Title>
                 <KeyboardAvoidingView behavior='padding'>
                     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible={false}>
@@ -126,16 +128,17 @@ export default function CommentForum({ user, forumPost, exit }) {
                             </View>}
                     </View>
                 </KeyboardAvoidingView>
+                <View>
+                    <FlatList
+                        data={comments}
+                        renderItem={({ item }) => (
+                            <Text>{item} </Text>
+                        )}
+
+                    />
+                </View>
             </View >
-            <View>
-                <FlatList
-                    data={comments}
-                    renderItem={(item) => (
-                        <Text>{item.comment}</Text>
-                    )
-                    }
-                />
-            </View>
+
         </ScrollView>
 
 
