@@ -38,8 +38,13 @@ class LoginScreen extends Component {
                             email: result.user.email,
                             profile_picture: "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg",
                             username: 'HS Survivor',
+<<<<<<< HEAD
                             bio: 'Welcome to CourseHelp!',
                             school: {item:'None'},
+=======
+                            bio: 'Hello!',
+                            school: { item: 'No School' },
+>>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
                             grade: 'FRESHMAN',
                             //last_name: result.additionalUserInfo.profile.family_name,
                             created_at: Date.now()
@@ -109,7 +114,11 @@ class LoginScreen extends Component {
                                     profile_picture: result.additionalUserInfo.profile.picture,
                                     username: result.additionalUserInfo.profile.given_name,
                                     bio: 'Hello!',
+<<<<<<< HEAD
                                     school: {item: 'None'},
+=======
+                                    school: { item: 'No School' },
+>>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
                                     grade: 'FRESHMAN',
                                     //last_name: result.additionalUserInfo.profile.family_name,
                                     created_at: Date.now()

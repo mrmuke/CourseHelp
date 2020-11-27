@@ -1,35 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Text, StyleSheet, View, KeyboardAvoidingView, Keyboard, TextInput, Alert } from 'react-native';
 import * as firebase from 'firebase'
-import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome'
-import moment from 'moment'
+import { ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Button, Card, Title } from 'react-native-paper';
 export default function CommentForum({ user, forumPost, exit }) {
     const [forum, setForum] = useState(forumPost)
     const [comment, setComment] = useState('')
     const [commentRender, setCommentRender] = useState(false)
-    const [comments, setComments] = useState(forumPost.comments)
-    useEffect(() => {
-        getForum()
-    }, [])
 
-    function getForum() {
-        var ref = firebase.database().ref("forum/" + forum.id + "/comments")
-        ref.on('child_added', function (snapshot) {
-
-            var list = []
-            snapshot.forEach(item => {
-                console.log(item)
-                list.push(item.val())
-            })
-            setComments(list)
-        })
-    }
+    //upvote downvote select subject and select asnwer and upload user
 
 
-    //console.log(forum.comments)
-    //
     function timeDifference(current, previous) {
 
         var msPerMinute = 60 * 1000;
@@ -66,9 +47,16 @@ export default function CommentForum({ user, forumPost, exit }) {
     }
 
     const commentMessage = async () => {
-        var ref = firebase.database().ref("forum/" + forum.id + "/comments/")
-        var commentKey = ref.push({
-            comment: comment
+        var ref = firebase.database().ref("forum/" + forumPost.id + "/comments/")
+        await ref.push({
+            comment: comment,
+            time_added: Date.now(),
+            commentedBy: user.username,
+            profile_picture: user.profile_picture
+        })
+        firebase.database().ref('forum/' + forumPost.id).once('value', snapshot => {
+            //console.log(snapshot.val())
+            setForum(snapshot.val())
         })
     }
     return (
@@ -91,7 +79,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                     </Card.Content>
                 </Card>
             </View>
-            <View style={{ height: 500 }}>
+            <View>
                 <Title style={{ borderBottomColor: "#dcdde1", borderBottomWidth: 1, margin: 20, marginTop: 20 }}>Comments</Title>
                 <KeyboardAvoidingView behavior='padding'>
                     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible={false}>
@@ -126,20 +114,48 @@ export default function CommentForum({ user, forumPost, exit }) {
                             </View>}
                     </View>
                 </KeyboardAvoidingView>
+
             </View >
-            <View>
-                <FlatList
-                    data={comments}
-                    renderItem={(item) => (
-                        <Text>{item.comment}</Text>
-                    )
-                    }
-                />
-            </View>
+            {forum.comments&&Object.values(forum.comments).reverse().length > 0 && Object.values(forum.comments).reverse().map(c => (
+                <View style={{
+                    paddingLeft: 19,
+                    paddingRight: 16,
+                    paddingVertical: 12,
+                    flexDirection: 'row',
+                    alignItems: 'flex-start'
+                }}
+                    key={c.id}>
+                    <Image style={{
+                        width: 45,
+                        height: 45,
+                        borderRadius: 20,
+
+                    }} source={{ uri: c.profile_picture }} />
+                    <View style={{ marginLeft: 16, flex: 1 }}>
+                        <TouchableOpacity onPress={() => { }}>
+
+                        </TouchableOpacity>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginBottom: 6
+                        }}>
+                            <Text style={{
+                                fontSize: 16,
+                                fontWeight: "bold",
+                            }}>{c.commentedBy}</Text>
+                            <Text style={{
+                                fontSize: 11,
+                                color: "#808080",
+                            }}>
+                                {timeDifference(Date.now(), c.time_added)}
+                            </Text>
+                        </View>
+                        <Text>{c.comment}</Text>
+                    </View>
+                </View>
+            ))}
         </ScrollView>
-
-
-
     )
 }
 
