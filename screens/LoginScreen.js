@@ -7,8 +7,6 @@ import firebase from 'firebase'
 import { Keyboard, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-
-
 class LoginScreen extends Component {
     constructor(props) {
         super(props)
@@ -37,10 +35,13 @@ class LoginScreen extends Component {
                         .database()
                         .ref('/users/' + result.user.uid)
                         .set({
-                            username: 'anonymous',
                             email: result.user.email,
+                            profile_picture: "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg",
+                            username: 'HS Survivor',
                             bio: 'Hello!',
                             school: 'None',
+                            grade: 'FRESHMAN',
+                            //last_name: result.additionalUserInfo.profile.family_name,
                             created_at: Date.now()
                         })
                 })
@@ -106,7 +107,6 @@ class LoginScreen extends Component {
                                 .set({
                                     email: result.user.email,
                                     profile_picture: result.additionalUserInfo.profile.picture,
-                                    locale: result.additionalUserInfo.profile.locale,
                                     username: result.additionalUserInfo.profile.given_name,
                                     bio: 'Hello!',
                                     school: 'None',

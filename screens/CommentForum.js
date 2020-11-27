@@ -9,26 +9,64 @@ export default function CommentForum({ user, forumPost, exit }) {
     const [forum, setForum] = useState(forumPost)
     const [comment, setComment] = useState('')
     const [commentRender, setCommentRender] = useState(false)
-    const [forumKey, setForumKey] = useState(null)
-
+    const [comments, setComments] = useState(forumPost.comments)
     useEffect(() => {
-        getForumKey()
+        getForum()
     }, [])
 
-    function getForumKey() {
-        var ref = firebase.database().ref("forum/")
-        ref.orderByChild('image').equalTo(forum.image).on("value", function (snapshot) {
-            snapshot.forEach((function (child) {
-                setForumKey(child.key)
-            }))
+    function getForum() {
+        var ref = firebase.database().ref("forum/" + forum.id + "/comments")
+        ref.on('child_added', function (snapshot) {
+
+            var list = []
+            snapshot.forEach(item => {
+                console.log(item)
+                list.push(item.val())
+            })
+            setComments(list)
         })
     }
 
 
     //console.log(forum.comments)
+    //
+    function timeDifference(current, previous) {
+
+        var msPerMinute = 60 * 1000;
+        var msPerHour = msPerMinute * 60;
+        var msPerDay = msPerHour * 24;
+        var msPerMonth = msPerDay * 30;
+        var msPerYear = msPerDay * 365;
+
+        var elapsed = current - previous;
+
+        if (elapsed < msPerMinute) {
+            return Math.round(elapsed / 1000) + ' seconds ago';
+        }
+
+        else if (elapsed < msPerHour) {
+            return Math.round(elapsed / msPerMinute) + ' minutes ago';
+        }
+
+        else if (elapsed < msPerDay) {
+            return Math.round(elapsed / msPerHour) + ' hours ago';
+        }
+
+        else if (elapsed < msPerMonth) {
+            return 'approximately ' + Math.round(elapsed / msPerDay) + ' days ago';
+        }
+
+        else if (elapsed < msPerYear) {
+            return 'approximately ' + Math.round(elapsed / msPerMonth) + ' months ago';
+        }
+
+        else {
+            return 'approximately ' + Math.round(elapsed / msPerYear) + ' years ago';
+        }
+    }
 
     const commentMessage = async () => {
-        var ref = firebase.database().ref("forum/" + forumKey + "/comments/")
+        var ref = firebase.database().ref("forum/" + forum.id + "/comments/")
         var commentKey = ref.push({
             comment: comment
         })
@@ -91,11 +129,10 @@ export default function CommentForum({ user, forumPost, exit }) {
             </View >
             <View>
                 <FlatList
-                    data={forum.comments}
+                    data={comments}
                     renderItem={(item) => (
                         <Text>{item.comment}</Text>
                     )
-
                     }
                 />
             </View>

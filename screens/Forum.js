@@ -28,7 +28,9 @@ export default function Forum() {
         var posts = []
         firebase.database().ref('forum/').once('value', snapshot => {
             snapshot.forEach(function (childSnapshot) {
-                posts.push(childSnapshot.val())
+                let item = childSnapshot.val()
+                item['id'] = childSnapshot.key()
+                posts.push(item)
             })
             setPostData(posts)
         })

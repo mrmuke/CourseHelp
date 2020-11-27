@@ -107,6 +107,7 @@ export default function ImageToText() {
                 }
             );
             let responseJson = await response.json();
+            console.log(responseJson);
             console.log(responseJson["responses"][0]["textAnnotations"][0]["description"]);
             let returnText = responseJson["responses"][0]["textAnnotations"][0]["description"]
             setText(returnText);
