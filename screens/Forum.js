@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 //import { render } from 'react-dom';
 import { Text, StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase'
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome'
+import { FlatList } from 'react-native-gesture-handler';
+import { Button, Card } from 'react-native-paper';
 import EditForum from './EditForum';
 import CommentForum from './CommentForum'
 import 'react-native-get-random-values';
@@ -12,12 +11,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function Forum() {
     const [postData, setPostData] = useState(null)
-    const [category, setCategory] = useState('All')
     const [user, setUser] = useState(null)
     const [create, setCreate] = useState(false)
     const [comment, setComment] = useState(false)
     const [forum, setForum] = useState(null)
-    const userID = firebase.auth().currentUser.uid
 
     useEffect(() => {
         getPosts()
@@ -26,15 +23,14 @@ export default function Forum() {
 
     function getPosts() {
         var posts = []
-        firebase.database().ref('forum/').once('value', snapshot => {
+        firebase.database().ref('forum/').on('value', snapshot => {
             snapshot.forEach(function (childSnapshot) {
                 let item = childSnapshot.val()
-                item['id'] = childSnapshot.key()
+                item['id'] = childSnapshot.key
                 posts.push(item)
             })
             setPostData(posts)
         })
-        //console.log(postData)
     }
     function getUser() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {

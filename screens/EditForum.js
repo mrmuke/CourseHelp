@@ -1,8 +1,7 @@
-import React, { useState, useEffect, Component } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Alert } from 'react-native';
 import * as firebase from 'firebase'
-import { Button, IconButton, Searchbar, Dialog, Provider, Portal, Title } from 'react-native-paper'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import { Button, IconButton, Title } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
@@ -39,7 +38,7 @@ export default function EditForum({ user, exit }) {
     }
     //console.log(url)
     const post = async () => {
-        firebase.database().ref("forum/" + postKey).set({
+        firebase.database().ref("forum/" + postKey).push({
             title: postTitle,
             post: postText,
             postedby: user.username,
@@ -77,7 +76,7 @@ export default function EditForum({ user, exit }) {
                 <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible={false} >
                     <View style={{ borderBottomColor: '#dcdde1', borderBottomWidth: 1, borderTopWidth: 1, borderTopColor: '#dcdde1' }}>
                         <TextInput
-                            style={{ flex: 1, margin: 20, width: 250, height: 60, borderBottomWidth: 1, borderBottomColor: "#dcdde1" }}
+                            style={{ flex: 1, margin: 20,paddingBottom:10,borderBottomWidth: 1, borderBottomColor: "#dcdde1" }}
                             placeholder="Post Title (required) max 40 char. "
                             maxLength={40}
                             mode='flat'
@@ -86,7 +85,7 @@ export default function EditForum({ user, exit }) {
                             autoCorrect={false}
                         />
                         <TextInput
-                            style={{ marginLeft: 20, width: 225, height: 275 }}
+                            style={{ marginLeft: 20,flex:1,height: 275 }}
                             placeholder="Your text post"
                             multiline={true}
                             mode='flat'
@@ -99,16 +98,14 @@ export default function EditForum({ user, exit }) {
                 </TouchableWithoutFeedback>
                 <View style={{ flexDirection: 'row' }}>
                     {uploaded ?
-                        <Title style={{ margin: 20, marginTopL }}>IMAGE UPLOADED</Title> : <Title style={{ margin: 20, marginTop: 15, }}>Upload Image</Title>}
+                        <Title style={{ margin: 20, marginTop:15 }}>IMAGE UPLOADED</Title> : <Title style={{ margin: 20, marginTop: 15, }}>Upload Image</Title>}
                     {loading ?
                         <ActivityIndicator size='large' marginLeft='auto' marginRight={15} marginVertical={18} /> :
                         <IconButton icon='camera' size={40} style={{ marginLeft: 'auto' }} onPress={pickImage} />}
                 </View>
                 <Image
                     style={{
-                        width: 200,
-                        height: 100,
-                        alignSelf: 'center',
+                        flex:1,height:300,
                     }}
                     source={{ uri: url }}
                 />

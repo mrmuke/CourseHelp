@@ -12,6 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Discover from '../screens/Discover';
 import CreateGroup from './CreateGroup';
 import Tools from '../screens/Tools';
+import { Badge } from 'react-native-paper';
 const Stack = createStackNavigator();
 
 
@@ -98,17 +99,7 @@ const MainTabScreen = () => (
           ),
         }}
       />
-     {/*  <Tab.Screen
-        name="Chat"
-        component={Chat}
-        options={{
-          tabBarLabel: 'Chat',
-          tabBarColor: '#5b59fb',
-          tabBarIcon: ({ color }) => (
-            <AntIcon name="message1" color={color} size={26} />
-          ),
-        }}
-      /> */}
+     
       <Tab.Screen
         name="Profile"
         component={Profile}
