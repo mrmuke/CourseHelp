@@ -114,7 +114,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                 </KeyboardAvoidingView>
 
             </View >
-            {Object.values(forum.comments).reverse().length > 0 && Object.values(forum.comments).reverse().map(c => (
+            {forum.comments&&Object.values(forum.comments).reverse().length > 0 && Object.values(forum.comments).reverse().map(c => (
                 <View style={{
                     paddingLeft: 19,
                     paddingRight: 16,

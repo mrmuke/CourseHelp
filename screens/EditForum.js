@@ -40,7 +40,8 @@ export default function EditForum({ user, exit }) {
             title: postTitle,
             post: postText,
             postedby: user.username,
-            image: url
+            image: url,
+            
         })
     }
     const revert = async () => {

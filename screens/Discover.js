@@ -36,7 +36,7 @@ export default function Discover() {
     }, [publicity, subject, keyword,showOptions])
     function joinGroup(c){
         firebase.database().ref('groups/'+c.id).once('value',snapshot=>{
-            var members=snapshot.val().members
+            var members=snapshot.val().members||[]
             members.push(firebase.auth().currentUser.uid)
             firebase.database().ref('groups/'+c.id).update({
                 members
@@ -78,7 +78,7 @@ export default function Discover() {
                             <Caption style={{ marginBottom: 10 }}>{c.description}</Caption>
                         </Card.Content>
                         <Card.Actions>
-                            {c.members.some(e=>e===firebase.auth().currentUser.uid)?<Button style={{ flex: 1 }} mode="contained" color="#003152" onPress={()=>leaveGroup(c)}>Leave</Button>:<Button onPress={()=>joinGroup(c)} style={{ flex: 1 }} mode="contained" color="#003152">Join</Button>}
+                            {c.members&&c.members.some(e=>e===firebase.auth().currentUser.uid)?<Button style={{ flex: 1 }} mode="contained" color="#003152" onPress={()=>leaveGroup(c)}>Leave</Button>:<Button onPress={()=>joinGroup(c)} style={{ flex: 1 }} mode="contained" color="#003152">Join</Button>}
 
                         </Card.Actions>
                     </Card>
