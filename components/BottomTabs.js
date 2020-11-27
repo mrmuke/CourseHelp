@@ -5,14 +5,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Chat from '../screens/Chat';
 import Home from '../screens/Home'
-import Profile from '../screens/Profile';
-import EditProfile from '../screens/EditProfile';
-import Forum from '../screens/Forum';
+import Profile from '../screens/Profile';import Forum from '../screens/Forum';
 import { createStackNavigator } from '@react-navigation/stack';
 import Discover from '../screens/Discover';
 import CreateGroup from './CreateGroup';
 import Tools from '../screens/Tools';
-import { Badge } from 'react-native-paper';
 const Stack = createStackNavigator();
 
 

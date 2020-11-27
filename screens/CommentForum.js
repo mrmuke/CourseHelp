@@ -1,40 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Text, StyleSheet, View, KeyboardAvoidingView, Keyboard, TextInput, Alert } from 'react-native';
 import * as firebase from 'firebase'
-import { FlatList, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button, Card, Title } from 'react-native-paper';
 export default function CommentForum({ user, forumPost, exit }) {
     const [forum, setForum] = useState(forumPost)
     const [comment, setComment] = useState('')
     const [commentRender, setCommentRender] = useState(false)
-    const [comments, setComments] = useState([])
-    useEffect(() => {
-        getComments()
-    }, [])
 
-    if (user == null) {
-        return null
-    }
     //upvote downvote select subject and select asnwer and upload user
-    function getComments() {
-        firebase.database().ref("forum/" + forum.id + "/comments").on('value', function (snapshot) {
-            var list = []
-            snapshot.forEach(function (item) {
-                list.push(item.val())
-            })
-            list.reverse()
-            setComments(list)
-        })
-        firebase.database().ref("forum/" + forum.id + "/comments").on('child_added', function (snapshot) {
-            var list = comments
-            list.push(snapshot.val())
-            setComments(list)
-        })
-    }
 
 
-    //console.log(forum.comments)
-    //
     function timeDifference(current, previous) {
 
         var msPerMinute = 60 * 1000;
@@ -71,15 +47,18 @@ export default function CommentForum({ user, forumPost, exit }) {
     }
 
     const commentMessage = async () => {
-        var ref = firebase.database().ref("forum/" + forum.id + "/comments/")
-        ref.push({
+        var ref = firebase.database().ref("forum/" + forumPost.id + "/comments/")
+        await ref.push({
             comment: comment,
             time_added: Date.now(),
-            username: user.username,
-            image: user.profile_picture
+            commentedBy: user.username,
+            profile_picture: user.profile_picture
+        })
+        firebase.database().ref('forum/' + forumPost.id).once('value', snapshot => {
+            //console.log(snapshot.val())
+            setForum(snapshot.val())
         })
     }
-    //console.log(comments)
     return (
 
         <ScrollView style={styles.container}>
@@ -137,7 +116,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                 </KeyboardAvoidingView>
 
             </View >
-            {comments.length > 0 && comments.map((c, index) => (
+            {forum.comments && Object.values(forum.comments).reverse().length > 0 && Object.values(forum.comments).reverse().map(c => (
                 <View style={{
                     paddingLeft: 19,
                     paddingRight: 16,
@@ -145,13 +124,13 @@ export default function CommentForum({ user, forumPost, exit }) {
                     flexDirection: 'row',
                     alignItems: 'flex-start'
                 }}
-                    key={index}>
+                    key={c.id}>
                     <Image style={{
                         width: 45,
                         height: 45,
                         borderRadius: 20,
 
-                    }} source={{ uri: c.image }} />
+                    }} source={{ uri: c.profile_picture }} />
                     <View style={{ marginLeft: 16, flex: 1 }}>
                         <TouchableOpacity onPress={() => { }}>
 
@@ -164,7 +143,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                             <Text style={{
                                 fontSize: 16,
                                 fontWeight: "bold",
-                            }}>{c.username}</Text>
+                            }}>{c.commentedBy}</Text>
                             <Text style={{
                                 fontSize: 11,
                                 color: "#808080",

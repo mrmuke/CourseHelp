@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 //import { render } from 'react-dom';
 import { Text, StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase'
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Button, Card } from 'react-native-paper';
 import EditForum from './EditForum';
 import CommentForum from './CommentForum'
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
 
 export default function Forum() {
     const [postData, setPostData] = useState(null)
@@ -51,9 +50,8 @@ export default function Forum() {
         }
     }
 
-
     function getPosts() {
-        
+
         firebase.database().ref('forum/').on('value', snapshot => {
             var posts = []
             snapshot.forEach(function (childSnapshot) {
@@ -95,8 +93,8 @@ export default function Forum() {
                     </Text>
                         </Card.Content>
                         <Card.Actions>
-                            <Button labelStyle={styles.cardButtons} onPress={() => { upvote() }} icon="arrow-down"></Button>
-                            <Button labelStyle={styles.cardButtons} onPress={() => { downvote() }} icon="arrow-up"></Button>
+                            <Button labelStyle={styles.cardButtons} icon="arrow-down"></Button>
+                            <Button labelStyle={styles.cardButtons} icon="arrow-up"></Button>
                             <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
                         </Card.Actions>
                     </Card>

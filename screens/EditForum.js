@@ -17,7 +17,6 @@ export default function EditForum({ user, exit }) {
     useEffect(() => {
         setPostKey(uuidv4())
     }, [])
-    //console.log(postKey)
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync();
         if (!result.cancelled) {
@@ -33,7 +32,6 @@ export default function EditForum({ user, exit }) {
         setUrl(downloadURL)
         setLoading(false)
         setUploaded(true)
-        //console.log(userID)
 
     }
     //console.log(url)
