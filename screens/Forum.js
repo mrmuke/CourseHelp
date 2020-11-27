@@ -15,11 +15,42 @@ export default function Forum() {
     const [create, setCreate] = useState(false)
     const [comment, setComment] = useState(false)
     const [forum, setForum] = useState(null)
+    const [vote, setVote] = useState(null)
+    const [disableVotes, setDisableVotes] = useState(false)
 
     useEffect(() => {
         getPosts()
         getUser()
     }, [])
+
+
+    function upvote(item) {
+        var ref = firebase.database().ref('forum/' + forum.id)
+        var v = 0
+        ref.on('value', snapshot => {
+            v = snapshot.val().vote
+            //console.log(snapshot.val().vote)
+        })
+        ref.update({
+            vote: v + 1
+        })
+        //+(v)
+    }
+
+    function downvote(item) {
+        if (item.vote != 0) {
+            var ref = firebase.database().ref('forum/' + forum.id)
+            var v = 0
+            ref.on('value', snapshot => {
+                v = snapshot.val().vote
+                //console.log(snapshot.val().vote)
+            })
+            ref.update({
+                vote: v - 1
+            })
+        }
+    }
+
 
     function getPosts() {
         var posts = []
@@ -30,6 +61,7 @@ export default function Forum() {
                 posts.push(item)
             })
             setPostData(posts)
+            //console.log(postData)
         })
     }
     function getUser() {
@@ -43,7 +75,6 @@ export default function Forum() {
     if (create) {
         return <EditForum user={user} exit={() => { setCreate(false) }} />
     }
-
     if (comment) {
         //console.log(forum)
         return <CommentForum user={user} forumPost={forum} exit={() => { setComment(false) }} />
@@ -54,20 +85,20 @@ export default function Forum() {
             <Button mode="contained" onPress={() => setCreate(true)} color="#4293f5" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
             <FlatList
                 data={postData}
-                keyExtractor={(item) => uuidv4()}
-                renderItem={({ item }) => (
+                keyExtractor={(index) => uuidv4()}
+                renderItem={({ item, index }) => (
                     <Card style={{ margin: 15 }}>
                         <Card.Title title={item.title} subtitle={"by " + item.postedby} />
                         <Card.Cover source={{ uri: item.image }} />
                         <Card.Content style={{ margin: 10 }}>
                             <Text>
-                                {item.post.substring(0, 300
-                                )}...
+                                {item.post.substring(0, 300)}...
                             </Text>
                         </Card.Content>
                         <Card.Actions>
-                            <Button labelStyle={styles.cardButtons} icon="arrow-down"></Button>
-                            <Button labelStyle={styles.cardButtons} icon="arrow-up"></Button>
+                            <Button labelStyle={styles.cardButtons} color='black' onPress={() => { setForum(item), downvote(item), setDisableVotes(true) }} icon="arrow-down"></Button>
+                            <Text>{item.vote}</Text>
+                            <Button labelStyle={styles.cardButtons} color='black' onPress={() => { setForum(item), upvote(item), setDisableVotes(true) }} icon="arrow-up"></Button>
                             <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
                         </Card.Actions>
                     </Card>
@@ -85,8 +116,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     cardButtons: {
-        color: '#666666'
+        color: 'black'
     }
-
-
 })
