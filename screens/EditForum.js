@@ -38,7 +38,7 @@ export default function EditForum({ user, exit }) {
     }
     //console.log(url)
     const post = async () => {
-        firebase.database().ref("forum/").push({
+        firebase.database().ref("forum/" + postKey).set({
             title: postTitle,
             post: postText,
             postedby: user.username,
@@ -79,20 +79,17 @@ export default function EditForum({ user, exit }) {
                         <TextInput
                             style={{ flex: 1, margin: 20, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: "#dcdde1" }}
                             placeholder="Post Title (required) max 40 char. "
-                            maxLength={40}
-                            mode='flat'
                             onChangeText={postTitle => setPostTitle(postTitle)}
                             underlineColor="#36485f"
-                            autoCorrect={false}
+                            autoCorrect={true}
                         />
                         <TextInput
                             style={{ marginLeft: 20, flex: 1, height: 275 }}
                             placeholder="Your text post"
                             multiline={true}
-                            mode='flat'
                             onChangeText={postText => setPostText(postText)}
                             underlineColor="#36485f"
-                            autoCorrect={false}
+                            autoCorrect={true}
 
                         />
                     </View>

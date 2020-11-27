@@ -137,14 +137,15 @@ export default function CommentForum({ user, forumPost, exit }) {
                 </KeyboardAvoidingView>
 
             </View >
-            {comments.map(c => (
+            {comments.length > 0 && comments.map((c, index) => (
                 <View style={{
                     paddingLeft: 19,
                     paddingRight: 16,
                     paddingVertical: 12,
                     flexDirection: 'row',
-                    alignItems: 'flex-start',
-                }}>
+                    alignItems: 'flex-start'
+                }}
+                    key={index}>
                     <Image style={{
                         width: 45,
                         height: 45,

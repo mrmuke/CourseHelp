@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 //import { render } from 'react-dom';
 import { Text, StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase'
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { Button, Card } from 'react-native-paper';
 import EditForum from './EditForum';
 import CommentForum from './CommentForum'
@@ -83,28 +83,27 @@ export default function Forum() {
     return (
         <View style={styles.container}>
             <Button mode="contained" onPress={() => setCreate(true)} color="#4293f5" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
-            <FlatList
-                data={postData}
-                keyExtractor={(index) => uuidv4()}
-                renderItem={({ item, index }) => (
-                    <Card style={{ margin: 15 }}>
-                        <Card.Title title={item.title} subtitle={"by " + item.postedby} />
-                        <Card.Cover source={{ uri: item.image }} />
-                        <Card.Content style={{ margin: 10 }}>
-                            <Text>
-                                {item.post.substring(0, 300)}...
-                            </Text>
-                        </Card.Content>
-                        <Card.Actions>
-                            <Button labelStyle={styles.cardButtons} color='black' onPress={() => { setForum(item), downvote(item), setDisableVotes(true) }} icon="arrow-down"></Button>
-                            <Text>{item.vote}</Text>
-                            <Button labelStyle={styles.cardButtons} color='black' onPress={() => { setForum(item), upvote(item), setDisableVotes(true) }} icon="arrow-up"></Button>
-                            <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
-                        </Card.Actions>
-                    </Card>
-                )
-                }
-            />
+            <ScrollView>
+            {postData.map(item=>(
+                <Card key={item.id} style={{ margin: 15 }}>
+                <Card.Title title={item.title} subtitle={"by " + item.postedby} />
+                <Card.Cover source={{ uri: item.image }} />
+                <Card.Content style={{ margin: 10 }}>
+                    <Text>
+                        {item.post.substring(0, 1000)}...
+                    </Text>
+                </Card.Content>
+                <Card.Actions>
+                    <Button labelStyle={styles.cardButtons} icon="arrow-down"></Button>
+                    <Button labelStyle={styles.cardButtons} icon="arrow-up"></Button>
+                    <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
+                </Card.Actions>
+            </Card>
+            ))}</ScrollView>
+            
+
+
+
         </View >
     );
 

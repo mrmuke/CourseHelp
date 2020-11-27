@@ -156,13 +156,9 @@ export default function EditProfile({ user, exit }) {
                                             onChangeText={(query) => { setQuery(query); searchData(query); }}
                                             value={query}
                                             placeholder="Search for your School" />
-                                        <FlatList
-                                            data={filteredData}
-                                            renderItem={({ item }) => {
-                                                return <Button color='#36485f' mode='outlined' labelStyle={{ fontSize: 10, color: 'black' }} contentStyle={{ height: 30 }} onPress={() => { setSchool({ item }), setQuery({ item }["item"]), setFilteredData([]) }}>{item}</Button>;
-                                            }}
-                                            keyExtractor={(item, index) => item}
-                                        />
+                                            {filteredData.map(item=>(
+                                                <Button key={item} color='#36485f' mode='outlined' labelStyle={{ fontSize: 10, color: 'black' }} contentStyle={{ height: 30 }} onPress={() => { setSchool({ item }), setQuery({ item }["item"]), setFilteredData([]) }}>{item}</Button>
+                                            ))}
  
                                         <Dialog.Actions>
                                             <Button color='#36485f' labelStyle={{ fontWeight: 'bold', fontSize: 15, color: 'black' }} onPress={() => { setQuery('') }, hideDialog}>Done</Button>

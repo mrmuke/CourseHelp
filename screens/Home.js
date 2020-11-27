@@ -7,13 +7,12 @@ import { Button, Card, Title, Caption } from 'react-native-paper';
 export default function Home(props) {
     const [groups, setGroups] = useState([])
    useEffect(()=>{
-        firebase.database().ref('groups/').on('value', snapshot=>{
+        firebase.database().ref('groups/').limitToFirst(10).on('value', snapshot=>{
             var list= []
             snapshot.forEach(item=>{
                 list.push(item.val())
             })
             setGroups(list)
-            console.log(list)
         })
    },[])
     function leftContent (props){return <Icon {...props} name="group" />}
