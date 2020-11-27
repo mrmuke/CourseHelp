@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList, Dimensions } from 'react-native';
-import {TextInput} from 'react-native-paper'
+import { TextInput } from 'react-native-paper'
 import * as firebase from 'firebase'
 import { Button, IconButton, Dialog, Provider, Portal } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker';
@@ -27,11 +27,10 @@ export default function EditProfile({ user, exit }) {
     
     const searchData = async (text) => {
         let textUpper = text.toUpperCase()
-        let array=data.filter(name=>name["A"].startsWith(textUpper)).map(item=>item["A"])
+        let array = data.filter(name => name["A"].startsWith(textUpper)).map(item => item["A"])
 
         setFilteredData(array.slice(0, 10));
     }
-
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync();
         if (!result.cancelled) {
@@ -101,10 +100,10 @@ export default function EditProfile({ user, exit }) {
             </View>
             <View style={{ padding: 15, borderBottomColor: '#dcdde1', borderBottomWidth: 1 }}>
 
-                <View style={{ flexDirection: 'row', alignItems:'center'}}>
-                    <Text style={{ marginRight: 5, fontSize: 15, width:80 }}> Username </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ marginRight: 5, fontSize: 15, width: 80 }}> Username </Text>
                     <TextInput
-                        style={{ flex:1,height: 40}}
+                        style={{ flex: 1, height: 40 }}
                         placeholder="Username"
                         value={username}
                         maxLength={18}
@@ -113,23 +112,23 @@ export default function EditProfile({ user, exit }) {
                         autoCorrect={false}
                     />
                 </View>
-                <View style={{ flexDirection: 'row',marginTop:20, alignItems:'center' }}>
-                    <Text style={{ marginRight: 5, width: 80,fontSize: 15 }}> Bio </Text>
+                <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center' }}>
+                    <Text style={{ marginRight: 5, width: 80, fontSize: 15 }}> Bio </Text>
                     <TextInput
-                        style={{ flex:1}}
+                        style={{ flex: 1 }}
                         placeholder="Bio (Max 150 Char.)"
                         value={bio}
                         maxLength={150}
                         multiline={true}
-                        
+
                         onChangeText={bio => setBio(bio)}
                         underlineColor="#36485f"
                     />
                 </View>
-                <View style={{ flexDirection: 'row', marginTop:20, alignItems:'center'}}>
-                    <Text style={{ marginRight: 5, width: 80,fontSize: 15 }}> School </Text>
-                    <TouchableOpacity onPress={showDialog} containerStyle={{flex:1}}>
-                    <Button mode="text" color='#36485f' contentStyle={{padding:10}}  labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{school["item"]}</Button>
+                <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center' }}>
+                    <Text style={{ marginRight: 5, width: 80, fontSize: 15 }}> School </Text>
+                    <TouchableOpacity onPress={showDialog} containerStyle={{ flex: 1 }}>
+                        <Button mode="text" color='#36485f' contentStyle={{ padding: 10 }} labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{school["item"]}</Button>
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row', marginTop:20, alignItems:'center'}}>
@@ -138,7 +137,7 @@ export default function EditProfile({ user, exit }) {
                         <TouchableOpacity onPress={()=>setSelectGrade(true)}>
                             <Button mode="text" contentStyle={{padding:10}} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
                         </TouchableOpacity>
-                        
+
                     </View >
                 </View>
             </View>
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         position: 'absolute',
         marginTop: 80
-        }
+    }
 
 })
 

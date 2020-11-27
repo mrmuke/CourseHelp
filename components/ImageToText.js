@@ -38,7 +38,9 @@ export default function ImageToText() {
             setUploading(true);
 
             if (!pickerResult.cancelled) {
-                await submitToGoogle(await uploadImageAsync(pickerResult['uri']));
+                var url = await uploadImageAsync(pickerResult['uri']);
+                console.log(url);
+                await submitToGoogle(url);
             }
         } catch (e) {
             console.log(e);
@@ -107,7 +109,7 @@ export default function ImageToText() {
                 }
             );
             let responseJson = await response.json();
-            console.log(responseJson.responses)
+            console.log(responseJson["responses"][0]["textAnnotations"][0]["description"]);
             let returnText = responseJson["responses"][0]["textAnnotations"][0]["description"]
             setText(returnText);
         } catch (e) {

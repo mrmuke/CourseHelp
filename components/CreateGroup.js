@@ -6,7 +6,7 @@ import firebase from 'firebase'
 import { Button, Searchbar, Caption, TextInput } from 'react-native-paper';
 export default function CreateGroup(props){
     const [subject, setSubject] = useState("All")
-    const [subjectFilter, setSubjectFilter]= useState("")
+    const [subjectFilter, setSubjectFilter] = useState("")
     const [showSubjects, setShowSubjects] = useState(false)
     const subjects = ["Science", "Economics", "Math", "History", "Physics", "All"]
     const [name, setName] = useState("")
