@@ -148,7 +148,6 @@ class LoginScreen extends Component {
                 iosClientId: '451006353013-ot4fj9fg8ijfrro6o7vj5l474205vtff.apps.googleusercontent.com',
                 scopes: ['profile', 'email'],
             });
-
             if (result.type === 'success') {
                 this.onSignIn(result)
                 return result.accessToken;

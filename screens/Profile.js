@@ -12,8 +12,8 @@ export default function Profile(props) {
     const [user, setUser] = useState(null)
     const [edit, setEdit] = useState(false)
     useEffect(() => {
-        getUser()
-    }, [])
+        getUser();
+    }, []);
 
     function getUser() {
 
@@ -21,14 +21,16 @@ export default function Profile(props) {
             setUser(snapshot.val())
         })
     }
+
     if (user == null) {
         return null
     }
+
     if (edit) {
         return <EditProfile user={user} exit={() => { setEdit(false); getUser() }} />
     }
-    return (
 
+    return (
         <ScrollView style={styles.container}>
             <View style={styles.container}>
                 <View style={styles.header}></View>
