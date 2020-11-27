@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase'
-<<<<<<< HEAD
 import { Button} from 'react-native-paper'
 import EditProfile from './EditProfile';;
 import VerifyQuiz from './verifyQuiz'
-=======
-import { Button } from 'react-native-paper'
-import EditProfile from './EditProfile';
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
 
 export default function Profile(props) {
     const [user, setUser] = useState(null)
@@ -34,14 +29,11 @@ export default function Profile(props) {
     if (edit) {
         return <EditProfile user={user} exit={() => { setEdit(false); getUser() }} />
     }
-<<<<<<< HEAD
 
     if(verify){
         return <VerifyQuiz exit={()=> {setVerify(false)} }/>
     }
 
-=======
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
     return (
         <ScrollView style={styles.container}>
             <View style={styles.container}>
@@ -54,7 +46,6 @@ export default function Profile(props) {
                         <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
                         <Text style={styles.description}>{user.bio}</Text>
                         <View style={styles.button}>
-<<<<<<< HEAD
                             <View style={{flexDirection:"row"}}>
                                 <View>
                                     <Button mode='outlined' color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
@@ -64,10 +55,6 @@ export default function Profile(props) {
                                 </View>
                             </View>
                             <Button mode="outlined" color='#5b59fb' contentStyle={{padding:2}} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
-=======
-                            <Button mode='contained' color='#5b59fb' contentStyle={{ padding: 10 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
-                            <Button mode='contained' color='#5b59fb' contentStyle={{ padding: 10 }} style={styles.buttonContainer} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
                         </View>
                     </View>
                 </View>
@@ -119,16 +106,9 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     description: {
-<<<<<<< HEAD
         fontSize: 14,
         color: "#707070",
         marginTop:30,
-=======
-        fontSize: 16,
-        color: "#696969",
-        marginTop: 10,
-        textAlign: 'center'
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
     },
     buttonContainer: {
         margin: 5,
@@ -139,11 +119,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 60,
-<<<<<<< HEAD
         width:Dimensions.get('screen').width,
-=======
-        width: Dimensions.get('screen').width
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
     }
 
 })
