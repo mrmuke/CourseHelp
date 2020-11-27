@@ -91,6 +91,7 @@ const audioConfig = {
     encoding: ENCODING,
     sampleRateHertz: SAMPLE_RATE_HERTZ,
     languageCode: LANGUAGE,
+    enableAutomaticPunctuation: true
 };
 
 const convertToText = (file, config) => {

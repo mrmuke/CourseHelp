@@ -61,13 +61,13 @@ export default function Tools() {
       const response = await fetch("https://us-central1-coursehelp-8d1c8.cloudfunctions.net/audioToText", {
         method: 'POST',
         body/* body */: formData,
-        /* headers: {
+        /* headers: {ss
           'Content-Type': 'multipart/form-data',
         }, */
       });
 
       const data = await response.json();
-      setNotes(data.transcript)
+     setNotes("-"+data.transcript.substr(0,data.transcript.length-1).replaceAll(". ","\n-").replaceAll("? ", "?\n-"))
     } catch (error) {
       console.log('There was an error', error);
       resetRecording()
@@ -124,16 +124,19 @@ export default function Tools() {
   const copyToClipboard = () => {
     Clipboard.setString(notes)
   }
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <View style={{alignItems:'center'}}>
+      <Title style={{textAlign:'center'}}>Lecture to Notes:</Title>
+
       {loading ? <><ActivityIndicator /></> :
         !isRecording ? <TouchableOpacity onPress={startRecording}><Icon size={100} name="microphone" /></TouchableOpacity> : <TouchableOpacity onPress={() => { stopRecording(); getTranscription() }} style={{ backgroundColor: 'red', borderRadius: 50, padding: 20 }}><Icon size={100} color="white" name="microphone-slash" /></TouchableOpacity>}
-      {notes.length > 0 && <>
+      {notes.length>0&& <>
         <Title>Notes:</Title>
-        <TextInput style={{ width: Dimensions.get('screen').width - 50 }} value={notes} onChangeText={text => setNotes(text)} />
-        <Button color="black" icon="pencil" onPress={() => copyToClipboard()}>Copy</Button></>}
-      {<ImageToText />}
+        <TextInput multiline={true} style={{ width: Dimensions.get('screen').width - 50 }} value={notes} onChangeText={text => setNotes(text)} />
+        <Button color="black" icon="pencil" onPress={() => copyToClipboard()}>Copy</Button></>}</View>
+        <Title style={{textAlign:'center'}}>Image to Notes:</Title>
+      <ImageToText />
 
     </ScrollView>
   );
@@ -146,8 +149,6 @@ export default function Tools() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
 
   }

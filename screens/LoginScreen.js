@@ -7,8 +7,6 @@ import firebase from 'firebase'
 import { Keyboard, TextInput, TouchableWithoutFeedback, Alert, KeyboardAvoidingView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-
-
 class LoginScreen extends Component {
     constructor(props) {
         super(props)
@@ -35,10 +33,15 @@ class LoginScreen extends Component {
                 .then(result => {
                     firebase
                         .database()
-                        .ref('/users/' + result.user.uid)
+                        .ref('users/' + result.user.uid)
                         .set({
                             email: result.user.email,
-
+                            profile_picture: "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg",
+                            username: 'HS Survivor',
+                            bio: 'Hello!',
+                            school: 'None',
+                            grade: 'FRESHMAN',
+                            //last_name: result.additionalUserInfo.profile.family_name,
                             created_at: Date.now()
                         })
                 })
@@ -55,7 +58,7 @@ class LoginScreen extends Component {
     loginUser = (email, password) => {
         try {
             firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
-                firebase.database().ref('/users/' + result.user.uid).update({
+                firebase.database().ref('users/' + result.user.uid).update({
                     last_logged_in: Date.now(),
 
                 })
@@ -100,11 +103,10 @@ class LoginScreen extends Component {
                         if (result.additionalUserInfo.isNewUser) {
                             firebase
                                 .database()
-                                .ref('/users/' + result.user.uid)
+                                .ref('users/' + result.user.uid)
                                 .set({
                                     email: result.user.email,
                                     profile_picture: result.additionalUserInfo.profile.picture,
-                                    locale: result.additionalUserInfo.profile.locale,
                                     username: result.additionalUserInfo.profile.given_name,
                                     bio: 'Hello!',
                                     school: 'None',
@@ -117,7 +119,7 @@ class LoginScreen extends Component {
                                 })
                         }
                         else {
-                            firebase.database().ref('/users/' + result.user.uid).update({
+                            firebase.database().ref('users/' + result.user.uid).update({
                                 last_logged_in: Date.now(),
 
                             })
@@ -144,7 +146,7 @@ class LoginScreen extends Component {
         try {
             const result = await Google.logInAsync({
                 /* behavior: 'web', */
-                /*  androidClientId: YOUR_CLIENT_ID_HERE, */
+                androidClientId: '451006353013-ku55n12e8e48ujfvqo49vsr1e5hpc73d.apps.googleusercontent.com',
                 iosClientId: '451006353013-ot4fj9fg8ijfrro6o7vj5l474205vtff.apps.googleusercontent.com',
                 scopes: ['profile', 'email'],
             });

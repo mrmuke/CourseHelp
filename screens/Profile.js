@@ -1,28 +1,26 @@
-import React, { useState, useEffect, Component } from 'react';
-import { View, Text, StyleSheet, Image, Alert, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase'
-import { TextInput, Button, IconButton, Caption, Searchbar, Title } from 'react-native-paper'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import * as ImagePicker from 'expo-image-picker'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Button} from 'react-native-paper'
 import EditProfile from './EditProfile';
 
 export default function Profile(props) {
-    const [image, setImage] = useState(null)
     const [user, setUser] = useState(null)
     const [edit, setEdit] = useState(false)
     useEffect(() => {
+        
         getUser();
-    }, []);
+    }, [])
 
     function getUser() {
-
+ 
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
         })
     }
 
     if (user == null) {
+        
         return null
     }
 
@@ -38,12 +36,11 @@ export default function Profile(props) {
                 <View style={styles.body}>
                     <View style={styles.bodyContent}>
                         <Text style={styles.name}>{user.username}</Text>
-                        <Text style={styles.info}>{user.school["item"]}</Text>
-                        <Text style={styles.info}>{user.grade}</Text>
+                        <Text style={styles.info}>{user.school["item"]} {user.grade}</Text>
                         <Text style={styles.description}>{user.bio}</Text>
                         <View style={styles.button}>
-                            <Button mode='outlined' color='#52575D' style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
-                            <Button mode='outlined' color='#52575D' style={styles.buttonContainer} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
+                            <Button mode='contained' color='#5b59fb' contentStyle={{padding:10}} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                            <Button mode='contained' color='#5b59fb' contentStyle={{padding:10}} style={styles.buttonContainer} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
                         </View>
                     </View>
                 </View>
@@ -64,10 +61,9 @@ const styles = StyleSheet.create({
     avatar: {
         width: 130,
         height: 130,
-        borderRadius: 63,
+        borderRadius: 100,
         borderWidth: 4,
         borderColor: "white",
-        marginBottom: 10,
         alignSelf: 'center',
         position: 'absolute',
         marginTop: 80
@@ -88,24 +84,21 @@ const styles = StyleSheet.create({
     info: {
         fontSize: 16,
         color: "#5b59fb",
-        marginTop: 15
+        marginTop: 15,
     },
     description: {
         fontSize: 16,
         color: "#696969",
-        marginTop: 20,
+        marginTop:10,
         textAlign: 'center'
     },
     buttonContainer: {
         margin: 5,
-        height: 35,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 150,
-        borderRadius: 7,
+
     },
     button: {
-        marginTop: 120
+        marginTop: 60,
+        width:Dimensions.get('screen').width
     }
 
 })
