@@ -1,29 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Text, StyleSheet, View, KeyboardAvoidingView, Keyboard, TextInput, Alert } from 'react-native';
 import * as firebase from 'firebase'
-import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome'
-import moment from 'moment'
+import { FlatList, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Button, Card, Title } from 'react-native-paper';
 export default function CommentForum({ user, forumPost, exit }) {
     const [forum, setForum] = useState(forumPost)
     const [comment, setComment] = useState('')
     const [commentRender, setCommentRender] = useState(false)
-    const [comments, setComments] = useState(forumPost.comments)
+    const [comments, setComments] = useState([])
     useEffect(() => {
-        getForum()
+        getComments()
     }, [])
-
-    function getForum() {
-        var ref = firebase.database().ref("forum/" + forum.id + "/comments")
-        ref.on('child_added', function (snapshot) {
-
-            var list = []
-            snapshot.forEach(item => {
-                console.log(item)
+    //upvote downvote select subject and select asnwer and upload user
+    function getComments() {
+        firebase.database().ref("forum/"+forum.id+"/comments").on('value', function (snapshot) {
+            var list =[]
+            snapshot.forEach(function(item){
                 list.push(item.val())
             })
+            list.reverse()
             setComments(list)
+
+            
+        })
+        firebase.database().ref("forum/"+forum.id+"/comments").on('child_added', function (snapshot) {
+            var list =comments
+            list.push(snapshot.val())
+            setComments(list)
+
+            
         })
     }
 
@@ -67,11 +72,13 @@ export default function CommentForum({ user, forumPost, exit }) {
 
     const commentMessage = async () => {
         var ref = firebase.database().ref("forum/" + forum.id + "/comments/")
-        var commentKey = ref.push({
-            comment: comment
+        ref.push({
+            comment: comment,
+            time_added:Date.now()
         })
     }
-    return (
+
+   return (
 
         <ScrollView style={styles.container}>
             <View>
@@ -91,7 +98,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                     </Card.Content>
                 </Card>
             </View>
-            <View style={{ height: 500 }}>
+            <View>
                 <Title style={{ borderBottomColor: "#dcdde1", borderBottomWidth: 1, margin: 20, marginTop: 20 }}>Comments</Title>
                 <KeyboardAvoidingView behavior='padding'>
                     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible={false}>
@@ -126,16 +133,44 @@ export default function CommentForum({ user, forumPost, exit }) {
                             </View>}
                     </View>
                 </KeyboardAvoidingView>
+                
             </View >
-            <View>
-                <FlatList
-                    data={comments}
-                    renderItem={(item) => (
-                        <Text>{item.comment}</Text>
-                    )
-                    }
-                />
-            </View>
+            {comments.map(c=>(
+                    <View style={{
+                        paddingLeft: 19,
+                        paddingRight: 16,
+                        paddingVertical: 12,
+                        flexDirection: 'row',
+                        alignItems: 'flex-start'
+                      }}>
+                    <Image style={{
+    width:45,
+    height:45,
+    borderRadius:20,
+
+  }} source={{uri: "https://bootdey.com/img/Content/avatar/avatar1.png"}}/>
+                    <View style={{marginLeft:16, flex:1}}>
+                        <TouchableOpacity onPress={() => {}}>
+                
+              </TouchableOpacity>
+                    <View style={{flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 6}}>
+                      <Text  style={{
+    fontSize:16,
+    fontWeight:"bold",
+  }}>Michael</Text>
+                      <Text style={{
+    fontSize:11,
+    color:"#808080",
+  }}>
+                        {timeDifference(Date.now(),c.time_added)}
+                      </Text>
+                    </View>
+                    <Text>{c.comment}</Text>
+                  </View>
+                   </View>
+                ))}
         </ScrollView>
 
 

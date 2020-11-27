@@ -54,7 +54,7 @@ export default function Forum() {
             <Button mode="contained" onPress={() => setCreate(true)} color="#4293f5" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
             <FlatList
                 data={postData}
-                keyExtractor={(item) => uuidv4()}
+                keyExtractor={(index) => uuidv4()}
                 renderItem={({ item, index }) => (
                     <Card style={{ margin: 15 }}>
                         <Card.Title title={item.title} subtitle={"by " + item.postedby} />
