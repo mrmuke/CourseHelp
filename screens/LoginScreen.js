@@ -37,8 +37,10 @@ class LoginScreen extends Component {
                         .database()
                         .ref('/users/' + result.user.uid)
                         .set({
+                            username: 'anonymous',
                             email: result.user.email,
-
+                            bio: 'Hello!',
+                            school: 'None',
                             created_at: Date.now()
                         })
                 })

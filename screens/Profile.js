@@ -21,6 +21,7 @@ export default function Profile(props) {
             setUser(snapshot.val())
         })
     }
+
     if (user == null) {
         return null
     }

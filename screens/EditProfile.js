@@ -40,11 +40,6 @@ export default function EditProfile({ user, exit }) {
         }
         setFilteredData(array.slice(0, 10));
     }
-    const ItemSeparator = () => <View style={{
-        height: 2,
-        width: "100%",
-        backgroundColor: "rgba(0,0,0,0.5)",
-    }} />
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync();
         if (!result.cancelled) {
@@ -63,7 +58,7 @@ export default function EditProfile({ user, exit }) {
         }).then(() => {
             setLoading(false)
         })
-        console.log(userID)
+        //console.log(userID)
 
     }
     function uploadUsername() {
