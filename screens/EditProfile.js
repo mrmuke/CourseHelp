@@ -85,9 +85,6 @@ export default function EditProfile({ user, exit }) {
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <ScrollView>
             <View style={styles.header}>
-                <Text style={styles.title} color='black'>
-                    Edit Profile
-                </Text>
             </View>
             <Image
                 style={styles.profileImage}
