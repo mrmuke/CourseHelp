@@ -33,7 +33,7 @@ class LoginScreen extends Component {
                 .then(result => {
                     firebase
                         .database()
-                        .ref('/users/' + result.user.uid)
+                        .ref('users/' + result.user.uid)
                         .set({
                             email: result.user.email,
                             profile_picture: "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg",
@@ -58,7 +58,7 @@ class LoginScreen extends Component {
     loginUser = (email, password) => {
         try {
             firebase.auth().signInWithEmailAndPassword(email, password).then(function (result) {
-                firebase.database().ref('/users/' + result.user.uid).update({
+                firebase.database().ref('users/' + result.user.uid).update({
                     last_logged_in: Date.now(),
 
                 })
@@ -103,7 +103,7 @@ class LoginScreen extends Component {
                         if (result.additionalUserInfo.isNewUser) {
                             firebase
                                 .database()
-                                .ref('/users/' + result.user.uid)
+                                .ref('users/' + result.user.uid)
                                 .set({
                                     email: result.user.email,
                                     profile_picture: result.additionalUserInfo.profile.picture,
@@ -119,7 +119,7 @@ class LoginScreen extends Component {
                                 })
                         }
                         else {
-                            firebase.database().ref('/users/' + result.user.uid).update({
+                            firebase.database().ref('users/' + result.user.uid).update({
                                 last_logged_in: Date.now(),
 
                             })

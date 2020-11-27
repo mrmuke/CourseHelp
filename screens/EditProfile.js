@@ -23,6 +23,8 @@ export default function EditProfile({ user, exit }) {
     const showDialog = () => setVisible(true);
     const hideDialog = () => setVisible(false);
     const userID = firebase.auth().currentUser.uid
+    const [selectGrade, setSelectGrade] = useState(false)
+    
     const searchData = async (text) => {
         let textUpper = text.toUpperCase()
         let array = data.filter(name => name["A"].startsWith(textUpper)).map(item => item["A"])
@@ -81,7 +83,7 @@ export default function EditProfile({ user, exit }) {
     return (
 
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-
+            <ScrollView>
             <View style={styles.header}>
                 <Text style={styles.title} color='black'>
                     Edit Profile
@@ -129,51 +131,61 @@ export default function EditProfile({ user, exit }) {
                         <Button mode="text" color='#36485f' contentStyle={{ padding: 10 }} labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{school["item"]}</Button>
                     </TouchableOpacity>
                 </View>
-                <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center' }}>
-                    <Text style={{ marginRight: 5, width: 80, fontSize: 15 }}> Grade </Text>
-                    <View style={{ flex: 1 }}>
-                        <TouchableOpacity onPress={() => setVisible(true)}>
-                            <Button mode="text" contentStyle={{ padding: 10 }} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
+                <View style={{ flexDirection: 'row', marginTop:20, alignItems:'center'}}>
+                    <Text style={{ marginRight: 5, width:80,fontSize: 15 }}> Grade </Text>
+                    <View style={{flex:1}}>
+                        <TouchableOpacity onPress={()=>setSelectGrade(true)}>
+                            <Button mode="text" contentStyle={{padding:10}} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
                         </TouchableOpacity>
 
                     </View >
                 </View>
             </View>
-
             <Button onPress={() => { exit(); uploadData() }} mode="text" color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} >Save</Button>
-            <Provider>
-                <Portal>
-                    <Dialog style={{ backgroundColor: "white" }} visible={visible}>
-                        <Dialog.Title style={{ color: 'black' }}>School</Dialog.Title>
-                        <Dialog.Content>
-                            <TextInput
-                                inputStyle={{ color: 'black', fontSize: 13 }}
-                                style={{ margin: 5, height: 40, borderBottomColor: '#dcdde1', borderBottomWidth: 1 }}
-                                iconColor='black'
-                                onChangeText={(query) => { setQuery(query); searchData(query); }}
-                                value={query}
-                                placeholder="Search for your School" />
-                            <FlatList
-                                data={filteredData}hello
 
-                                renderItem={({ item }) => {
-                                    return <Button key={item} color='#36485f' mode='outlined' labelStyle={{ fontSize: 10, color: 'black' }} contentStyle={{ height: 30 }} onPress={() => { setSchool({ item }), setQuery({ item }["item"]), setFilteredData([]) }}>{item}</Button>;
-                                }}
-                                keyExtractor={(index) => index}
-                            />
-                            <TouchableOpacity style={{ margin: 5 }} onPress={() => setShowGrade(!showGrade)}>
-                                <Button mode="text" contentStyle={{ padding: 10 }} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
-                            </TouchableOpacity>
-                            {showGrade && <>{grades.map(grade =>
-                                <Button key={grade} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={styles.selector} mode="text" color="black" onPress={() => { setGrade(grade); setShowGrade(false) }}>{grade}</Button>
-                            )}</>}
-                            <Dialog.Actions>
-                                <Button color='#36485f' labelStyle={{ fontWeight: 'bold', fontSize: 15, color: 'black' }} onPress={() => { setQuery('') }, hideDialog}>Done</Button>
-                            </Dialog.Actions>
-                        </Dialog.Content>
-                    </Dialog>
-                </Portal>
-            </Provider>
+            </ScrollView>
+            <Provider>
+                    <Portal>
+                        <Dialog style={{ backgroundColor: "white" }} visible={visible}>
+                                    <Dialog.Title style={{ color: 'black' }}>School</Dialog.Title>
+                                    <Dialog.Content>
+                                        <TextInput
+                                            inputStyle={{ color: 'black', fontSize: 13 }}
+                                            style={{ margin: 5, height: 40, borderBottomColor: '#dcdde1', borderBottomWidth: 1 }}
+                                            iconColor='black'
+                                            onChangeText={(query) => { setQuery(query); searchData(query); }}
+                                            value={query}
+                                            placeholder="Search for your School" />
+                                        <FlatList
+                                            data={filteredData}
+                                            renderItem={({ item }) => {
+                                                return <Button color='#36485f' mode='outlined' labelStyle={{ fontSize: 10, color: 'black' }} contentStyle={{ height: 30 }} onPress={() => { setSchool({ item }), setQuery({ item }["item"]), setFilteredData([]) }}>{item}</Button>;
+                                            }}
+                                            keyExtractor={(item, index) => item}
+                                        />
+ 
+                                        <Dialog.Actions>
+                                            <Button color='#36485f' labelStyle={{ fontWeight: 'bold', fontSize: 15, color: 'black' }} onPress={() => { setQuery('') }, hideDialog}>Done</Button>
+                                        </Dialog.Actions>
+                                    </Dialog.Content>
+                        </Dialog>
+                        <Dialog style={{ backgroundColor: "white" }} visible={selectGrade}>
+                                    <Dialog.Title style={{ color: 'black' }}>Grade</Dialog.Title>
+                                    <Dialog.Content>
+
+                                        <TouchableOpacity style={{margin:5}} onPress={() => setShowGrade(!showGrade)}>
+                            <Button mode="text" contentStyle={{padding:10}} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
+                        </TouchableOpacity>
+                                        {showGrade && <>{grades.map(grade =>
+                            <Button key={grade} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={styles.selector} mode="text" color="black" onPress={() => { setGrade(grade); setShowGrade(false) }}>{grade}</Button>
+                        )}</>}
+                                        <Dialog.Actions>
+                                            <Button color='#36485f' labelStyle={{ fontWeight: 'bold', fontSize: 15, color: 'black' }} onPress={() => setSelectGrade(false)}>Done</Button>
+                                        </Dialog.Actions>
+                                    </Dialog.Content>
+                        </Dialog>
+                    </Portal>
+                </Provider>
         </View >
     );
 
