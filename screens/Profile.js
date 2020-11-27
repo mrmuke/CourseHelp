@@ -1,33 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase'
-import { Button} from 'react-native-paper'
+import { Button } from 'react-native-paper'
 import EditProfile from './EditProfile';
 
 export default function Profile(props) {
     const [user, setUser] = useState(null)
     const [edit, setEdit] = useState(false)
     useEffect(() => {
-        
         getUser();
+        //firebase.auth().signOut()
     }, [])
 
     function getUser() {
- 
+
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
         })
     }
-
     if (user == null) {
-        
+
         return null
     }
 
     if (edit) {
         return <EditProfile user={user} exit={() => { setEdit(false); getUser() }} />
     }
-
     return (
         <ScrollView style={styles.container}>
             <View style={styles.container}>
@@ -39,8 +37,8 @@ export default function Profile(props) {
                         <Text style={styles.info}>{user.school["item"]} {user.grade}</Text>
                         <Text style={styles.description}>{user.bio}</Text>
                         <View style={styles.button}>
-                            <Button mode='contained' color='#5b59fb' contentStyle={{padding:10}} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
-                            <Button mode='contained' color='#5b59fb' contentStyle={{padding:10}} style={styles.buttonContainer} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
+                            <Button mode='contained' color='#5b59fb' contentStyle={{ padding: 10 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                            <Button mode='contained' color='#5b59fb' contentStyle={{ padding: 10 }} style={styles.buttonContainer} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
                         </View>
                     </View>
                 </View>
@@ -89,7 +87,7 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 16,
         color: "#696969",
-        marginTop:10,
+        marginTop: 10,
         textAlign: 'center'
     },
     buttonContainer: {
@@ -98,7 +96,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 60,
-        width:Dimensions.get('screen').width
+        width: Dimensions.get('screen').width
     }
 
 })

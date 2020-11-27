@@ -17,15 +17,11 @@ export default function CommentForum({ user, forumPost, exit }) {
     function getForum() {
         var ref = firebase.database().ref("forum/" + forum.id + "/comments")
         ref.on('child_added', function (snapshot) {
-            //console.log(snapshot.val())
             var list = []
             snapshot.forEach((item) => {
-                list.push(item.val())
-                //console.log(list)
+                list.push(snapshot.val())
             })
-            //console.log(list)
             setComments(list)
-            //console.log(comments)
         })
     }
 
@@ -74,8 +70,7 @@ export default function CommentForum({ user, forumPost, exit }) {
         })
     }
     return (
-
-        <ScrollView style={styles.container}>
+        <ScrollView>
             <View>
                 <Button icon="arrow-left" onPress={() => exit()} color='#36485f'
                     labelStyle={{ color: 'black' }}
@@ -128,21 +123,17 @@ export default function CommentForum({ user, forumPost, exit }) {
                             </View>}
                     </View>
                 </KeyboardAvoidingView>
-                <View>
+                <View style={{ height: 500 }}>
                     <FlatList
                         data={comments}
                         renderItem={({ item }) => (
-                            <Text>{item} </Text>
+                            <Text>{item.comment} </Text>
                         )}
 
                     />
                 </View>
             </View >
-
         </ScrollView>
-
-
-
     )
 }
 

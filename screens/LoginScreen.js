@@ -109,7 +109,7 @@ class LoginScreen extends Component {
                                     profile_picture: result.additionalUserInfo.profile.picture,
                                     username: result.additionalUserInfo.profile.given_name,
                                     bio: 'Hello!',
-                                    school: 'None',
+                                    school: { item: 'None' },
                                     grade: 'FRESHMAN',
                                     //last_name: result.additionalUserInfo.profile.family_name,
                                     created_at: Date.now()

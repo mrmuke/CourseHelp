@@ -62,7 +62,7 @@ export default function Forum() {
                         <Card.Content style={{ margin: 10 }}>
                             <Text>
                                 {item.post.substring(0, 300
-                                    )}...
+                                )}...
                             </Text>
                         </Card.Content>
                         <Card.Actions>
