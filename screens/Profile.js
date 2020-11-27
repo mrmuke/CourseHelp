@@ -9,7 +9,7 @@ export default function Profile(props) {
     const [edit, setEdit] = useState(false)
     useEffect(() => {
         
-        getUser()
+        getUser();
     }, [])
 
     function getUser() {
@@ -23,11 +23,12 @@ export default function Profile(props) {
         
         return null
     }
+
     if (edit) {
         return <EditProfile user={user} exit={() => { setEdit(false); getUser() }} />
     }
-    return (
 
+    return (
         <ScrollView style={styles.container}>
             <View style={styles.container}>
                 <View style={styles.header}></View>

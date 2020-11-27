@@ -21,7 +21,6 @@ if (!firebase.apps.length) {
 
 }
 
-
 export default class App extends React.Component {
   render() {
     return <NavigationContainer><AppNavigator /></NavigationContainer>

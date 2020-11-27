@@ -146,11 +146,10 @@ class LoginScreen extends Component {
         try {
             const result = await Google.logInAsync({
                 /* behavior: 'web', */
-                /*  androidClientId: YOUR_CLIENT_ID_HERE, */
+                androidClientId: '451006353013-r826qrrdbgavd6bdj5v9bhh6le1iqnjk.apps.googleusercontent.com',
                 iosClientId: '451006353013-ot4fj9fg8ijfrro6o7vj5l474205vtff.apps.googleusercontent.com',
                 scopes: ['profile', 'email'],
             });
-
             if (result.type === 'success') {
                 this.onSignIn(result)
                 return result.accessToken;
