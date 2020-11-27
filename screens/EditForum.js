@@ -45,7 +45,7 @@ export default function EditForum({ user, exit }) {
         })
     }
     const revert = async () => {
-        console.log(uploaded)
+        //console.log(uploaded)
         if (uploaded) {
             let ref = firebase.storage().ref("forumimages/" + postKey)
             ref.delete().then(console.log('success'))
@@ -75,14 +75,14 @@ export default function EditForum({ user, exit }) {
                 <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} accessible={false} >
                     <View style={{ borderBottomColor: '#dcdde1', borderBottomWidth: 1, borderTopWidth: 1, borderTopColor: '#dcdde1' }}>
                         <TextInput
-                            style={{ flex: 1, margin: 20,paddingBottom:10,borderBottomWidth: 1, borderBottomColor: "#dcdde1" }}
+                            style={{ flex: 1, margin: 20, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: "#dcdde1" }}
                             placeholder="Post Title (required) max 40 char. "
                             onChangeText={postTitle => setPostTitle(postTitle)}
                             underlineColor="#36485f"
                             autoCorrect={true}
                         />
                         <TextInput
-                            style={{ marginLeft: 20,flex:1,height: 275 }}
+                            style={{ marginLeft: 20, flex: 1, height: 275 }}
                             placeholder="Your text post"
                             multiline={true}
                             onChangeText={postText => setPostText(postText)}
@@ -94,14 +94,14 @@ export default function EditForum({ user, exit }) {
                 </TouchableWithoutFeedback>
                 <View style={{ flexDirection: 'row' }}>
                     {uploaded ?
-                        <Title style={{ margin: 20, marginTop:15 }}>IMAGE UPLOADED</Title> : <Title style={{ margin: 20, marginTop: 15, }}>Upload Image</Title>}
+                        <Title style={{ margin: 20, marginTop: 15 }}>IMAGE UPLOADED</Title> : <Title style={{ margin: 20, marginTop: 15, }}>Upload Image</Title>}
                     {loading ?
                         <ActivityIndicator size='large' marginLeft='auto' marginRight={15} marginVertical={18} /> :
                         <IconButton icon='camera' size={40} style={{ marginLeft: 'auto' }} onPress={pickImage} />}
                 </View>
                 <Image
                     style={{
-                        flex:1,height:300,
+                        flex: 1, height: 300,
                     }}
                     source={{ uri: url }}
                 />

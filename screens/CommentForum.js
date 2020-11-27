@@ -50,10 +50,12 @@ export default function CommentForum({ user, forumPost, exit }) {
         var ref = firebase.database().ref("forum/" + forumPost.id + "/comments/")
         await ref.push({
             comment: comment,
-            time_added: Date.now()
+            time_added: Date.now(),
+            commentedBy: user.username,
+            profile_picture: user.profile_picture
         })
-        firebase.database().ref('forum/'+forumPost.id).once('value',snapshot=>{
-            console.log(snapshot.val())
+        firebase.database().ref('forum/' + forumPost.id).once('value', snapshot => {
+            //console.log(snapshot.val())
             setForum(snapshot.val())
         })
     }
@@ -128,7 +130,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                         height: 45,
                         borderRadius: 20,
 
-                    }} source={{ uri: "https://bootdey.com/img/Content/avatar/avatar1.png" }} />
+                    }} source={{ uri: c.profile_picture }} />
                     <View style={{ marginLeft: 16, flex: 1 }}>
                         <TouchableOpacity onPress={() => { }}>
 
@@ -141,7 +143,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                             <Text style={{
                                 fontSize: 16,
                                 fontWeight: "bold",
-                            }}>Michael</Text>
+                            }}>{c.commentedBy}</Text>
                             <Text style={{
                                 fontSize: 11,
                                 color: "#808080",
@@ -154,9 +156,6 @@ export default function CommentForum({ user, forumPost, exit }) {
                 </View>
             ))}
         </ScrollView>
-
-
-
     )
 }
 

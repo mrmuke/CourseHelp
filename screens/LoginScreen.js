@@ -39,7 +39,7 @@ class LoginScreen extends Component {
                             profile_picture: "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg",
                             username: 'HS Survivor',
                             bio: 'Hello!',
-                            school: 'None',
+                            school: { item: 'No School' },
                             grade: 'FRESHMAN',
                             //last_name: result.additionalUserInfo.profile.family_name,
                             created_at: Date.now()
@@ -109,7 +109,7 @@ class LoginScreen extends Component {
                                     profile_picture: result.additionalUserInfo.profile.picture,
                                     username: result.additionalUserInfo.profile.given_name,
                                     bio: 'Hello!',
-                                    school: 'None',
+                                    school: { item: 'No School' },
                                     grade: 'FRESHMAN',
                                     //last_name: result.additionalUserInfo.profile.family_name,
                                     created_at: Date.now()

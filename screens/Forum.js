@@ -14,11 +14,41 @@ export default function Forum() {
     const [create, setCreate] = useState(false)
     const [comment, setComment] = useState(false)
     const [forum, setForum] = useState(null)
+    const [vote, setVote] = useState(null)
+    const [disableVotes, setDisableVotes] = useState(false)
 
     useEffect(() => {
         getPosts()
         getUser()
     }, [])
+
+
+    function upvote(item) {
+        var ref = firebase.database().ref('forum/' + forum.id)
+        var v = 0
+        ref.on('value', snapshot => {
+            v = snapshot.val().vote
+            //console.log(snapshot.val().vote)
+        })
+        ref.update({
+            vote: v + 1
+        })
+        //+(v)
+    }
+
+    function downvote(item) {
+        if (item.vote != 0) {
+            var ref = firebase.database().ref('forum/' + forum.id)
+            var v = 0
+            ref.on('value', snapshot => {
+                v = snapshot.val().vote
+                //console.log(snapshot.val().vote)
+            })
+            ref.update({
+                vote: v - 1
+            })
+        }
+    }
 
     function getPosts() {
 
@@ -30,6 +60,7 @@ export default function Forum() {
                 posts.push(item)
             })
             setPostData(posts)
+            //console.log(postData)
         })
     }
     function getUser() {
@@ -43,7 +74,6 @@ export default function Forum() {
     if (create) {
         return <EditForum user={user} exit={() => { setCreate(false) }} />
     }
-
     if (comment) {
         //console.log(forum)
         return <CommentForum user={user} forumPost={forum} exit={() => { setComment(false) }} />
@@ -84,8 +114,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     cardButtons: {
-        color: '#666666'
+        color: 'black'
     }
-
-
 })
