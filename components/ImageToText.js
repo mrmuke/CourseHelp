@@ -5,6 +5,8 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function ImageToText() {
     const [uploading, setUploading] = useState(false);
@@ -112,27 +114,20 @@ export default function ImageToText() {
             console.log(e);
         }
     }
+    console.log(text)
 if(uploading){
     return <ActivityIndicator/>
 }
     return (
             <View style={{padding:15}}>
-                <Button
-                    onPress={CameraPhoto}
-                    color='white'
-                    style={{
-                        backgroundColor: '#59a8fb',
-                    }}
-                >Take Photo</Button>
-                <Button
-                    onPress={takePhoto}                    
-                    style={{
-                        backgroundColor: '#59a8fb',
-                    }}
-                    color='white'
-                >Submit Photo</Button>
+                <View style={{flexDirection:'row', justifyContent:'center'}}>
+                <TouchableOpacity onPress={CameraPhoto}><Icon size={100} name="camera" /></TouchableOpacity>
+
+                <TouchableOpacity onPress={takePhoto}><Icon size={100} name="upload" /></TouchableOpacity>
+ 
+                </View>
                  
-                {text.length>0&&<View><Title>Notes:</Title><TextInput value={text}/><Button color="black" icon="pencil" onPress={() => Clipboard.setString(text)}>Copy</Button></View>}
+                {text.length>0&&<View><Title style={{textAlign:'center'}}>Notes:</Title><TextInput multiline={true} value={text}/><Button color="black" icon="pencil" onPress={() => Clipboard.setString(text)}>Copy</Button></View>}
             </View>
             
 
