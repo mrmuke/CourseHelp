@@ -38,13 +38,8 @@ class LoginScreen extends Component {
                             email: result.user.email,
                             profile_picture: "https://icon-library.com/images/default-profile-icon/default-profile-icon-16.jpg",
                             username: 'HS Survivor',
-<<<<<<< HEAD
                             bio: 'Welcome to CourseHelp!',
                             school: {item:'None'},
-=======
-                            bio: 'Hello!',
-                            school: { item: 'No School' },
->>>>>>> 3cba4ca7933cf247458b7efb0dc86e57923d7423
                             grade: 'FRESHMAN',
                             //last_name: result.additionalUserInfo.profile.family_name,
                             created_at: Date.now()

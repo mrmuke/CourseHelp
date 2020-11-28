@@ -4,13 +4,17 @@ import * as firebase from 'firebase'
 import { Button, Provider, Modal, Portal } from 'react-native-paper'
 import EditProfile from './EditProfile';
 import VerifyQuiz from './verifyQuiz';
+import { Icon } from 'react-native-elements';
 
 export default function Profile(props) {
     const [user, setUser] = useState(null)
     const [edit, setEdit] = useState(false)
     var [verify, setVerify] = useState(false);
     var [modalVisibility, setModalVisibility] = useState(false);
-    var [verifiedCourse, setVerifiedCourse] = useState("");
+    var [verifiedCourse, setVerifiedCourse] = useState({
+        msg: "",
+        bool: true
+    });
 
     useEffect(() => {
         getUser();
@@ -38,16 +42,22 @@ export default function Profile(props) {
                 setModalVisibility(true);
                 if (correct > 8) {
                     var newArray;
-                    if(user["verified"] == undefined){
+                    if (user["verified"] == undefined) {
                         newArray = [];
                     } else {
                         newArray = [...user["verified"]];
                     }
                     newArray.push(course);
                     firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('verified').set(newArray);
-                    setVerifiedCourse('YOU PASSED THE ' + course + ' TEST WITH A SCORE OF ' + correct + "/10! You're now verified!");
+                    setVerifiedCourse({
+                        msg: 'You passed the ' + course + ' verification test with a score of ' + correct + "/10! You're now verified!",
+                        bool: true
+                    });
                 } else {
-                    setVerifiedCourse('YOU FAILED THE ' + course + ' TEST with a score of ' + correct + "/10! Better luck next time!");
+                    setVerifiedCourse({ 
+                        msg:'You failed the ' + course + ' verification test with a score of ' + correct + "/10! Better luck next time!",
+                        bool: false
+                    });
                 }
             }
             setVerify(false);
@@ -58,7 +68,16 @@ export default function Profile(props) {
         <Provider>
             <Portal>
                 <Modal visible={modalVisibility} onDismiss={() => { setModalVisibility(false) }}>
-                    <Text style={{ backgroundColor: "#fff", marginLeft: 30, marginRight: 30, padding: 30, textAlign: "center"}}>{verifiedCourse}</Text>
+                    <View style={{ backgroundColor: "#fff", marginLeft: 30, marginRight: 30, paddingTop: 60, paddingBottom: 60, paddingLeft: 20, paddingRight:20}}>
+                        <Text style={{textAlign: "center", fontSize: 18}}>{verifiedCourse.msg}</Text>
+                        {(()=>{
+                            if(verifiedCourse.bool){
+                                return <Icon style={{marginTop: 30}} color="#5b59fb" size={60} name="check-circle" />;
+                            } else {
+                                return <Icon style={{marginTop: 30}} color="#5b59fb" size={60} name="sentiment-dissatisfied" />;
+                            }
+                        })()}
+                    </View>
                 </Modal>
             </Portal>
             <ScrollView style={styles.container}>

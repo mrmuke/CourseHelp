@@ -35,16 +35,28 @@ export default function VerifyQuiz({ exit }) {
         if(menuText != "Pick a class"){
             for (let each of courses[menuText]) {
                 if(each != undefined){
-                    item.push(<QuestionComponent courses={each} index={index} pickAnswer={(key, index)=>{
+                    item.push(<QuestionComponent key={"A:" + index} courses={each} index={index} pickAnswer={(key, index)=>{
                         var newObj = answer;
                         newObj[index] = key;
                         setAnswer(newObj);
-                    }}/>);
+                    }} menuText={menuText}/>);
                     index++;
                 }
             }
             setQuestionList(item);
         }
+        setAnswer({
+            1:0,
+            2:0,
+            3:0,
+            4:0,
+            5:0,
+            6:0,
+            7:0,
+            8:0,
+            9:0,
+            10:0
+        })
     }, [menuText]);
 
     for (let each in courses) {
@@ -75,12 +87,12 @@ export default function VerifyQuiz({ exit }) {
                     if (questionList.length > 0) {
                         return <Button mode="contained" onPress={() => {
                             checkAnswers();
-                        }} color="#5b59fb" style={{ margin: 10, padding: 5 }}>Submit</Button>;
+                        }} color="#5b59fb" style={{ margin: 30, padding: 5 }}>Submit</Button>;
                     }
                 })()}
                 <Button mode="contained" onPress={() => {
                     exit('back', null, null);
-                }} color="#5b59fb" style={{ marginLeft:10, marginRight:10, marginBottom: 10 ,padding: 5 }}>BACK</Button>
+                }} color="#5b59fb" style={{ marginLeft:30, marginRight:30, marginBottom: 30 ,padding: 5 }}>BACK</Button>
             </ScrollView>
         </Provider>
     )
