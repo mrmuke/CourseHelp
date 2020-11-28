@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 //import { render } from 'react-dom';
-import { ScrollView, View, Linking, Dimensions, Image } from 'react-native';
+import { ScrollView, View, Linking, Dimensions, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from 'firebase'
 import { Button, Card, Title, Caption, Chip, IconButton, Provider, Portal, Dialog, Text, Badge, Modal, TextInput, Subheading } from 'react-native-paper';
@@ -84,14 +84,27 @@ else{
         
     }
     function leaveGroup(c) {
-        firebase.database().ref('groups/' + c.id).once('value', snapshot => {
-            var members = snapshot.val().members
-            members = members.filter(e => e != firebase.auth().currentUser.uid)
-
-            firebase.database().ref('groups/' + c.id).update({
-                members
-            })
-        })
+        Alert.alert(
+            "Leave Group",
+        "Are you sure you want to leave this group?",
+            [
+              {
+                text: "Cancel",
+                style: "cancel"
+              },
+              { text: "LEAVE", onPress: () =>  firebase.database().ref('groups/' + c.id).once('value', snapshot => {
+                var members = snapshot.val().members
+                members = members.filter(e => e != firebase.auth().currentUser.uid)
+    
+                firebase.database().ref('groups/' + c.id).update({
+                    members
+                })
+            }) }
+            ],
+            { cancelable: false }
+          );
+      
+       
     }
 
     function joinGroup(c) {
@@ -108,6 +121,7 @@ else{
     }
 
     function removePending(c) {
+       
         firebase.database().ref('groups/' + group.id).once('value', snapshot => {
             var pending = snapshot.val().pending || []
             pending = pending.filter(e => e != c)

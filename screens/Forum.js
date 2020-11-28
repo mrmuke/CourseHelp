@@ -15,8 +15,6 @@ export default function Forum() {
     const [create, setCreate] = useState(false)
     const [comment, setComment] = useState(false)
     const [forum, setForum] = useState(null)
-    const [votes, setVotes] = useState(0)
-
     const [category, setCategory] = useState('all')
     const userUID = firebase.auth().currentUser.uid
     useEffect(() => {
@@ -25,8 +23,8 @@ export default function Forum() {
     }, [])
 
 
-    function Votes(type) {
-        let ref = firebase.database().ref('forum/' + forum.id)
+    function Votes(type ,item ) {
+        let ref = firebase.database().ref('forum/' + item.id)
         var upVoters = []
         var downVoters = []
         ref.once('value', snapshot => {
@@ -57,16 +55,15 @@ export default function Forum() {
         }
 
         //setUpvote(upVoters)
-        //setDownvote(downVoters)
-        setVotes(upVoters.length - downVoters.length)
-        ref.update({ upvotes: upVoters })
+        //setDownvote(downVoters)        ref.update({ upvotes: upVoters })
         ref.update({ downvotes: downVoters })
+        ref.update({ upvotes: upVoters })
         //console..length, upVoters)
         // console.log('down', downVoters.length, downVoters)
     }
     //console.log(votes)
 
-    const getPosts = async (cat) => {
+    const getPosts = (cat) => {
         firebase.database().ref('forum/').on('value', snapshot => {
             var posts = []
             snapshot.forEach(function (childSnapshot) {
@@ -79,7 +76,6 @@ export default function Forum() {
                         posts.push(item)
                     }
                 }
-                console.log(posts)
             })
             setPostData(posts)
         })
@@ -120,10 +116,10 @@ export default function Forum() {
                     </Text>
                         </Card.Content>
                         <Card.Actions>
-                            <Button labelStyle={styles.cardButtons} onPress={() => { setForum(item), Votes('down') }} icon="arrow-down"></Button>
-                            <Text>{votes}</Text>
-                            <Button labelStyle={styles.cardButtons} onPress={() => { setForum(item), Votes('up') }} icon="arrow-up"></Button>
-                            <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
+                            <Button labelStyle={styles.cardButtons} onPress={() => { Votes('down', item) }} icon="arrow-down"></Button>
+                            <Text>{}</Text>
+                            <Button labelStyle={styles.cardButtons} onPress={() => { Votes('up', item) }} icon="arrow-up"></Button>
+                            <Button onPress={() => { setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
                         </Card.Actions>
                     </Card>
                 ))}

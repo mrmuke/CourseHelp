@@ -16,13 +16,15 @@ class Fire {
   }
 
   parse = snapshot => {
-    const { timestamp, text, user } = snapshot.val();
+    const { timestamp, text, user,image,quickReplies } = snapshot.val();
     const { key: _id } = snapshot;
     const message = {
       _id,
       createdAt:timestamp,
       text,
       user,
+      image,
+      quickReplies
     };
     return message;
   };
@@ -42,25 +44,8 @@ class Fire {
       const message = {
         text,
         user,
-        /* quickReplies: {
-          type: 'radio', // or 'checkbox',
-          keepIt: true,
-          values: [
-            {
-              title: '😋 Yes',
-              value: 'yes',
-            },
-            {
-              title: '📷 Yes, let me show you with a picture!',
-              value: 'yes_picture',
-            },
-            {
-              title: '😞 Nope. What?',
-              value: 'no',
-            },
-          ],
-        }, */
-        timestamp: this.timestamp,
+        
+                timestamp: this.timestamp,
       };
       this.append(message);
     }
