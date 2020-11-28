@@ -150,6 +150,7 @@ export default function Tools() {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+    padding:20
 
   }
 })

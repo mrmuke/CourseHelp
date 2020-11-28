@@ -92,7 +92,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                                 marginLeft: 10
                             }} source={{ uri: user.profile_picture }} />
                             <TextInput
-                                style={{ margin: 20, paddingVertical: 15, width: 300, borderBottomColor: "#dcdde1", borderBottomWidth: 1 }}
+                                style={{ margin: 20, paddingVertical: 15, flex:1, borderBottomColor: "#dcdde1", borderBottomWidth: 1 }}
                                 placeholder="Add a public comment..."
                                 mode='flat'
                                 multiline={true}
@@ -116,7 +116,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                 </KeyboardAvoidingView>
 
             </View >
-            {forum.comments&&Object.values(forum.comments).reverse().length > 0 && Object.values(forum.comments).reverse().map(c => (
+            {forum.comments && Object.values(forum.comments).reverse().length > 0 && Object.values(forum.comments).reverse().map(c => (
                 <View style={{
                     paddingLeft: 19,
                     paddingRight: 16,
