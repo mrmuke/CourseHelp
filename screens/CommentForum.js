@@ -92,7 +92,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                                 marginLeft: 10
                             }} source={{ uri: user.profile_picture }} />
                             <TextInput
-                                style={{ margin: 20, paddingVertical: 15, flex:1, borderBottomColor: "#dcdde1", borderBottomWidth: 1 }}
+                                style={{ margin: 20, paddingVertical: 15, flex: 1, borderBottomColor: "#dcdde1", borderBottomWidth: 1 }}
                                 placeholder="Add a public comment..."
                                 mode='flat'
                                 multiline={true}
@@ -109,7 +109,7 @@ export default function CommentForum({ user, forumPost, exit }) {
                         {commentRender ?
                             <View style={{ flexDirection: 'row', marginLeft: 'auto', marginHorizontal: 20 }}>
                                 <Button onPress={() => setCommentRender(false)} color='black' labelStyle={{ color: '#525252' }}>Cancel</Button>
-                                <Button onPress={() => commentMessage()} style={{ backgroundColor: '#525252' }} mode="contained">Comment</Button></View>
+                                <Button onPress={() => { commentMessage() }} style={{ backgroundColor: '#525252' }} mode="contained">Comment</Button></View>
                             : <View>
                             </View>}
                     </View>

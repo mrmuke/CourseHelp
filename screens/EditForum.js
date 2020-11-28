@@ -54,7 +54,7 @@ export default function EditForum({ user, exit }) {
         }
     }
     function check() {
-        if (uploaded&&postText.length>0&&postTitle.length>0) {
+        if (uploaded && postText.length > 0 && postTitle.length > 0) {
             post()
         } else {
             Alert.alert('Fill in all fields!')
@@ -83,7 +83,7 @@ export default function EditForum({ user, exit }) {
                             autoCorrect={true}
                         />
                         <TextInput
-                            style={{ marginLeft: 20, flex: 1, height: 275 }}
+                            style={{ marginHorizontal: 20, flex: 1, height: 275 }}
                             placeholder="Your text post"
                             multiline={true}
                             onChangeText={postText => setPostText(postText)}

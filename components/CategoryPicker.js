@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, Text, FlatList, View } from 'react-native
 
 const CategoryPicker = ({ selectedCategory, onClick, setFieldValue, ...props }) => {
     //const { colors } = useTheme()
-    const categories = ['Science', 'Math', 'History', 'English', 'Art', 'Language']
+    const categories = ['Science', 'Math', 'History', 'English', 'Art', 'Language', 'Technology']
     return (
         <View {...props}>
             <FlatList
@@ -12,7 +12,7 @@ const CategoryPicker = ({ selectedCategory, onClick, setFieldValue, ...props }) 
                 keyExtractor={item => item}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        onPress={() =>  onClick(item) }>
+                        onPress={() => onClick(item)}>
                         <Text
                             style={[
                                 styles.category,

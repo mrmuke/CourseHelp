@@ -15,42 +15,88 @@ export default function Forum() {
     const [create, setCreate] = useState(false)
     const [comment, setComment] = useState(false)
     const [forum, setForum] = useState(null)
-    const [vote, setVote] = useState(null)
-    const [disableVotes, setDisableVotes] = useState(false)
+    //const [votes, setVotes] = useState(0)
+    const [upvote, setUpvote] = useState([])
+    const [downvote, setDownvote] = useState([])
     const [category, setCategory] = React.useState('all')
-
+    const userUID = firebase.auth().currentUser.uid
     useEffect(() => {
         getPosts('all')
         getUser()
     }, [])
 
 
-    function upvote(item) {
-        var ref = firebase.database().ref('forum/' + forum.id)
-        var v = 0
-        ref.on('value', snapshot => {
-            v = snapshot.val().vote
-            //console.log(snapshot.val().vote)
+    function Votes(type) {
+        let upRef = firebase.database().ref('forum/' + forum.id + '/upvotes')
+        let downRef = firebase.database().ref('forum/' + forum.id + '/downvotes')
+        var upVoters = []
+        var downVoters = []
+        upRef.on('value', snapshot => {
+            let upLength = 0
+            snapshot.forEach(function (childSnapshot) {
+                upVoters.push(childSnapshot.val())
+            })
         })
-        ref.update({
-            vote: v + 1
+        downRef.on('value', snapshot => {
+            let downLength = 0
+            snapshot.forEach(function (childSnapshot) {
+                downVoters.push(childSnapshot.val())
+            })
         })
-        //+(v)
-    }
 
-    function downvote(item) {
-        if (item.vote != 0) {
-            var ref = firebase.database().ref('forum/' + forum.id)
-            var v = 0
-            ref.on('value', snapshot => {
-                v = snapshot.val().vote
-                //console.log(snapshot.val().vote)
+        if (type == 'up') {
+            if (upVoters.includes(userUID) && !downVoters.includes(userUID)) {
+                upRef.remove()
+            } else if (!upVoters.includes(userUID) && !downVoters.includes(userUID)) {
+                upRef.push(userUID)
+            } else if (!upVoters.includes(userUID) && downVoters.includes(userUID)) {
+                upRef.push(userUID)
+                downRef.remove()
+            }
+        } else if (type == 'down') {
+            if (downVoters.includes(userUID) && !upVoters.includes(userUID)) {
+                downRef.remove()
+            } else if (!downVoters.includes(userUID) && !upVoters.includes(userUID)) {
+                downRef.push(userUID)
+            } else if (!downVoters.includes(userUID) && upVoters.includes(userUID)) {
+                downRef.push(userUID)
+                upRef.remove()
+            }
+        }
+        setUpvote(upVoters)
+        setDownvote(downVoters)
+        console.log('up', upvote.length)
+        console.log('down', downvote.length)
+
+    }
+    function UpVote() {
+        let ref = firebase.database().ref('forum/' + forum.id + '/upvotes')
+        var users = []
+        ref.on('value', snapshot => {
+            snapshot.forEach(function (childSnapshot) {
+                users.push(childSnapshot.val())
             })
-            ref.update({
-                vote: v - 1
-            })
+        })
+        if (users.includes(userUID)) {
+            ref.delete().then(console.log(success))
+        } else if (!ref.inclued(userUID)) {
+            users.push(firebase.auth().currentUser.uid)
         }
     }
+
+    function DownVote() {
+        var ref = firebase.database().ref('forum/' + forum.id + '/downvotes')
+        var users = []
+        ref.on('value', snapsho => {
+            snapshot.forEach(function (childSnapshot) {
+                users.push(childSnapshot.val())
+            })
+        })
+        if (users.includes(userUID)) {
+            ref.delete()
+        }
+    }
+
 
     const getPosts = async (cat) => {
         firebase.database().ref('forum/').on('value', snapshot => {
@@ -58,20 +104,20 @@ export default function Forum() {
             snapshot.forEach(function (childSnapshot) {
                 let item = childSnapshot.val()
                 item['id'] = childSnapshot.key
+                //console.log(item["id"])
                 if (cat == 'all') {
                     //let item = childSnapshot.val()
                     //console.log('all')
                     posts.push(item)
                 } else {
                     //console.log(cat)
-                    console.log(cat)
+                    // console.log(cat)
                     if (item.category === cat) {
                         posts.push(item)
                     }
                 }
             })
             setPostData(posts)
-            //console.log(postData)
         })
     }
     function getUser() {
@@ -110,8 +156,8 @@ export default function Forum() {
                     </Text>
                         </Card.Content>
                         <Card.Actions>
-                            <Button labelStyle={styles.cardButtons} icon="arrow-down"></Button>
-                            <Button labelStyle={styles.cardButtons} icon="arrow-up"></Button>
+                            <Button labelStyle={styles.cardButtons} onPress={() => { setForum(item), Votes('down') }} icon="arrow-down"></Button>
+                            <Button labelStyle={styles.cardButtons} onPress={() => { setForum(item), Votes('up') }} icon="arrow-up"></Button>
                             <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
                         </Card.Actions>
                     </Card>
