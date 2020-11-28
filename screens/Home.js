@@ -34,8 +34,13 @@ export default function Home(props) {
     }, [])
     function getInvites(){
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
-            setInvites(snap.val().invites||[])
+            var item =snap.val().invites||[]
+            setInvites(item)
+            if(item.length==0){
+                setViewInvites(false)
+            }
     })
+        
     }
     useEffect(()=>{
         firebase.database().ref('users/').on('value', snap => {
@@ -58,6 +63,14 @@ export default function Home(props) {
     },[userQuery])
     function sendInvite(){
         setUserQuery("")
+        if(group.pending&&group.pending.includes(selectedUser.id))
+{
+    removePending(selectedUser.id)
+    joinGroup(selectedUser.id)
+
+}
+
+else{
         firebase.database().ref('users/'+ selectedUser.id).once('value',snap=>{
             let invites = snap.val().invites||[]
             invites.push(group.id)
@@ -67,6 +80,7 @@ export default function Home(props) {
                 setSelectedUser(null)
             })
         })
+    }
         
     }
     function leaveGroup(c) {
@@ -117,7 +131,7 @@ export default function Home(props) {
                 </View>
 
                 {groups.map(group => (
-                    <View>
+                    <View key={group.id}>
                         <TouchableOpacity onPress={()=>{setMembers(group.members), setDescription(group.description)}} style={{ flexDirection: 'row', alignSelf: 'flex-end', marginHorizontal: 20 }}>
                             {group.members.map(c => (
                                 <User key={c} user={c} type="profile" />
