@@ -31,6 +31,7 @@ export default function Discover() {
             if(showOptions){
                 list=list.filter(e=>e.publicity===publicity&&e.subject===subject)
             }
+            list.reverse()
             setFilteredGroups(list)
         })
     }, [publicity, subject, keyword,showOptions])

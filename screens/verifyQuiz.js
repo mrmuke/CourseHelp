@@ -100,6 +100,6 @@ export default function VerifyQuiz({ exit }) {
 
 const styles = StyleSheet.create({
     menuItem: {
-        width: Dimensions.get('screen').width,
+        flex:1
     }
 });
