@@ -1,14 +1,14 @@
 import { ActivityIndicator, Button, TextInput, Title } from 'react-native-paper';
 import React, { useState } from 'react';
-import { View, Clipboard } from 'react-native';
+import { View, Clipboard, Dimensions, Text } from 'react-native';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import * as ImagePicker from 'expo-image-picker';
 import * as firebase from 'firebase';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function ImageToText() {
+export default function ImageToText({ exit }) {
     const [uploading, setUploading] = useState(false);
     const [text, setText] = useState('');
 
@@ -118,21 +118,35 @@ export default function ImageToText() {
         }
     }
     console.log(text)
-if(uploading){
-    return <ActivityIndicator/>
-}
+    if (uploading) {
+        return <ActivityIndicator />
+    }
     return (
-            <View style={{padding:15}}>
-                <View style={{flexDirection:'row', justifyContent:'center'}}>
-                <TouchableOpacity onPress={CameraPhoto}><Icon size={100} name="camera" /></TouchableOpacity>
-
-                <TouchableOpacity onPress={takePhoto}><Icon size={100} name="upload" /></TouchableOpacity>
- 
-                </View>
-                 
-                {text.length>0&&<View><Title style={{textAlign:'center'}}>Notes:</Title><TextInput multiline={true} value={text}/><Button color="black" icon="pencil" onPress={() => Clipboard.setString(text)}>Copy</Button></View>}
-            </View>
-            
+        <View style={{ alignItems: 'center', flexDirection: "column", justifyContent: "center", height: Dimensions.get('screen').height - 142 }}>
+            {(() => {
+                if (text.length > 0) {
+                    return (<View style={{alignItems:"center"}}>
+                        <Title style={{ textAlign: 'center', marginBottom: 20 }}>Notes:</Title>
+                        <TextInput multiline={true} value={text} style={{ width: Dimensions.get('screen').width - 50, height: Dimensions.get('screen').height * 0.3 }} />
+                        <Button color="black" icon="pencil" onPress={() => Clipboard.setString(text)}>Copy</Button>
+                        <Button mode="outlined" style={{ marginTop: 30, width: Dimensions.get("screen").width - 200 }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} color="#59a8fb" onPress={() => {
+                            setText('');
+                        }}><Text>New Photo</Text></Button>
+                    </View>
+                    )
+                } else {
+                    return (
+                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                            <TouchableOpacity onPress={CameraPhoto}><Icon size={100} name="party-mode"/><Text style={{textAlign:"center"}}>Take Photo</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={takePhoto}><Icon size={100} name="get-app" /><Text style={{textAlign:"center"}}>Upload Photo</Text></TouchableOpacity>
+                        </View>
+                    )
+                }
+            })()}
+            <Button mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200 }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} color="#59a8fb" onPress={() => {
+                exit();
+            }}><Text>Back</Text></Button>
+        </View>
 
     );
 }
