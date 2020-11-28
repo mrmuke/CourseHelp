@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase'
-import { Button} from 'react-native-paper'
+import { Button } from 'react-native-paper'
 import EditProfile from './EditProfile';;
 import VerifyQuiz from './verifyQuiz'
 
@@ -30,8 +30,8 @@ export default function Profile(props) {
         return <EditProfile user={user} exit={() => { setEdit(false); getUser() }} />
     }
 
-    if(verify){
-        return <VerifyQuiz exit={()=> {setVerify(false)} }/>
+    if (verify) {
+        return <VerifyQuiz exit={() => { setVerify(false) }} />
     }
 
     return (
@@ -46,15 +46,15 @@ export default function Profile(props) {
                         <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
                         <Text style={styles.description}>{user.bio}</Text>
                         <View style={styles.button}>
-                            <View style={{flexDirection:"row"}}>
+                            <View style={{ flexDirection: "row" }}>
                                 <View>
-                                    <Button mode='outlined' color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                                    <Button mode='outlined' color='#5b59fb' contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
                                 </View>
                                 <View>
-                                    <Button mode="outlined" color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
+                                    <Button mode="outlined" color='#5b59fb' contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
                                 </View>
                             </View>
-                            <Button mode="outlined" color='#5b59fb' contentStyle={{padding:2}} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
+                            <Button mode="outlined" color='#5b59fb' contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
                         </View>
                     </View>
                 </View>
@@ -108,18 +108,18 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 14,
         color: "#707070",
-        marginTop:30,
+        marginTop: 30,
     },
     buttonContainer: {
         margin: 5,
-        width:Dimensions.get('screen').width/2 - 10
+        width: Dimensions.get('screen').width / 2 - 10
     },
-    buttonSignOut:{
-        margin:5
+    buttonSignOut: {
+        margin: 5
     },
     button: {
         marginTop: 60,
-        width:Dimensions.get('screen').width,
+        width: Dimensions.get('screen').width,
     }
 
 })
