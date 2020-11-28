@@ -42,6 +42,24 @@ class Fire {
       const message = {
         text,
         user,
+        /* quickReplies: {
+          type: 'radio', // or 'checkbox',
+          keepIt: true,
+          values: [
+            {
+              title: '😋 Yes',
+              value: 'yes',
+            },
+            {
+              title: '📷 Yes, let me show you with a picture!',
+              value: 'yes_picture',
+            },
+            {
+              title: '😞 Nope. What?',
+              value: 'no',
+            },
+          ],
+        }, */
         timestamp: this.timestamp,
       };
       this.append(message);

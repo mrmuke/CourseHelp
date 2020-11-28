@@ -18,6 +18,9 @@ export default function CommentForum({ user, forumPost, exit }) {
     //user profiles images chat
     //suggested groups based on school
     //machine learning
+    //video claling
+    //timer
+    //take a break kahoot
 
     function timeDifference(current, previous) {
 

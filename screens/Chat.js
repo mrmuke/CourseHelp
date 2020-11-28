@@ -1,9 +1,8 @@
 // @flow
 import React from 'react';
 import { GiftedChat } from 'react-native-gifted-chat'; // 0.3.0
-import firebase, { database } from 'firebase'
+import firebase from 'firebase'
 import Fire from '../Fire';
-import { TextInput } from 'react-native-paper';
 import { View } from 'react-native';
 
 
@@ -12,14 +11,18 @@ class Chat extends React.Component {
   state = {
     database:new Fire(this.props.route.params.group),
     messages: [],
+    user:null
   };
   
   get user() {
-    
-    
+    const {user} = this.state
+    if(!user){
+      return null
+    }
     return {
       
-      name: firebase.auth().currentUser.displayName,
+      name: user.username,
+      avatar:user.profile_picture,
       _id: this.state.database.uid,
     }
   }
@@ -32,6 +35,7 @@ class Chat extends React.Component {
                         
       <View style={{flex:1}}>
       <GiftedChat
+      renderUsernameOnMessage={true}
         messages={this.state.messages}
         onSend={this.state.database.send}
         user={this.user}
@@ -40,6 +44,9 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
+    firebase.database().ref('users/'+firebase.auth().currentUser.uid).once('value',snap=>{
+      this.setState({user:snap.val()})
+    })
     this.state.database.on(message =>
       this.setState(previousState => ({
         messages: GiftedChat.append(previousState.messages, message),
