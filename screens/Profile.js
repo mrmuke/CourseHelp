@@ -23,10 +23,11 @@ export default function Profile(props) {
 
     function getUser() {
 
-        firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
+        firebase.database().ref('users/' + (props.userID?props.userID:firebase.auth().currentUser.uid)).once('value', snapshot => {
             setUser(snapshot.val())
         })
     }
+    console.log(user)
     if (user == null) {
 
         return null
@@ -47,8 +48,11 @@ export default function Profile(props) {
                     } else {
                         newArray = [...user["verified"]];
                     }
-                    newArray.push(course);
+                    if(!newArray.includes(course)){
+                        newArray.push(course);
+                    }
                     firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('verified').set(newArray);
+                    getUser();
                     setVerifiedCourse({
                         msg: 'You passed the ' + course + ' verification test with a score of ' + correct + "/10! You're now verified!",
                         bool: true
@@ -92,6 +96,7 @@ export default function Profile(props) {
                             <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
                             
                             <Text style={styles.description}>{user.bio}</Text>
+                            {!props.userID&&
                             <View style={styles.button}>
                                 <View style={{ flexDirection: "row" }}>
                                     <View>
@@ -102,7 +107,7 @@ export default function Profile(props) {
                                     </View>
                                 </View>
                                 <Button mode="contained" color='#5b59fb' contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
-                            </View>
+                            </View>}
                         </View>
                     </View>
                 </View>

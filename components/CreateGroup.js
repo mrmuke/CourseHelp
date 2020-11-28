@@ -28,8 +28,8 @@ export default function CreateGroup(props) {
         {showSubjects && <><Searchbar onChangeText={text => setSubjectFilter(text)} />{subjects.filter(subject => subject.toLowerCase().startsWith(subjectFilter.toLowerCase())).map(subject =>
             <Button key={subject} style={{ display: 'flex' }} mode="contained" color="white" onPress={() => { setSubject(subject); setShowSubjects(false) }}>{subject}</Button>
         )}</>}
-        <TextInput placeholder="Group name..." onChangeText={text => setName(text)} />
-        <TextInput style={{ marginTop: 5 }} placeholder="Group description..." onChangeText={text => setDescription(text)} />
+        <TextInput placeholder="Group name... Be creative!" onChangeText={text => {if(text.length<10){setName(text)}}} value={name} />
+        <TextInput style={{ marginTop: 5 }} placeholder="Group description..." onChangeText={text => setDescription(text)} value={description} />
         <View style={{ marginTop: 5, display: 'flex', flexDirection: 'row' }}>
             <Button onPress={() => setPublicity("public")} style={{ flex: 1 }} contentStyle={{ padding: 10 }} color="#eee" mode="contained" icon={publicity === "public" && "check"} ><Caption>Public</Caption></Button>
 

@@ -21,7 +21,7 @@ export default function Forum() {
     const [category, setCategory] = React.useState('all')
     const userUID = firebase.auth().currentUser.uid
     useEffect(() => {
-        getPosts('all', true)
+        getPosts('all')
         getUser()
     }, [])
 
@@ -83,11 +83,15 @@ export default function Forum() {
             }
         }
 
-        ref.update({ upvotes: upVoters })
+        //setUpvote(upVoters)
+        //setDownvote(downVoters)        ref.update({ upvotes: upVoters })
         ref.update({ downvotes: downVoters })
+        ref.update({ upvotes: upVoters })
+        //console..length, upVoters)
+        // console.log('down', downVoters.length, downVoters)
     }
 
-    function getPosts(cat, order) {
+    const getPosts = (cat) => {
         firebase.database().ref('forum/').on('value', snapshot => {
             var posts = []
             snapshot.forEach(function (childSnapshot) {
@@ -105,23 +109,6 @@ export default function Forum() {
                     }
                 }
             })
-            if (order) {
-                posts.sort((a, b) => {
-
-                    if (a.upvotes == null) {
-                        ((0 - a.downvotes.length) > (b.upvotes.length - b.downvotes.length)) ? 1 : ((0 - a.downvotes.length) === (b.upvotes.length - b.downvotes.length)) ? ((0 - a.downvotes.length) > (b.upvotes.length - b.downvotes.length) ? 1 : -1) : -1
-                    } else if (a.downvotes == null) {
-                        ((a.upvotes.length - 0) > (b.upvotes.length - b.downvotes.length)) ? 1 : ((a.upvotes.length - 0) === (b.upvotes.length - b.downvotes.length)) ? ((a.upvotes.length - 0) > (b.upvotes.length - b.downvotes.length) ? 1 : -1) : -1
-                    } else if (b.upvotes == null) {
-                        ((a.upvotes.length - a.downvotes.length) > (0 - b.downvotes.length)) ? 1 : ((a.upvotes.length - a.downvotes.length) === (0 - b.downvotes.length)) ? ((a.upvotes.length - a.downvotes.length) > (0 - b.downvotes.length) ? 1 : -1) : -1
-                    } else if (b.downvotes == null) {
-                        ((a.upvotes.length - a.downvotes.length) > (b.upvotes.length - 0)) ? 1 : ((a.upvotes.length - a.downvotes.length) === (b.upvotes.length - 0)) ? ((a.upvotes.length - a.downvotes.length) > (b.upvotes.length - 0) ? 1 : -1) : -1
-
-                    } else {
-                        ((a.upvotes.length - a.downvotes.length) > (b.upvotes.length - b.downvotes.length)) ? 1 : ((a.upvotes.length - a.downvotes.length) === (b.upvotes.length - b.downvotes.length)) ? ((a.upvotes.length - a.downvotes.length) > (b.upvotes.length - b.downvotes.length) ? 1 : -1) : -1
-                    }
-                })
-            }
             setPostData(posts)
         })
 

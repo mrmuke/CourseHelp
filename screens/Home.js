@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 //import { render } from 'react-dom';
-import { ScrollView, View, Linking, Dimensions, Image } from 'react-native';
+import { ScrollView, View, Linking, Dimensions, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from 'firebase'
 import { Button, Card, Title, Caption, Chip, IconButton, Provider, Portal, Dialog, Text, Badge, Modal, TextInput, Subheading } from 'react-native-paper';
@@ -34,8 +34,13 @@ export default function Home(props) {
     }, [])
     function getInvites() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
-            setInvites(snap.val().invites || [])
-        })
+            var item =snap.val().invites||[]
+            setInvites(item)
+            if(item.length==0){
+                setViewInvites(false)
+            }
+    })
+        
     }
     useEffect(() => {
         firebase.database().ref('users/').on('value', snap => {
@@ -58,8 +63,16 @@ export default function Home(props) {
     }, [userQuery])
     function sendInvite() {
         setUserQuery("")
-        firebase.database().ref('users/' + selectedUser.id).once('value', snap => {
-            let invites = snap.val().invites || []
+        if(group.pending&&group.pending.includes(selectedUser.id))
+{
+    removePending(selectedUser.id)
+    joinGroup(selectedUser.id)
+
+}
+
+else{
+        firebase.database().ref('users/'+ selectedUser.id).once('value',snap=>{
+            let invites = snap.val().invites||[]
             invites.push(group.id)
             firebase.database().ref('users/' + selectedUser.id).update({
                 invites
@@ -67,17 +80,31 @@ export default function Home(props) {
                 setSelectedUser(null)
             })
         })
-
+    }
+        
     }
     function leaveGroup(c) {
-        firebase.database().ref('groups/' + c.id).once('value', snapshot => {
-            var members = snapshot.val().members
-            members = members.filter(e => e != firebase.auth().currentUser.uid)
-
-            firebase.database().ref('groups/' + c.id).update({
-                members
-            })
-        })
+        Alert.alert(
+            "Leave Group",
+        "Are you sure you want to leave this group?",
+            [
+              {
+                text: "Cancel",
+                style: "cancel"
+              },
+              { text: "LEAVE", onPress: () =>  firebase.database().ref('groups/' + c.id).once('value', snapshot => {
+                var members = snapshot.val().members
+                members = members.filter(e => e != firebase.auth().currentUser.uid)
+    
+                firebase.database().ref('groups/' + c.id).update({
+                    members
+                })
+            }) }
+            ],
+            { cancelable: false }
+          );
+      
+       
     }
 
     function joinGroup(c) {
@@ -94,6 +121,7 @@ export default function Home(props) {
     }
 
     function removePending(c) {
+       
         firebase.database().ref('groups/' + group.id).once('value', snapshot => {
             var pending = snapshot.val().pending || []
             pending = pending.filter(e => e != c)
@@ -117,8 +145,8 @@ export default function Home(props) {
                 </View>
 
                 {groups.map(group => (
-                    <View>
-                        <TouchableOpacity onPress={() => { setMembers(group.members), setDescription(group.description) }} style={{ flexDirection: 'row', alignSelf: 'flex-end', marginHorizontal: 20 }}>
+                    <View key={group.id}>
+                        <TouchableOpacity onPress={()=>{setMembers(group.members), setDescription(group.description)}} style={{ flexDirection: 'row', alignSelf: 'flex-end', marginHorizontal: 20 }}>
                             {group.members.map(c => (
                                 <User key={c} user={c} type="profile" />
                             ))}
