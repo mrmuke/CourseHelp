@@ -52,19 +52,20 @@ export default function Forum() {
         }
     }
 
-    const getPosts = async () => {
+    const getPosts = async (cat) => {
         firebase.database().ref('forum/').on('value', snapshot => {
             var posts = []
             snapshot.forEach(function (childSnapshot) {
                 let item = childSnapshot.val()
                 item['id'] = childSnapshot.key
-                if (category == 'all') {
+                if (cat == 'all') {
                     //let item = childSnapshot.val()
                     //console.log('all')
                     posts.push(item)
                 } else {
-                    //console.log(category)
-                    if (item.category == category) {
+                    //console.log(cat)
+                    console.log(cat)
+                    if (item.category === cat) {
                         posts.push(item)
                     }
                 }
@@ -77,6 +78,10 @@ export default function Forum() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
         })
+    }
+    function selectCategory(cat) {
+        setCategory(cat)
+        getPosts(cat)
     }
     if (user == null) {
         return null
@@ -92,7 +97,7 @@ export default function Forum() {
     return (
         <View style={styles.container}>
             <Button mode="contained" onPress={() => setCreate(true)} color="#4293f5" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
-            <CategoryPicker style={styles.categoryPicker} selectedCategory={category} onClick={setCategory} onPress={() => getPosts} />
+            <CategoryPicker style={styles.categoryPicker} selectedCategory={category} onClick={selectCategory} />
             <ScrollView>
                 {postData.map(item => (
                     <Card key={item.id} style={{ margin: 15 }}>

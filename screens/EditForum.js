@@ -12,13 +12,11 @@ export default function EditForum({ user, exit }) {
     const [loading, setLoading] = useState(false)
     const [url, setUrl] = useState(null)
     const [uploaded, setUploaded] = useState(false)
-    const [postKey, setPostKey] = useState('')
+    const [postKey, setPostKey] = useState(uuidv4())
     const [category, setCategory] = useState('all')
     const [showCategory, setShowCategory] = useState(true)
     const categories = ['Science', 'Math', 'History', 'English', 'Art', 'Language']
-    useEffect(() => {
-        setPostKey(uuidv4())
-    }, [])
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync();
         if (!result.cancelled) {
@@ -45,6 +43,7 @@ export default function EditForum({ user, exit }) {
             image: url,
             category: category
         })
+        exit()
     }
     const revert = async () => {
         //console.log(uploaded)
@@ -55,10 +54,10 @@ export default function EditForum({ user, exit }) {
         }
     }
     function check() {
-        if (uploaded) {
-            exit()
+        if (uploaded&&postText.length>0&&postTitle.length>0) {
+            post()
         } else {
-            Alert.alert('Must Upload an Image')
+            Alert.alert('Fill in all fields!')
         }
     }
     if (!user) {

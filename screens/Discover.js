@@ -53,6 +53,15 @@ export default function Discover() {
             })
         })
     }
+    function applyGroup(c){
+        firebase.database().ref('groups/'+c.id).once('value',snapshot=>{
+            var pending=snapshot.val().pending||[]
+            pending.push(firebase.auth().currentUser.uid)
+            firebase.database().ref('groups/'+c.id).update({
+                pending
+            })
+        })
+    }
     return (
         <View style={styles.container}>
             <View style={{ backgroundColor: '#003152', padding: 10, borderRadius: 10, diplsya: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -73,12 +82,12 @@ export default function Discover() {
             <ScrollView>
                 {filteredGroups.map((c) => (
                     <Card style={{ margin: 5 }} key={c.id}>
-                        <Card.Title title={c.name + "-Surviving " + c.subject} left={props => <Icon name="group" {...props} />} />
+                        <Card.Title title={c.name} subtitle={"Surviving " +c.subject} left={props => <Icon name="group" {...props} />} />
                         <Card.Content>
                             <Caption style={{ marginBottom: 10 }}>{c.description}</Caption>
                         </Card.Content>
                         <Card.Actions>
-                            {c.members&&c.members.some(e=>e===firebase.auth().currentUser.uid)?<Button style={{ flex: 1 }} mode="contained" color="#003152" onPress={()=>leaveGroup(c)}>Leave</Button>:<Button onPress={()=>joinGroup(c)} style={{ flex: 1 }} mode="contained" color="#003152">Join</Button>}
+                            {c.members&&c.members.some(e=>e===firebase.auth().currentUser.uid)?<Button style={{ flex: 1 }} mode="contained" color="#003152" onPress={()=>leaveGroup(c)}>Leave</Button>:c.publicity==="public"?<Button onPress={()=>joinGroup(c)} style={{ flex: 1 }} mode="contained" color="#003152">Join</Button>:c.pending&&c.pending.some(e=>e==firebase.auth().currentUser.uid)?<Button style={{ flex: 1 }} mode="contained" color="#003152">Awaiting Approval</Button>:<Button onPress={()=>applyGroup(c)} style={{ flex: 1 }} mode="contained" color="#003152">Apply</Button>}
 
                         </Card.Actions>
                     </Card>
