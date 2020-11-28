@@ -10,17 +10,15 @@ export default function CommentForum({ user, forumPost, exit }) {
 
     //upvote downvote and select answer
     //free response
-    //improve chat features
-    //vreify dropdown ui
-    //tools js ui
+        //vreify dropdown ui
     //my questions
     //notifications page
-    //user profiles images chat
     //suggested groups based on school
     //machine learning
     //video claling
     //timer
     //take a break kahoot
+    //suggested groups
 
     function timeDifference(current, previous) {
 

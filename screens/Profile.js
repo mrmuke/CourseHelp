@@ -22,7 +22,12 @@ export default function Profile(props) {
     }, [])
 
     function getUser() {
+<<<<<<< HEAD
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
+=======
+
+        firebase.database().ref('users/' + (props.userID?props.userID:firebase.auth().currentUser.uid)).once('value', snapshot => {
+>>>>>>> a12e89cd9058d0e953460f0d2c4597586a3ecb51
             setUser(snapshot.val())
         })
         firebase.database().ref('users').once('value', snapshot=>{
@@ -35,6 +40,7 @@ export default function Profile(props) {
             }
         })
     }
+    console.log(user)
     if (user == null) {
 
         return null
@@ -103,6 +109,7 @@ export default function Profile(props) {
                             <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
                             
                             <Text style={styles.description}>{user.bio}</Text>
+                            {!props.userID&&
                             <View style={styles.button}>
                                 <View style={{ flexDirection: "row" }}>
                                     <View>
@@ -113,7 +120,7 @@ export default function Profile(props) {
                                     </View>
                                 </View>
                                 <Button mode="contained" color='#5b59fb' contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
-                            </View>
+                            </View>}
                         </View>
                     </View>
                 </View>

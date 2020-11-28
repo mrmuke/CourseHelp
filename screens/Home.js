@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 //import { render } from 'react-dom';
-import { ScrollView, View, Linking, Dimensions, Image } from 'react-native';
+import { ScrollView, View, Linking, Dimensions, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from 'firebase'
 import { Button, Card, Title, Caption, Chip, IconButton, Provider, Portal, Dialog, Text, Badge, Modal, TextInput, Subheading } from 'react-native-paper';
@@ -9,7 +9,7 @@ export default function Home(props) {
     const [groups, setGroups] = useState([])
     const [group, setGroup] = useState(null)
     const [members, setMembers] = useState([])
-    const [description,setDescription]  = useState("")
+    const [description, setDescription] = useState("")
     const [invites, setInvites] = useState([])
     const [userQuery, setUserQuery] = useState("")
     const [filteredUsers, setFilteredUsers] = useState([])
@@ -30,9 +30,9 @@ export default function Home(props) {
             setGroups(list)
         })
         getInvites()
-        
+
     }, [])
-    function getInvites(){
+    function getInvites() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
             var item =snap.val().invites||[]
             setInvites(item)
@@ -42,26 +42,26 @@ export default function Home(props) {
     })
         
     }
-    useEffect(()=>{
+    useEffect(() => {
         firebase.database().ref('users/').on('value', snap => {
             var list = []
-            snap.forEach(function(user){
+            snap.forEach(function (user) {
                 let item = user.val()
-                item["id"] =user.key
+                item["id"] = user.key
 
-        
-                if(group&&!group.members.some(e=>e==user.key)&&item.username.toLowerCase().startsWith(userQuery.toLowerCase())){
+
+                if (group && !group.members.some(e => e == user.key) && item.username.toLowerCase().startsWith(userQuery.toLowerCase())) {
                     list.push(item)
                 }
-                
+
             })
             setFilteredUsers(list)
 
 
-            
-            })
-    },[userQuery])
-    function sendInvite(){
+
+        })
+    }, [userQuery])
+    function sendInvite() {
         setUserQuery("")
         if(group.pending&&group.pending.includes(selectedUser.id))
 {
@@ -74,9 +74,9 @@ else{
         firebase.database().ref('users/'+ selectedUser.id).once('value',snap=>{
             let invites = snap.val().invites||[]
             invites.push(group.id)
-            firebase.database().ref('users/'+ selectedUser.id).update({
+            firebase.database().ref('users/' + selectedUser.id).update({
                 invites
-            }).then(()=>{
+            }).then(() => {
                 setSelectedUser(null)
             })
         })
@@ -84,14 +84,27 @@ else{
         
     }
     function leaveGroup(c) {
-        firebase.database().ref('groups/' + c.id).once('value', snapshot => {
-            var members = snapshot.val().members
-            members = members.filter(e => e != firebase.auth().currentUser.uid)
-
-            firebase.database().ref('groups/' + c.id).update({
-                members
-            })
-        })
+        Alert.alert(
+            "Leave Group",
+        "Are you sure you want to leave this group?",
+            [
+              {
+                text: "Cancel",
+                style: "cancel"
+              },
+              { text: "LEAVE", onPress: () =>  firebase.database().ref('groups/' + c.id).once('value', snapshot => {
+                var members = snapshot.val().members
+                members = members.filter(e => e != firebase.auth().currentUser.uid)
+    
+                firebase.database().ref('groups/' + c.id).update({
+                    members
+                })
+            }) }
+            ],
+            { cancelable: false }
+          );
+      
+       
     }
 
     function joinGroup(c) {
@@ -108,6 +121,7 @@ else{
     }
 
     function removePending(c) {
+       
         firebase.database().ref('groups/' + group.id).once('value', snapshot => {
             var pending = snapshot.val().pending || []
             pending = pending.filter(e => e != c)
@@ -121,7 +135,7 @@ else{
     return (
         <View style={{ height: Dimensions.get('screen').height, }}>
             <ScrollView style={{ padding: 15 }}>
-                {invites.length>0&&<Badge style={{ alignSelf: 'flex-start' }} onPress={()=>setViewInvites(true)}>{invites.length} NEW INVITES</Badge>}
+                {invites.length > 0 && <Badge style={{ alignSelf: 'flex-start' }} onPress={() => setViewInvites(true)}>{invites.length} NEW INVITES</Badge>}
 
                 <View style={{ flex: 1, flexDirection: 'row', margin: 5, justifyContent: 'space-between' }}>
                     <Title>My Study Groups</Title>
@@ -137,7 +151,7 @@ else{
                                 <User key={c} user={c} type="profile" />
                             ))}
                         </TouchableOpacity>
-                        <View key={group.id} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 5, padding: 15, backgroundColor: 'white', borderRadius: 10, marginTop: -15, zIndex:-1 }}>
+                        <View key={group.id} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 5, padding: 15, backgroundColor: 'white', borderRadius: 10, marginTop: -15, zIndex: -1 }}>
 
 
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -164,15 +178,15 @@ else{
             </ScrollView>
             <Provider>
                 <Portal>
-                    <Modal visible={members.length > 0} onDismiss={() => {setMembers([]),setDescription("")}} contentContainerStyle={{ backgroundColor: 'white', padding: 20, marginHorizontal:30, marginBottom:'auto' }}>
+                    <Modal visible={members.length > 0} onDismiss={() => { setMembers([]), setDescription("") }} contentContainerStyle={{ backgroundColor: 'white', padding: 20, marginHorizontal: 30, marginBottom: 'auto' }}>
                         <Title>Group Members</Title>
-                        {members.map(c=>(
-                            <User key={c} type="both" user={c}/>
+                        {members.map(c => (
+                            <User key={c} type="both" user={c} />
                         ))}
                         <Subheading>Group Description: {description}</Subheading>
                     </Modal>
-                    <Modal visible={group} onDismiss={() => setGroup(null)} contentContainerStyle={{ backgroundColor: 'white', padding: 20, marginHorizontal: 30,marginBottom:'auto'  }}>
-                        
+                    <Modal visible={group} onDismiss={() => setGroup(null)} contentContainerStyle={{ backgroundColor: 'white', padding: 20, marginHorizontal: 30, marginBottom: 'auto' }}>
+
                         {group && group.pending && <View>
                             <Title style={{ marginTop: 10 }}>Pending</Title>
                             {group.pending.map(c => (
@@ -185,23 +199,23 @@ else{
                                 </View>
                             ))}</View>}
 
-                            <Title>Invite Member</Title>
-                            <View style={{flexDirection:'row', alignItems:'center'}}>
-                            {!selectedUser?<TextInput style={{flex:1, }} onChangeText={text=>setUserQuery(text)} value={userQuery} placeholder="Invite member..."/>:
-                            <TouchableOpacity style={{padding:10,paddingHorizontal:45,backgroundColor:'#eee'}} onPress={()=>setSelectedUser(null)}><Text>{selectedUser.username}</Text></TouchableOpacity>}
-                            
+                        <Title>Invite Member</Title>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            {!selectedUser ? <TextInput style={{ flex: 1, }} onChangeText={text => setUserQuery(text)} value={userQuery} placeholder="Invite member..." /> :
+                                <TouchableOpacity style={{ padding: 10, paddingHorizontal: 45, backgroundColor: '#eee' }} onPress={() => setSelectedUser(null)}><Text>{selectedUser.username}</Text></TouchableOpacity>}
 
-                            {selectedUser&&<IconButton onPress={sendInvite} style={{backgroundColor:'#003152'}} color="white" icon="send"/>}
-                            </View>
-                            {!selectedUser&&filteredUsers.map(e=>(
-                                <TouchableOpacity key={e.id} onPress={()=>setSelectedUser(e)} style={{flexDirection:'row', alignItems:'center'}}><Image source={{ uri: e.profile_picture }} style={{ borderRadius: 50, height: 50, width: 50, borderColor: 'white', borderWidth: 1,marginRight:10 }} /><View style={{flexDirection:'column'}}><Title>{e.username}</Title><Caption>{e.school.item} {e.grade}</Caption></View></TouchableOpacity>
-                            ))}
-                            
+
+                            {selectedUser && <IconButton onPress={sendInvite} style={{ backgroundColor: '#003152' }} color="white" icon="send" />}
+                        </View>
+                        {!selectedUser && filteredUsers.map(e => (
+                            <TouchableOpacity key={e.id} onPress={() => setSelectedUser(e)} style={{ flexDirection: 'row', alignItems: 'center' }}><Image source={{ uri: e.profile_picture }} style={{ borderRadius: 50, height: 50, width: 50, borderColor: 'white', borderWidth: 1, marginRight: 10 }} /><View style={{ flexDirection: 'column' }}><Title>{e.username}</Title><Caption>{e.school.item} {e.grade}</Caption></View></TouchableOpacity>
+                        ))}
+
                     </Modal>
-                    <Modal visible={viewInvites} onDismiss={() => setViewInvites(false)} contentContainerStyle={{ backgroundColor: 'white', padding: 20, marginHorizontal:30, marginBottom:'auto',marginTop:20 }}>
-                                {invites.map(c=>(
-                                    <Invite reload={getInvites} key={c} id={c}/>
-                                ))}
+                    <Modal visible={viewInvites} onDismiss={() => setViewInvites(false)} contentContainerStyle={{ backgroundColor: 'white', padding: 20, marginHorizontal: 30, marginBottom: 'auto', marginTop: 20 }}>
+                        {invites.map(c => (
+                            <Invite reload={getInvites} key={c} id={c} />
+                        ))}
                     </Modal>
                 </Portal></Provider></View>
 
@@ -219,8 +233,8 @@ function User({ user, type }) {
     if (!cur) {
         return null
     }
-    if(type==="both"){
-        return <View style={{flexDirection:'row', alignItems:'center'}}><Image source={{ uri: cur.profile_picture }} style={{ borderRadius: 50, height: 50, width: 50, borderColor: 'white', borderWidth: 1,marginRight:10 }} /><View style={{flexDirection:'column'}}><Title>{cur.username}</Title><Caption>{cur.school.item} {cur.grade}</Caption></View></View>
+    if (type === "both") {
+        return <View style={{ flexDirection: 'row', alignItems: 'center' }}><Image source={{ uri: cur.profile_picture }} style={{ borderRadius: 50, height: 50, width: 50, borderColor: 'white', borderWidth: 1, marginRight: 10 }} /><View style={{ flexDirection: 'column' }}><Title>{cur.username}</Title><Caption>{cur.school.item} {cur.grade}</Caption></View></View>
     }
     if (type === "profile") {
         return <Image source={{ uri: cur.profile_picture }} style={{ borderRadius: 50, height: 30, width: 30, borderColor: 'white', borderWidth: 1 }} />
@@ -233,16 +247,16 @@ function User({ user, type }) {
      } */
 
 }
-function Invite({id,reload}){
+function Invite({ id, reload }) {
     const [group, setGroup] = useState(null)
-    useEffect(()=>{
-        firebase.database().ref('groups/'+id).once('value',s=>{
+    useEffect(() => {
+        firebase.database().ref('groups/' + id).once('value', s => {
             setGroup(s.val())
         })
-    },[])
-    function joinGroup(){
-        firebase.database().ref('groups/'+id).once('value',s=>{
-            var members = s.val().members||[]
+    }, [])
+    function joinGroup() {
+        firebase.database().ref('groups/' + id).once('value', s => {
+            var members = s.val().members || []
             members.push(firebase.auth().currentUser.uid)
             firebase.database().ref('groups/' + id).update({
                 members
@@ -251,23 +265,23 @@ function Invite({id,reload}){
         })
         dismiss()
     }
-    function dismiss(){
+    function dismiss() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
-            var invites=snap.val().invites
-            invites=invites.filter(e=>e!=id)
+            var invites = snap.val().invites
+            invites = invites.filter(e => e != id)
             firebase.database().ref('users/' + firebase.auth().currentUser.uid).update({
                 invites
-            }).then(()=>{
+            }).then(() => {
                 reload()
             })
 
-            
-    })
+
+        })
     }
-    if(!group){
+    if (!group) {
         return null
     }
 
-    return <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', borderBottomWidth:1}}><Subheading>{group.name.substr(0,3)}</Subheading><Chip icon="information">{group.subject}</Chip><View style={{flexDirection:'row'}}><IconButton icon="check" color="green" onPress={joinGroup}/><IconButton color="red" icon="close" onPress={dismiss}/></View></View>
+    return <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1 }}><Subheading>{group.name.substr(0, 3)}</Subheading><Chip icon="information">{group.subject}</Chip><View style={{ flexDirection: 'row' }}><IconButton icon="check" color="green" onPress={joinGroup} /><IconButton color="red" icon="close" onPress={dismiss} /></View></View>
 
 }

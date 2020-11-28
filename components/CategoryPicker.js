@@ -7,7 +7,7 @@ const CategoryPicker = ({ selectedCategory, onClick, setFieldValue, ...props }) 
     return (
         <View {...props}>
             <FlatList
-                data={['all', ...categories]}
+                data={['all', 'My Posts', ...categories]}
                 horizontal
                 keyExtractor={item => item}
                 renderItem={({ item }) => (
