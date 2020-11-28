@@ -8,8 +8,16 @@ export default function CommentForum({ user, forumPost, exit }) {
     const [comment, setComment] = useState('')
     const [commentRender, setCommentRender] = useState(false)
 
-    //upvote downvote select subject and select asnwer and upload user
-
+    //upvote downvote and select answer
+    //free response
+    //improve chat features
+    //vreify dropdown ui
+    //tools js ui
+    //my questions
+    //notifications page
+    //user profiles images chat
+    //suggested groups based on school
+    //machine learning
 
     function timeDifference(current, previous) {
 
