@@ -15,7 +15,7 @@ export default function Forum() {
     const [create, setCreate] = useState(false)
     const [comment, setComment] = useState(false)
     const [forum, setForum] = useState(null)
-    //const [votes, setVotes] = useState(0)
+    const [votes, setVotes] = useState(0)
     const [upvote, setUpvote] = useState([])
     const [downvote, setDownvote] = useState([])
     const [category, setCategory] = React.useState('all')
@@ -27,76 +27,45 @@ export default function Forum() {
 
 
     function Votes(type) {
-        let upRef = firebase.database().ref('forum/' + forum.id + '/upvotes')
-        let downRef = firebase.database().ref('forum/' + forum.id + '/downvotes')
+        let ref = firebase.database().ref('forum/' + forum.id)
         var upVoters = []
         var downVoters = []
-        upRef.on('value', snapshot => {
-            let upLength = 0
-            snapshot.forEach(function (childSnapshot) {
-                upVoters.push(childSnapshot.val())
-            })
-        })
-        downRef.on('value', snapshot => {
-            let downLength = 0
-            snapshot.forEach(function (childSnapshot) {
-                downVoters.push(childSnapshot.val())
-            })
+        ref.once('value', snapshot => {
+            upVoters = snapshot.val().upvotes || []
+            //console.log(upVoters)
+            downVoters = snapshot.val().downvotes || []
         })
 
+        console.log(upVoters)
         if (type == 'up') {
             if (upVoters.includes(userUID) && !downVoters.includes(userUID)) {
-                upRef.remove()
+                upVoters.splice(upVoters.indexOf(userUID), 1)
             } else if (!upVoters.includes(userUID) && !downVoters.includes(userUID)) {
-                upRef.push(userUID)
+                upVoters.push(userUID)
             } else if (!upVoters.includes(userUID) && downVoters.includes(userUID)) {
-                upRef.push(userUID)
-                downRef.remove()
+                upVoters.push(userUID)
+                downVoters.splice(downVoters.indexOf(userUID), 1)
             }
         } else if (type == 'down') {
             if (downVoters.includes(userUID) && !upVoters.includes(userUID)) {
-                downRef.remove()
+                downVoters.splice(downVoters.indexOf(userUID), 1)
             } else if (!downVoters.includes(userUID) && !upVoters.includes(userUID)) {
-                downRef.push(userUID)
+                downVoters.push(userUID)
             } else if (!downVoters.includes(userUID) && upVoters.includes(userUID)) {
-                downRef.push(userUID)
-                upRef.remove()
+                downVoters.push(userUID)
+                upVoters.splice(upVoters.indexOf(userUID), 1)
             }
         }
-        setUpvote(upVoters)
-        setDownvote(downVoters)
-        console.log('up', upvote.length)
-        console.log('down', downvote.length)
 
+        //setUpvote(upVoters)
+        //setDownvote(downVoters)
+        setVotes(upVoters.length - downVoters.length)
+        ref.update({ upvotes: upVoters })
+        ref.update({ downvotes: downVoters })
+        //console..length, upVoters)
+        // console.log('down', downVoters.length, downVoters)
     }
-    function UpVote() {
-        let ref = firebase.database().ref('forum/' + forum.id + '/upvotes')
-        var users = []
-        ref.on('value', snapshot => {
-            snapshot.forEach(function (childSnapshot) {
-                users.push(childSnapshot.val())
-            })
-        })
-        if (users.includes(userUID)) {
-            ref.delete().then(console.log(success))
-        } else if (!ref.inclued(userUID)) {
-            users.push(firebase.auth().currentUser.uid)
-        }
-    }
-
-    function DownVote() {
-        var ref = firebase.database().ref('forum/' + forum.id + '/downvotes')
-        var users = []
-        ref.on('value', snapsho => {
-            snapshot.forEach(function (childSnapshot) {
-                users.push(childSnapshot.val())
-            })
-        })
-        if (users.includes(userUID)) {
-            ref.delete()
-        }
-    }
-
+    //console.log(votes)
 
     const getPosts = async (cat) => {
         firebase.database().ref('forum/').on('value', snapshot => {
@@ -104,14 +73,9 @@ export default function Forum() {
             snapshot.forEach(function (childSnapshot) {
                 let item = childSnapshot.val()
                 item['id'] = childSnapshot.key
-                //console.log(item["id"])
                 if (cat == 'all') {
-                    //let item = childSnapshot.val()
-                    //console.log('all')
                     posts.push(item)
                 } else {
-                    //console.log(cat)
-                    // console.log(cat)
                     if (item.category === cat) {
                         posts.push(item)
                     }
@@ -157,6 +121,7 @@ export default function Forum() {
                         </Card.Content>
                         <Card.Actions>
                             <Button labelStyle={styles.cardButtons} onPress={() => { setForum(item), Votes('down') }} icon="arrow-down"></Button>
+                            <Text>{votes}</Text>
                             <Button labelStyle={styles.cardButtons} onPress={() => { setForum(item), Votes('up') }} icon="arrow-up"></Button>
                             <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
                         </Card.Actions>

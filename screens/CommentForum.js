@@ -55,7 +55,6 @@ export default function CommentForum({ user, forumPost, exit }) {
             profile_picture: user.profile_picture
         })
         firebase.database().ref('forum/' + forumPost.id).once('value', snapshot => {
-            //console.log(snapshot.val())
             setForum(snapshot.val())
         })
     }

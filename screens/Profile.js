@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase'
-<<<<<<< HEAD
-import { Button } from 'react-native-paper'
-import EditProfile from './EditProfile';;
-import VerifyQuiz from './verifyQuiz'
-=======
 import { Button, Provider, Modal, Portal } from 'react-native-paper'
 import EditProfile from './EditProfile';
 import VerifyQuiz from './verifyQuiz';
-import { Icon } from 'react-native-elements';
->>>>>>> 424faf83aac1ca51a464036a602d0501101235e8
+import Icon from 'react-native-vector-icons';
 
 export default function Profile(props) {
     const [user, setUser] = useState(null)
@@ -171,11 +165,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 60,
-<<<<<<< HEAD
-        width: Dimensions.get('screen').width,
-=======
         width: Dimensions.get('screen').width
->>>>>>> 424faf83aac1ca51a464036a602d0501101235e8
     }
 
 })

@@ -29,44 +29,43 @@ export default function VerifyQuiz({ exit }) {
         });
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         let item = [];
         var index = 1;
-        if(menuText != "Pick a class"){
+        if (menuText != "Pick a class") {
             for (let each of courses[menuText]) {
-                if(each != undefined){
-                    item.push(<QuestionComponent key={"A:" + index} courses={each} index={index} pickAnswer={(key, index)=>{
+                if (each != undefined) {
+                    item.push(<QuestionComponent key={"A:" + index} courses={each} index={index} pickAnswer={(key, index) => {
                         var newObj = answer;
                         newObj[index] = key;
                         setAnswer(newObj);
-                    }} menuText={menuText}/>);
+                    }} menuText={menuText} />);
                     index++;
                 }
             }
             setQuestionList(item);
         }
         setAnswer({
-            1:0,
-            2:0,
-            3:0,
-            4:0,
-            5:0,
-            6:0,
-            7:0,
-            8:0,
-            9:0,
-            10:0
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0,
+            9: 0,
+            10: 0
         })
     }, [menuText]);
-
     for (let each in courses) {
         ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} style={styles.menuItem} title={each} />);
     }
 
     function checkAnswers() {
         var correct = 0;
-        for(let i = 1; i < 11; i++){
-            if(answer[i] == courses[menuText][i]['correct']){
+        for (let i = 1; i < 11; i++) {
+            if (answer[i] == courses[menuText][i]['correct']) {
                 correct++;
             }
         }
@@ -78,8 +77,8 @@ export default function VerifyQuiz({ exit }) {
                 <Menu
                     visible={visible}
                     onDismiss={() => { setVisible(false) }}
-                    style={{ width: Dimensions.get('screen').width - 15, marginTop: 90}}
-                    anchor={<Button style={{marginTop:30}} contentStyle={{marginBottom: 30, marginTop:30}} onPress={() => { setVisible(true); }}>{menuText}</Button>}>
+                    style={{ width: Dimensions.get('screen').width - 15, marginTop: 90 }}
+                    anchor={<Button style={{ marginTop: 30 }} contentStyle={{ marginBottom: 30, marginTop: 30 }} onPress={() => { setVisible(true); }}>{menuText}</Button>}>
                     {ItemList}
                 </Menu>
                 {questionList}
@@ -92,7 +91,7 @@ export default function VerifyQuiz({ exit }) {
                 })()}
                 <Button mode="contained" onPress={() => {
                     exit('back', null, null);
-                }} color="#5b59fb" style={{ marginLeft:30, marginRight:30, marginBottom: 30 ,padding: 5 }}>BACK</Button>
+                }} color="#5b59fb" style={{ marginLeft: 30, marginRight: 30, marginBottom: 30, padding: 5 }}>BACK</Button>
             </ScrollView>
         </Provider>
     )
