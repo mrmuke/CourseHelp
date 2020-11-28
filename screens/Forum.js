@@ -7,6 +7,7 @@ import { Button, Card } from 'react-native-paper';
 import EditForum from './EditForum';
 import CommentForum from './CommentForum'
 import 'react-native-get-random-values';
+import CategoryPicker from '../components/CategoryPicker'
 
 export default function Forum() {
     const [postData, setPostData] = useState(null)
@@ -16,9 +17,10 @@ export default function Forum() {
     const [forum, setForum] = useState(null)
     const [vote, setVote] = useState(null)
     const [disableVotes, setDisableVotes] = useState(false)
+    const [category, setCategory] = React.useState('all')
 
     useEffect(() => {
-        getPosts()
+        getPosts('all')
         getUser()
     }, [])
 
@@ -50,14 +52,23 @@ export default function Forum() {
         }
     }
 
-    function getPosts() {
-
+    const getPosts = async (cat) => {
         firebase.database().ref('forum/').on('value', snapshot => {
             var posts = []
             snapshot.forEach(function (childSnapshot) {
                 let item = childSnapshot.val()
                 item['id'] = childSnapshot.key
-                posts.push(item)
+                if (cat == 'all') {
+                    //let item = childSnapshot.val()
+                    //console.log('all')
+                    posts.push(item)
+                } else {
+                    //console.log(cat)
+                    console.log(cat)
+                    if (item.category === cat) {
+                        posts.push(item)
+                    }
+                }
             })
             setPostData(posts)
             //console.log(postData)
@@ -67,6 +78,10 @@ export default function Forum() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
         })
+    }
+    function selectCategory(cat) {
+        setCategory(cat)
+        getPosts(cat)
     }
     if (user == null) {
         return null
@@ -78,18 +93,20 @@ export default function Forum() {
         //console.log(forum)
         return <CommentForum user={user} forumPost={forum} exit={() => { setComment(false) }} />
     }
-
+    //console.log(category)
     return (
         <View style={styles.container}>
             <Button mode="contained" onPress={() => setCreate(true)} color="#4293f5" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
+            <CategoryPicker style={styles.categoryPicker} selectedCategory={category} onClick={selectCategory} />
             <ScrollView>
                 {postData.map(item => (
                     <Card key={item.id} style={{ margin: 15 }}>
+                        <Text style={{ marginHorizontal: 17, marginTop: 17 }}>{item.category}</Text>
                         <Card.Title title={item.title} subtitle={"by " + item.postedby} />
                         <Card.Cover source={{ uri: item.image }} />
                         <Card.Content style={{ margin: 10 }}>
                             <Text>
-                                {item.post.substring(0, 1000)}...
+                                {item.post.substring(0, 400)}...
                     </Text>
                         </Card.Content>
                         <Card.Actions>
@@ -98,7 +115,8 @@ export default function Forum() {
                             <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
                         </Card.Actions>
                     </Card>
-                ))}</ScrollView>
+                ))}
+            </ScrollView>
 
 
 
@@ -108,12 +126,16 @@ export default function Forum() {
 
 }
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
     cardButtons: {
         color: 'black'
-    }
+    },
+    categoryPicker: {
+        padding: 5,
+        marginVertical: 7,
+        elevation: 3,
+    },
 })

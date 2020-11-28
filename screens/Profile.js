@@ -48,13 +48,13 @@ export default function Profile(props) {
                         <View style={styles.button}>
                             <View style={{flexDirection:"row"}}>
                                 <View>
-                                    <Button mode='outlined' color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                                    <Button mode='contained' color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
                                 </View>
                                 <View>
-                                    <Button mode="outlined" color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
+                                    <Button mode="contained" color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
                                 </View>
                             </View>
-                            <Button mode="outlined" color='#5b59fb' contentStyle={{padding:2}} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
+                            <Button mode="contained" color='#5b59fb' contentStyle={{padding:2}} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
                         </View>
                     </View>
                 </View>

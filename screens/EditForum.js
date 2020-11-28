@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Image, ScrollView, ActivityIndicator, FlatList, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Alert } from 'react-native';
 import * as firebase from 'firebase'
 import { Button, IconButton, Title } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker';
@@ -13,6 +13,9 @@ export default function EditForum({ user, exit }) {
     const [url, setUrl] = useState(null)
     const [uploaded, setUploaded] = useState(false)
     const [postKey, setPostKey] = useState(uuidv4())
+    const [category, setCategory] = useState('all')
+    const [showCategory, setShowCategory] = useState(true)
+    const categories = ['Science', 'Math', 'History', 'English', 'Art', 'Language']
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync();
@@ -38,7 +41,7 @@ export default function EditForum({ user, exit }) {
             post: postText,
             postedby: user.username,
             image: url,
-            
+            category: category
         })
         exit()
     }
@@ -90,11 +93,20 @@ export default function EditForum({ user, exit }) {
                         />
                     </View>
                 </TouchableWithoutFeedback>
+                <View style={{ height: 380 }}>
+                    <Title style={{ margin: 20, marginTop: 20, alignSelf: 'center' }}>Category</Title>
+                    <TouchableOpacity style={{ margin: 5 }} onPress={() => setShowCategory(!showCategory)}>
+                        <Button mode="text" contentStyle={{ padding: 10 }} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{category}</Button>
+                    </TouchableOpacity>
+                    {showCategory && <>{categories.map(category =>
+                        <Button key={category} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={styles.selector} mode="text" color="black" onPress={() => { setCategory(category) }}>{category}</Button>
+                    )}</>}
+                </View>
                 <View style={{ flexDirection: 'row' }}>
                     {uploaded ?
                         <Title style={{ margin: 20, marginTop: 15 }}>IMAGE UPLOADED</Title> : <Title style={{ margin: 20, marginTop: 15, }}>Upload Image</Title>}
                     {loading ?
-                        <ActivityIndicator size='large' marginLeft='auto' marginRight={15} marginVertical={18} /> :
+                        <ActivityIndicator size='large' marginRight={0} marginVertical={18} /> :
                         <IconButton icon='camera' size={40} style={{ marginLeft: 'auto' }} onPress={pickImage} />}
                 </View>
                 <Image
@@ -103,9 +115,11 @@ export default function EditForum({ user, exit }) {
                     }}
                     source={{ uri: url }}
                 />
+
                 <Button onPress={() => { check(), post() }} mode="outlined" color='#36485f'
                     labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }}
                     style={{ width: 150, alignSelf: 'center', margin: 20 }} >Post</Button>
+
             </KeyboardAvoidingView>
         </ScrollView>
     )
@@ -115,5 +129,11 @@ export default function EditForum({ user, exit }) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white'
-    }
+    },
+    selector: {
+        fontSize: 15,
+        padding: 5,
+        marginVertical: 2,
+        textAlign: 'center'
+    },
 })
