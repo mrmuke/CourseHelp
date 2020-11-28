@@ -10,18 +10,17 @@ import 'react-native-get-random-values';
 import CategoryPicker from '../components/CategoryPicker'
 
 export default function Forum() {
-    const [postData, setPostData] = useState(null)
+    const [postData, setPostData] = useState([])
     const [user, setUser] = useState(null)
     const [create, setCreate] = useState(false)
     const [comment, setComment] = useState(false)
     const [forum, setForum] = useState(null)
     const [votes, setVotes] = useState(0)
-    const [upvote, setUpvote] = useState([])
-    const [downvote, setDownvote] = useState([])
-    const [category, setCategory] = React.useState('all')
+
+    const [category, setCategory] = useState('all')
     const userUID = firebase.auth().currentUser.uid
     useEffect(() => {
-        getPosts('all')
+        getPosts(category)
         getUser()
     }, [])
 
@@ -80,6 +79,7 @@ export default function Forum() {
                         posts.push(item)
                     }
                 }
+                console.log(posts)
             })
             setPostData(posts)
         })
