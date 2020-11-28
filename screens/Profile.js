@@ -47,8 +47,11 @@ export default function Profile(props) {
                     } else {
                         newArray = [...user["verified"]];
                     }
-                    newArray.push(course);
+                    if(!newArray.includes(course)){
+                        newArray.push(course);
+                    }
                     firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('verified').set(newArray);
+                    getUser();
                     setVerifiedCourse({
                         msg: 'You passed the ' + course + ' verification test with a score of ' + correct + "/10! You're now verified!",
                         bool: true
