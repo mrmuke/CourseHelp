@@ -51,37 +51,36 @@ export default function EditProfile({ user, exit }) {
         })
 
     }
-    function uploadUsername() {
-        firebase.database().ref("users/" + userID).update({
+    async function uploadUsername() {
+        await firebase.database().ref("users/" + userID).update({
             username: username
         })
     }
-    function uploadSchool() {
-        firebase.database().ref("users/" + userID).update({
+    async function uploadSchool() {
+        await firebase.database().ref("users/" + userID).update({
             school: school
         })
     }
-    function uploadGrade() {
-        firebase.database().ref("users/" + userID).update({
+    async function uploadGrade() {
+        await firebase.database().ref("users/" + userID).update({
             grade: grade
         })
     }
-    function uploadBio() {
-        firebase.database().ref("users/" + userID).update({
+    async function uploadBio() {
+        await firebase.database().ref("users/" + userID).update({
             bio: bio
         })
     }
-    function uploadData() {
-        uploadSchool()
-        uploadUsername()
-        uploadGrade()
-        uploadBio()
+    async function uploadData() {
+        await uploadSchool()
+        await uploadUsername()
+        await uploadGrade()
+        await uploadBio()
     }
     if (!user) {
         return null
     }
     return (
-
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <ScrollView>
                 <View style={styles.header}>
@@ -141,7 +140,7 @@ export default function EditProfile({ user, exit }) {
                         </View >
                     </View>
                 </View>
-                <Button onPress={() => { exit(); uploadData() }} mode="text" color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} >Save</Button>
+                <Button onPress={async() => { await uploadData(); exit(); }} mode="text" color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} >Save</Button>
 
             </ScrollView>
             <Provider>

@@ -22,9 +22,17 @@ export default function Profile(props) {
     }, [])
 
     function getUser() {
-
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
+        })
+        firebase.database().ref('users').once('value', snapshot=>{
+            for(let each in snapshot.val()){
+                let person = snapshot.val()[each]
+                console.log(person["username"] + ": ");
+                console.log("--- Bio: " + person["bio"]);
+                console.log("--- School: " + person["school"]["item"]);
+                console.log("--- Grade: " + person["grade"]);
+            }
         })
     }
     if (user == null) {
@@ -33,7 +41,7 @@ export default function Profile(props) {
     }
 
     if (edit) {
-        return <EditProfile user={user} exit={() => { setEdit(false); getUser() }} />
+        return <EditProfile user={user} exit={() => { setEdit(false); getUser(); }} />
     }
 
     if (verify) {
