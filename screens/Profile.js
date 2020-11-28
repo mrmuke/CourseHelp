@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase'
-<<<<<<< HEAD
-import { Button} from 'react-native-paper'
-import EditProfile from './EditProfile';;
-import VerifyQuiz from './verifyQuiz'
-=======
-import { Button } from 'react-native-paper'
+import { Button, Provider, Modal, Portal } from 'react-native-paper'
 import EditProfile from './EditProfile';
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
+import VerifyQuiz from './verifyQuiz';
 
 export default function Profile(props) {
     const [user, setUser] = useState(null)
     const [edit, setEdit] = useState(false)
     var [verify, setVerify] = useState(false);
+    var [modalVisibility, setModalVisibility] = useState(false);
+    var [verifiedCourse, setVerifiedCourse] = useState("");
 
     useEffect(() => {
         getUser();
@@ -34,45 +31,62 @@ export default function Profile(props) {
     if (edit) {
         return <EditProfile user={user} exit={() => { setEdit(false); getUser() }} />
     }
-<<<<<<< HEAD
 
-    if(verify){
-        return <VerifyQuiz exit={()=> {setVerify(false)} }/>
+    if (verify) {
+        return <VerifyQuiz exit={(func, course, correct) => {
+            if (func == "check") {
+                setModalVisibility(true);
+                if (correct > 8) {
+                    var newArray;
+                    if(user["verified"] == undefined){
+                        newArray = [];
+                    } else {
+                        newArray = [...user["verified"]];
+                    }
+                    newArray.push(course);
+                    firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('verified').set(newArray);
+                    setVerifiedCourse('YOU PASSED THE ' + course + ' TEST WITH A SCORE OF ' + correct + "/10! You're now verified!");
+                } else {
+                    setVerifiedCourse('YOU FAILED THE ' + course + ' TEST with a score of ' + correct + "/10! Better luck next time!");
+                }
+            }
+            setVerify(false);
+        }} />
     }
 
-=======
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.container}>
-                <View style={styles.header}></View>
-                <Image style={styles.avatar} source={{ uri: user.profile_picture }} />
-                <View style={styles.body}>
-                    <View style={styles.bodyContent}>
-                        <Text style={styles.name}>{user.username}</Text>
-                        <Text style={styles.school}>{user.school["item"]}</Text>
-                        <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
-                        <Text style={styles.description}>{user.bio}</Text>
-                        <View style={styles.button}>
-<<<<<<< HEAD
-                            <View style={{flexDirection:"row"}}>
-                                <View>
-                                    <Button mode='outlined' color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+        <Provider>
+            <Portal>
+                <Modal visible={modalVisibility} onDismiss={() => { setModalVisibility(false) }}>
+                    <Text style={{ backgroundColor: "#fff", marginLeft: 30, marginRight: 30, padding: 30, textAlign: "center"}}>{verifiedCourse}</Text>
+                </Modal>
+            </Portal>
+            <ScrollView style={styles.container}>
+                <View style={styles.container}>
+                    <View style={styles.header}></View>
+                    <Image style={styles.avatar} source={{ uri: user.profile_picture }} />
+                    <View style={styles.body}>
+                        <View style={styles.bodyContent}>
+                            <Text style={styles.name}>{user.username}</Text>
+                            <Text style={styles.school}>{user.school["item"]}</Text>
+                            <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
+                            <Text style={styles.description}>{user.bio}</Text>
+                            <View style={styles.button}>
+                                <View style={{ flexDirection: "row" }}>
+                                    <View>
+                                        <Button mode='outlined' color='#5b59fb' contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                                    </View>
+                                    <View>
+                                        <Button mode="outlined" color='#5b59fb' contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
+                                    </View>
                                 </View>
-                                <View>
-                                    <Button mode="outlined" color='#5b59fb' contentStyle={{padding:5}} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
-                                </View>
+                                <Button mode="outlined" color='#5b59fb' contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
                             </View>
-                            <Button mode="outlined" color='#5b59fb' contentStyle={{padding:2}} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
-=======
-                            <Button mode='contained' color='#5b59fb' contentStyle={{ padding: 10 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
-                            <Button mode='contained' color='#5b59fb' contentStyle={{ padding: 10 }} style={styles.buttonContainer} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
                         </View>
                     </View>
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </Provider>
     );
 }
 
@@ -119,31 +133,20 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     description: {
-<<<<<<< HEAD
         fontSize: 14,
         color: "#707070",
-        marginTop:30,
-=======
-        fontSize: 16,
-        color: "#696969",
-        marginTop: 10,
-        textAlign: 'center'
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
+        marginTop: 30,
     },
     buttonContainer: {
         margin: 5,
-        width:Dimensions.get('screen').width/2 - 10
+        width: Dimensions.get('screen').width / 2 - 10
     },
-    buttonSignOut:{
-        margin:5
+    buttonSignOut: {
+        margin: 5
     },
     button: {
         marginTop: 60,
-<<<<<<< HEAD
-        width:Dimensions.get('screen').width,
-=======
         width: Dimensions.get('screen').width
->>>>>>> d95994fd49a6fefb325b928cc293b66b586948f7
     }
 
 })

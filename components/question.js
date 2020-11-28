@@ -6,7 +6,7 @@ export default function QuestionComponent({courses, index, pickAnswer}) {
     var [checked, setChecked] = useState(0);
 
     useEffect(()=>{
-        pickAnswer(checked, index-1);
+        pickAnswer(checked, index);
     },[checked])
 
     return (
