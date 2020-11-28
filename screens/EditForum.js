@@ -15,8 +15,8 @@ export default function EditForum({ user, exit }) {
     const [postKey, setPostKey] = useState(uuidv4())
     const [category, setCategory] = useState('all')
     const [showCategory, setShowCategory] = useState(true)
-    const categories = ['Science', 'Math', 'History', 'English', 'Art', 'Language']
-
+    const categories = ['Science', 'Math', 'History', 'English', 'Art', 'Language', 'Technology']
+    const userUID = firebase.auth().currentUser.uid
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync();
         if (!result.cancelled) {
@@ -41,7 +41,8 @@ export default function EditForum({ user, exit }) {
             post: postText,
             postedby: user.username,
             image: url,
-            category: category
+            category: category,
+            uid: userUID
         })
         exit()
     }
@@ -93,7 +94,7 @@ export default function EditForum({ user, exit }) {
                         />
                     </View>
                 </TouchableWithoutFeedback>
-                <View style={{ height: 380 }}>
+                <View style={{ height: 420 }}>
                     <Title style={{ margin: 20, marginTop: 20, alignSelf: 'center' }}>Category</Title>
                     <TouchableOpacity style={{ margin: 5 }} onPress={() => setShowCategory(!showCategory)}>
                         <Button mode="text" contentStyle={{ padding: 10 }} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{category}</Button>

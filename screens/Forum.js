@@ -9,34 +9,60 @@ import CommentForum from './CommentForum'
 import 'react-native-get-random-values';
 import CategoryPicker from '../components/CategoryPicker'
 
+
+
 export default function Forum() {
-    const [postData, setPostData] = useState(null)
+    const [postData, setPostData] = useState([])
     const [user, setUser] = useState(null)
     const [create, setCreate] = useState(false)
     const [comment, setComment] = useState(false)
     const [forum, setForum] = useState(null)
     const [votes, setVotes] = useState(0)
-    const [upvote, setUpvote] = useState([])
-    const [downvote, setDownvote] = useState([])
     const [category, setCategory] = React.useState('all')
     const userUID = firebase.auth().currentUser.uid
     useEffect(() => {
-        getPosts('all')
+        getPosts('all', true)
         getUser()
     }, [])
 
-
-    function Votes(type) {
-        let ref = firebase.database().ref('forum/' + forum.id)
+    function getVoters(item) {
+        let ref = firebase.database().ref('forum/' + item.id)
         var upVoters = []
         var downVoters = []
         ref.once('value', snapshot => {
             upVoters = snapshot.val().upvotes || []
-            //console.log(upVoters)
             downVoters = snapshot.val().downvotes || []
         })
+        return [upVoters, downVoters, ref]
+    }
 
-        console.log(upVoters)
+    function getVote(item) {
+        let voters = getVoters(item)
+        var upVoters = voters[0]
+        var downVoters = voters[1]
+        return upVoters.length - downVoters.length
+    }
+
+    function isVoted(item) {
+        let voters = getVoters(item)
+        var upVoters = voters[0]
+        var downVoters = voters[1]
+        if (upVoters.includes(userUID)) {
+            return 'up'
+        } else if (downVoters.includes(userUID)) {
+            return 'down'
+        } else {
+            return 'none'
+        }
+
+    }
+
+    function Votes(type, forum) {
+        let voters = getVoters(forum)
+        var upVoters = voters[0]
+        var downVoters = voters[1]
+        var ref = voters[2]
+
         if (type == 'up') {
             if (upVoters.includes(userUID) && !downVoters.includes(userUID)) {
                 upVoters.splice(upVoters.indexOf(userUID), 1)
@@ -57,17 +83,11 @@ export default function Forum() {
             }
         }
 
-        //setUpvote(upVoters)
-        //setDownvote(downVoters)
-        setVotes(upVoters.length - downVoters.length)
         ref.update({ upvotes: upVoters })
         ref.update({ downvotes: downVoters })
-        //console..length, upVoters)
-        // console.log('down', downVoters.length, downVoters)
     }
-    //console.log(votes)
 
-    const getPosts = async (cat) => {
+    function getPosts(cat, order) {
         firebase.database().ref('forum/').on('value', snapshot => {
             var posts = []
             snapshot.forEach(function (childSnapshot) {
@@ -75,15 +95,38 @@ export default function Forum() {
                 item['id'] = childSnapshot.key
                 if (cat == 'all') {
                     posts.push(item)
+                } else if (cat == 'My Posts') {
+                    if (item.uid == userUID) {
+                        posts.push(item)
+                    }
                 } else {
                     if (item.category === cat) {
                         posts.push(item)
                     }
                 }
             })
+            if (order) {
+                posts.sort((a, b) => {
+
+                    if (a.upvotes == null) {
+                        ((0 - a.downvotes.length) > (b.upvotes.length - b.downvotes.length)) ? 1 : ((0 - a.downvotes.length) === (b.upvotes.length - b.downvotes.length)) ? ((0 - a.downvotes.length) > (b.upvotes.length - b.downvotes.length) ? 1 : -1) : -1
+                    } else if (a.downvotes == null) {
+                        ((a.upvotes.length - 0) > (b.upvotes.length - b.downvotes.length)) ? 1 : ((a.upvotes.length - 0) === (b.upvotes.length - b.downvotes.length)) ? ((a.upvotes.length - 0) > (b.upvotes.length - b.downvotes.length) ? 1 : -1) : -1
+                    } else if (b.upvotes == null) {
+                        ((a.upvotes.length - a.downvotes.length) > (0 - b.downvotes.length)) ? 1 : ((a.upvotes.length - a.downvotes.length) === (0 - b.downvotes.length)) ? ((a.upvotes.length - a.downvotes.length) > (0 - b.downvotes.length) ? 1 : -1) : -1
+                    } else if (b.downvotes == null) {
+                        ((a.upvotes.length - a.downvotes.length) > (b.upvotes.length - 0)) ? 1 : ((a.upvotes.length - a.downvotes.length) === (b.upvotes.length - 0)) ? ((a.upvotes.length - a.downvotes.length) > (b.upvotes.length - 0) ? 1 : -1) : -1
+
+                    } else {
+                        ((a.upvotes.length - a.downvotes.length) > (b.upvotes.length - b.downvotes.length)) ? 1 : ((a.upvotes.length - a.downvotes.length) === (b.upvotes.length - b.downvotes.length)) ? ((a.upvotes.length - a.downvotes.length) > (b.upvotes.length - b.downvotes.length) ? 1 : -1) : -1
+                    }
+                })
+            }
             setPostData(posts)
         })
+
     }
+
     function getUser() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
@@ -91,7 +134,7 @@ export default function Forum() {
     }
     function selectCategory(cat) {
         setCategory(cat)
-        getPosts(cat)
+        getPosts(cat, true)
     }
     if (user == null) {
         return null
@@ -100,10 +143,8 @@ export default function Forum() {
         return <EditForum user={user} exit={() => { setCreate(false) }} />
     }
     if (comment) {
-        //console.log(forum)
         return <CommentForum user={user} forumPost={forum} exit={() => { setComment(false) }} />
     }
-    //console.log(category)
     return (
         <View style={styles.container}>
             <Button mode="contained" onPress={() => setCreate(true)} color="#4293f5" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
@@ -115,23 +156,17 @@ export default function Forum() {
                         <Card.Title title={item.title} subtitle={"by " + item.postedby} />
                         <Card.Cover source={{ uri: item.image }} />
                         <Card.Content style={{ margin: 10 }}>
-                            <Text>
-                                {item.post.substring(0, 400)}...
-                    </Text>
+                            <Text>{item.post.substring(0, 400)}...</Text>
                         </Card.Content>
                         <Card.Actions>
-                            <Button labelStyle={styles.cardButtons} onPress={() => { setForum(item), Votes('down') }} icon="arrow-down"></Button>
-                            <Text>{votes}</Text>
-                            <Button labelStyle={styles.cardButtons} onPress={() => { setForum(item), Votes('up') }} icon="arrow-up"></Button>
-                            <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={styles.cardButtons} icon="comment"></Button>
+                            <Button labelStyle={{ color: isVoted(item) == 'up' ? '#4293f5' : 'black' }} onPress={() => { Votes('up', item) }} icon="arrow-up"></Button>
+                            <Text>{getVote(item)}</Text>
+                            <Button labelStyle={{ color: isVoted(item) == 'down' ? '#4293f5' : 'black' }} onPress={() => { Votes('down', item) }} icon="arrow-down"></Button>
+                            <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={{ color: 'black' }} icon="comment"></Button>
                         </Card.Actions>
                     </Card>
                 ))}
             </ScrollView>
-
-
-
-
         </View >
     );
 
@@ -140,9 +175,6 @@ export default function Forum() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    cardButtons: {
-        color: 'black'
     },
     categoryPicker: {
         padding: 5,
