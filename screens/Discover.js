@@ -35,6 +35,92 @@ export default function Discover() {
             setFilteredGroups(list)
         })
     }, [publicity, subject, keyword,showOptions])
+    useEffect(()=>{
+        getSuggestedGroups()
+    },[])
+    function getSuggestedGroups(){
+        firebase.database().ref('groups/').on('value',snap=>{
+            var suggested = []
+            snap.forEach(item=async()=>{
+                let cur = item.val()
+                cur["similarity"]=0.0
+                for(var i =0;i<cur.members.length;i++){
+                   /*  console.log(await getUser(cur.members[i])) */
+                }
+            })
+        })
+    }
+    function similarity(self, person) {
+        let userArr = self["bio"].split(" ");
+        let userArrCount = [];
+        for (let word in userArr) {
+            var skip = false;
+            for (let obj in userArrCount) {
+                if (userArrCount[obj].word == userArr[word]) {
+                    userArrCount[obj].count++;
+                    skip = true;
+                    break;
+                }
+            }
+            if (!skip) {
+                userArrCount.push({
+                    word: userArr[word].toLowerCase(),
+                    count: 1
+                })
+            }
+        }
+        let school = 0;
+        let grade = 0;
+        if (self["grade"] == person["grade"]) {
+            grade = 1;
+        }
+        if (self["school"]["item"] == person["school"]["item"]) {
+            school = 1;
+        }
+        let arr = person["bio"].split(" ");
+        let arrCount = [];
+        for (let word in arr) {
+            var skip = false;
+            for (let obj in arrCount) {
+                if (arrCount[obj].word == arr[word]) {
+                    arrCount[obj].count++;
+                    skip = true;
+                    break;
+                }
+            }
+            if (!skip) {
+                arrCount.push({
+                    word: arr[word].toLowerCase(),
+                    count: 1
+                })
+            }
+        }
+        let countTop = 0;
+        let countBottom1 = 0;
+        let countBottom2 = 0;
+        for (let obj in userArrCount) {
+            for (let obj1 in arrCount) {
+                countBottom1 += (arrCount[obj1].count) * (arrCount[obj1].count)
+                if (userArrCount[obj].word == arrCount[obj1].word) {
+                    countTop += (userArrCount[obj].count * arrCount[obj1].count)
+                }
+            }
+            countBottom2 += (userArrCount[obj].count) * (userArrCount[obj].count)
+        }
+        countBottom2 = countBottom2 / userArrCount.length;
+        countBottom1 = Math.sqrt(countBottom1);
+        countBottom2 = Math.sqrt(countBottom2);
+        let cosineSimilarity = countTop / (countBottom1) * (countBottom2);
+        let similarity = (cosineSimilarity * 0.3) + (0.4 * school) + (0.3 * grade);
+        return similarity;
+    }
+    function getUser(id){
+        firebase.database().ref('users/'+id).once('value',snap=>{
+            let item = snap.val()
+            item["uid"]=snap.key
+            return item
+        })
+    }
     function joinGroup(c){
         firebase.database().ref('groups/'+c.id).once('value',snapshot=>{
             var members=snapshot.val().members||[]

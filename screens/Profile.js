@@ -26,72 +26,11 @@ export default function Profile(props) {
     function getUser() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
+            
+
         })
     }
-    function similarity(self, person) {
-        let userArr = self["bio"].split(" ");
-        let userArrCount = [];
-        for (let word in userArr) {
-            var skip = false;
-            for (let obj in userArrCount) {
-                if (userArrCount[obj].word == userArr[word]) {
-                    userArrCount[obj].count++;
-                    skip = true;
-                    break;
-                }
-            }
-            if (!skip) {
-                userArrCount.push({
-                    word: userArr[word].toLowerCase(),
-                    count: 1
-                })
-            }
-        }
-        let school = 0;
-        let grade = 0;
-        if (self["grade"] == person["grade"]) {
-            grade = 1;
-        }
-        if (self["school"]["item"] == person["school"]["item"]) {
-            school = 1;
-        }
-        let arr = person["bio"].split(" ");
-        let arrCount = [];
-        for (let word in arr) {
-            var skip = false;
-            for (let obj in arrCount) {
-                if (arrCount[obj].word == arr[word]) {
-                    arrCount[obj].count++;
-                    skip = true;
-                    break;
-                }
-            }
-            if (!skip) {
-                arrCount.push({
-                    word: arr[word].toLowerCase(),
-                    count: 1
-                })
-            }
-        }
-        let countTop = 0;
-        let countBottom1 = 0;
-        let countBottom2 = 0;
-        for (let obj in userArrCount) {
-            for (let obj1 in arrCount) {
-                countBottom1 += (arrCount[obj1].count) * (arrCount[obj1].count)
-                if (userArrCount[obj].word == arrCount[obj1].word) {
-                    countTop += (userArrCount[obj].count * arrCount[obj1].count)
-                }
-            }
-            countBottom2 += (userArrCount[obj].count) * (userArrCount[obj].count)
-        }
-        countBottom2 = countBottom2 / userArrCount.length;
-        countBottom1 = Math.sqrt(countBottom1);
-        countBottom2 = Math.sqrt(countBottom2);
-        let cosineSimilarity = countTop / (countBottom1) * (countBottom2);
-        let similarity = (cosineSimilarity * 0.3) + (0.4 * school) + (0.3 * grade);
-        return similarity;
-    }
+    
 
     if (user == null) {
         return null
