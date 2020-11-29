@@ -69,7 +69,7 @@ export default function Tools() {
       });
 
       const data = await response.json();
-      setNotes("-" + data.transcript.substr(0, data.transcript.length - 1));
+      setNotes("-" + data.transcript.substr(0, data.transcript.length - 1).replaceAll());
     } catch (error) {
       console.log('There was an error', error);
       resetRecording()

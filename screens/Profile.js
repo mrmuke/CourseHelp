@@ -21,28 +21,96 @@ export default function Profile(props) {
         //firebase.auth().signOut()
     }, [])
 
-    function getUser() {
-<<<<<<< HEAD
-        firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
-=======
+    useEffect(()=> {
+        if(user != null){
+            console.log(similarity());
+        }
+    }, [user])
 
-        firebase.database().ref('users/' + (props.userID?props.userID:firebase.auth().currentUser.uid)).once('value', snapshot => {
->>>>>>> a12e89cd9058d0e953460f0d2c4597586a3ecb51
+    function getUser() {
+        firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
         })
-        firebase.database().ref('users').once('value', snapshot=>{
-            for(let each in snapshot.val()){
-                let person = snapshot.val()[each]
-                console.log(person["username"] + ": ");
-                console.log("--- Bio: " + person["bio"]);
-                console.log("--- School: " + person["school"]["item"]);
-                console.log("--- Grade: " + person["grade"]);
+    }
+
+    function similarity(){
+        let finalArr = [];
+        firebase.database().ref('users').once('value', snapshot => {
+            let userArr = user["bio"].split(" ");
+            let userArrCount = [];
+            for (let word in userArr) {
+                var skip = false;
+                for (let obj in userArrCount) {
+                    if (userArrCount[obj].word == userArr[word]) {
+                        userArrCount.count++;
+                        skip = true;
+                        break;
+                    }
+                }
+                if (!skip) {
+                    userArrCount.push({
+                        word: userArr[word].toLowerCase(),
+                        count: 1
+                    })
+                }
+            }
+            for (let each in snapshot.val()) {
+                let person = snapshot.val()[each];
+                let school = 0;
+                let grade = 0;
+                if(user["grade"] == person["grade"]){
+                    grade = 1;
+                }
+                if(user["school"]["item"] == person["school"]["item"]){
+                    school = 1;
+                }
+                if (person["username"] != user["username"]) {
+                    let arr = person["bio"].split(" ");
+                    let arrCount = [];
+                    for (let word in arr) {
+                        var skip = false;
+                        for (let obj in arrCount) {
+                            if (arrCount[obj].word == arr[word]) {
+                                arrCount[obj].count++;
+                                skip = true;
+                                break;
+                            }
+                        }
+                        if (!skip) {
+                            arrCount.push({
+                                word: arr[word].toLowerCase(),
+                                count: 1
+                            })
+                        }
+                    }
+                    //userArrCount
+                    //arrCount
+                    let countTop = 0;
+                    let countBottom1 = 0;
+                    let countBottom2 = 0;
+                    for(let obj in userArrCount){
+                        for(let obj1 in arrCount){
+                            countBottom1 += (arrCount[obj1].count) * (arrCount[obj1].count)
+                            if(userArrCount[obj].word == arrCount[obj1].word){
+                                count += (userArrCount[obj].count * arrCount[obj1].count)
+                            }
+                        }
+                        countBottom2 += (userArrCount[obj].count) * (userArrCount[obj].count)
+                    }
+                    countBottom2 = countBottom2/userArrCount.length;
+                    let cosineSimilarity = countTop/(countBottom1)*(countBottom2);
+                    let similarity = (cosineSimilarity*0.3) + (0.4*school) + (0.3*grade);
+                    finalArr.push({
+                        username: person["username"],
+                        similarity: similarity
+                    })
+                }
             }
         })
+        return finalArr;
     }
-    console.log(user)
-    if (user == null) {
 
+    if (user == null) {
         return null
     }
 
@@ -61,7 +129,7 @@ export default function Profile(props) {
                     } else {
                         newArray = [...user["verified"]];
                     }
-                    if(!newArray.includes(course)){
+                    if (!newArray.includes(course)) {
                         newArray.push(course);
                     }
                     firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('verified').set(newArray);
@@ -85,13 +153,13 @@ export default function Profile(props) {
         <Provider>
             <Portal>
                 <Modal visible={modalVisibility} onDismiss={() => { setModalVisibility(false) }}>
-                    <View style={{ backgroundColor: "#fff", marginLeft: 30, marginRight: 30, paddingTop: 60, paddingBottom: 60, paddingLeft: 20, paddingRight:20}}>
-                        <Text style={{textAlign: "center", fontSize: 18}}>{verifiedCourse.msg}</Text>
-                        {(()=>{
-                            if(verifiedCourse.bool){
-                                return <Icon style={{marginTop: 30, alignSelf:'center'}} color="#5b59fb" size={60} name="check-circle" />;
+                    <View style={{ backgroundColor: "#fff", marginLeft: 30, marginRight: 30, paddingTop: 60, paddingBottom: 60, paddingLeft: 20, paddingRight: 20 }}>
+                        <Text style={{ textAlign: "center", fontSize: 18 }}>{verifiedCourse.msg}</Text>
+                        {(() => {
+                            if (verifiedCourse.bool) {
+                                return <Icon style={{ marginTop: 30, alignSelf: 'center' }} color="#5b59fb" size={60} name="check-circle" />;
                             } else {
-                                return <Icon style={{marginTop: 30, alignSelf:'center'}} color="#5b59fb" size={60} name="emoticon-sad" />;
+                                return <Icon style={{ marginTop: 30, alignSelf: 'center' }} color="#5b59fb" size={60} name="emoticon-sad" />;
                             }
                         })()}
                     </View>
@@ -104,12 +172,11 @@ export default function Profile(props) {
                     <View style={styles.body}>
                         <View style={styles.bodyContent}>
                             <Text style={styles.name}>{user.username}</Text>
-                            {user.verified&&user.verified.map(c=><Chip key={c} style={{marginTop:10}} icon="check">{c}</Chip>)}
+                            {user.verified && user.verified.map(c => <Chip key={c} style={{ marginTop: 10 }} icon="check">{c}</Chip>)}
                             <Text style={styles.school}>{user.school["item"]}</Text>
                             <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
-                            
+
                             <Text style={styles.description}>{user.bio}</Text>
-                            {!props.userID&&
                             <View style={styles.button}>
                                 <View style={{ flexDirection: "row" }}>
                                     <View>
@@ -120,7 +187,7 @@ export default function Profile(props) {
                                     </View>
                                 </View>
                                 <Button mode="contained" color='#5b59fb' contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
-                            </View>}
+                            </View>
                         </View>
                     </View>
                 </View>
