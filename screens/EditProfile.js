@@ -120,7 +120,6 @@ export default function EditProfile({ user, exit }) {
                             value={bio}
                             maxLength={150}
                             multiline={true}
-
                             onChangeText={bio => setBio(bio)}
                             underlineColor="#36485f"
                         />
@@ -188,15 +187,15 @@ export default function EditProfile({ user, exit }) {
 }
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: "#5b59fb",
+        backgroundColor: "#b0d3bf",
         height: 150,
     },
     title: {
         textAlign: 'center',
-        marginTop: 25,
-        fontSize: 28,
+        marginTop: 40,
+        fontSize: 20,
         color: "white",
-        fontWeight: "600"
+        fontWeight: "bold"
     },
     selector: {
         fontSize: 15,

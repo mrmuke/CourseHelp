@@ -5,18 +5,18 @@ import { Card, RadioButton, Title, Subheading } from 'react-native-paper';
 export default function QuestionComponent({ courses, index, pickAnswer, menuText }) {
     var [checked, setChecked] = useState(0);
 
-    useEffect(()=>{
+    useEffect(() => {
         setChecked(0);
-    },[menuText])
+    }, [menuText])
 
     useEffect(() => {
         pickAnswer(checked, index);
     }, [checked]);
 
     return (
-        <Card style={{ marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
+        <Card style={{ backgroundColor: 'white', marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
             <Card.Content>
-                <Title style={{ marginTop: 20 }}>{(() => {
+                <Title style={{ color: 'black', marginTop: 20 }}>{(() => {
                     return courses["question"];
                 })()}</Title>
                 <Subheading style={{ marginBottom: 40, color: "#8a8a8a" }}>Question {index}</Subheading>

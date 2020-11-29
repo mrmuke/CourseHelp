@@ -34,13 +34,13 @@ export default function Home(props) {
     }, [])
     function getInvites() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
-            var item =snap.val().invites||[]
+            var item = snap.val().invites || []
             setInvites(item)
-            if(item.length==0){
+            if (item.length == 0) {
                 setViewInvites(false)
             }
-    })
-        
+        })
+
     }
     useEffect(() => {
         firebase.database().ref('users/').on('value', snap => {
@@ -63,48 +63,49 @@ export default function Home(props) {
     }, [userQuery])
     function sendInvite() {
         setUserQuery("")
-        if(group.pending&&group.pending.includes(selectedUser.id))
-{
-    removePending(selectedUser.id)
-    joinGroup(selectedUser.id)
+        if (group.pending && group.pending.includes(selectedUser.id)) {
+            removePending(selectedUser.id)
+            joinGroup(selectedUser.id)
 
-}
+        }
 
-else{
-        firebase.database().ref('users/'+ selectedUser.id).once('value',snap=>{
-            let invites = snap.val().invites||[]
-            invites.push(group.id)
-            firebase.database().ref('users/' + selectedUser.id).update({
-                invites
-            }).then(() => {
-                setSelectedUser(null)
+        else {
+            firebase.database().ref('users/' + selectedUser.id).once('value', snap => {
+                let invites = snap.val().invites || []
+                invites.push(group.id)
+                firebase.database().ref('users/' + selectedUser.id).update({
+                    invites
+                }).then(() => {
+                    setSelectedUser(null)
+                })
             })
-        })
-    }
-        
+        }
+
     }
     function leaveGroup(c) {
         Alert.alert(
             "Leave Group",
-        "Are you sure you want to leave this group?",
+            "Are you sure you want to leave this group?",
             [
-              {
-                text: "Cancel",
-                style: "cancel"
-              },
-              { text: "LEAVE", onPress: () =>  firebase.database().ref('groups/' + c.id).once('value', snapshot => {
-                var members = snapshot.val().members
-                members = members.filter(e => e != firebase.auth().currentUser.uid)
-    
-                firebase.database().ref('groups/' + c.id).update({
-                    members
-                })
-            }) }
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "LEAVE", onPress: () => firebase.database().ref('groups/' + c.id).once('value', snapshot => {
+                        var members = snapshot.val().members
+                        members = members.filter(e => e != firebase.auth().currentUser.uid)
+
+                        firebase.database().ref('groups/' + c.id).update({
+                            members
+                        })
+                    })
+                }
             ],
             { cancelable: false }
-          );
-      
-       
+        );
+
+
     }
 
     function joinGroup(c) {
@@ -121,7 +122,7 @@ else{
     }
 
     function removePending(c) {
-       
+
         firebase.database().ref('groups/' + group.id).once('value', snapshot => {
             var pending = snapshot.val().pending || []
             pending = pending.filter(e => e != c)
@@ -138,15 +139,15 @@ else{
                 {invites.length > 0 && <Badge style={{ alignSelf: 'flex-start' }} onPress={() => setViewInvites(true)}>{invites.length} NEW INVITES</Badge>}
 
                 <View style={{ flex: 1, flexDirection: 'row', margin: 5, justifyContent: 'space-between' }}>
-                    <Title>My Study Groups</Title>
+                    <Title style={{ color: "#34646e" }}>My Study Groups</Title>
 
-                    <Button color="#003152" mode="contained" onPress={() => props.navigation.navigate('CreateGroup')}>+ Create</Button>
+                    <Button color="#0a6067" labelStyle={{ color: 'white' }} mode="contained" onPress={() => props.navigation.navigate('CreateGroup')}>+ Create</Button>
 
                 </View>
 
                 {groups.map(group => (
-                    <View key={group.id}>
-                        <TouchableOpacity onPress={()=>{setMembers(group.members), setDescription(group.description)}} style={{ flexDirection: 'row', alignSelf: 'flex-end', marginHorizontal: 20 }}>
+                    <View key={group.id} style={{ marginVertical: 20 }}>
+                        <TouchableOpacity onPress={() => { setMembers(group.members), setDescription(group.description) }} style={{ flexDirection: 'row', alignSelf: 'flex-end', marginHorizontal: 20 }}>
                             {group.members.map(c => (
                                 <User key={c} user={c} type="profile" />
                             ))}
@@ -157,13 +158,12 @@ else{
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Icon size={40} name="group" style={{ marginRight: 10 }} />
                                 <View style={{ flexDirection: 'column' }}>
-                                    <Title>{group.name}</Title>
+                                    <Title style={{ color: "#34646e" }}>{group.name}</Title>
                                     <Chip icon="information">{group.subject}</Chip></View></View>
                             <View style={{ flexDirection: 'row' }}>
-                                <IconButton icon="settings" style={{ backgroundColor: '#003152' }} onPress={() => setGroup(group)} color="white"></IconButton>
-
-                                <IconButton icon="chat" style={{ backgroundColor: '#003152' }} onPress={() => props.navigation.navigate('Chat', { group: group.name })} color="white"></IconButton>
-                                <IconButton icon="close" style={{ backgroundColor: '#003152' }} onPress={() => leaveGroup(group)} color="white"></IconButton>
+                                <IconButton icon="settings" style={{ backgroundColor: '#0a6067' }} onPress={() => setGroup(group)} color="white"></IconButton>
+                                <IconButton icon="chat" style={{ backgroundColor: '#0a6067' }} onPress={() => props.navigation.navigate('Chat', { group: group.name })} color="white"></IconButton>
+                                <IconButton icon="close" style={{ backgroundColor: '#0a6067' }} onPress={() => leaveGroup(group)} color="white"></IconButton>
 
                             </View>
                         </View></View>

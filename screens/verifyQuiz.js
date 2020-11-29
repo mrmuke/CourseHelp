@@ -59,7 +59,7 @@ export default function VerifyQuiz({ exit }) {
         })
     }, [menuText]);
     for (let each in courses) {
-        ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} style={styles.menuItem} title={each} />);
+        ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} titleStyle={{ color: 'white' }} style={{ flex: 1 }} title={each} />);
     }
 
     function checkAnswers() {
@@ -78,7 +78,7 @@ export default function VerifyQuiz({ exit }) {
                     visible={visible}
                     onDismiss={() => { setVisible(false) }}
                     style={{ width: Dimensions.get('screen').width - 15, marginTop: 90 }}
-                    anchor={<Button style={{ marginTop: 30 }} contentStyle={{ marginBottom: 30, marginTop: 30 }} onPress={() => { setVisible(true); }}>{menuText}</Button>}>
+                    anchor={<Button style={{ marginTop: 30 }} color="#99bfb5" lableStyle={{ color: '#99bfb5' }} contentStyle={{ marginBottom: 30, marginTop: 30 }} onPress={() => { setVisible(true); }}>{menuText}</Button>}>
                     {ItemList}
                 </Menu>
                 {questionList}
@@ -86,19 +86,17 @@ export default function VerifyQuiz({ exit }) {
                     if (questionList.length > 0) {
                         return <Button mode="contained" onPress={() => {
                             checkAnswers();
-                        }} color="#5b59fb" style={{ margin: 30, padding: 5 }}>Submit</Button>;
+                        }} labelStyle={{ color: 'white' }} style={{ backgroundColor: '#589d62', margin: 30, padding: 5 }}>Submit</Button>;
                     }
                 })()}
                 <Button mode="contained" onPress={() => {
                     exit('back', null, null);
-                }} color="#5b59fb" style={{ marginLeft: 30, marginRight: 30, marginBottom: 30, padding: 5 }}>BACK</Button>
+                }} color="#589d62" labelStyle={{ color: 'white' }} style={{ marginLeft: 30, marginRight: 30, marginBottom: 30, padding: 5, backgroundColor: '#589d62' }}>BACK</Button>
             </ScrollView>
         </Provider>
     )
 }
 
 const styles = StyleSheet.create({
-    menuItem: {
-        flex:1
-    }
+
 });

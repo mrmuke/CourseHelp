@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase'
-import { Button, Provider, Modal, Portal, Chip } from 'react-native-paper'
+import { Button, Provider, Modal, Portal, Chip, Appbar } from 'react-native-paper'
 import EditProfile from './EditProfile';
 import VerifyQuiz from './verifyQuiz';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -23,7 +23,7 @@ export default function Profile(props) {
 
     function getUser() {
 
-        firebase.database().ref('users/' + (props.userID?props.userID:firebase.auth().currentUser.uid)).once('value', snapshot => {
+        firebase.database().ref('users/' + (props.userID ? props.userID : firebase.auth().currentUser.uid)).once('value', snapshot => {
             setUser(snapshot.val())
         })
     }
@@ -48,7 +48,7 @@ export default function Profile(props) {
                     } else {
                         newArray = [...user["verified"]];
                     }
-                    if(!newArray.includes(course)){
+                    if (!newArray.includes(course)) {
                         newArray.push(course);
                     }
                     firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('verified').set(newArray);
@@ -72,13 +72,13 @@ export default function Profile(props) {
         <Provider>
             <Portal>
                 <Modal visible={modalVisibility} onDismiss={() => { setModalVisibility(false) }}>
-                    <View style={{ backgroundColor: "#fff", marginLeft: 30, marginRight: 30, paddingTop: 60, paddingBottom: 60, paddingLeft: 20, paddingRight:20}}>
-                        <Text style={{textAlign: "center", fontSize: 18}}>{verifiedCourse.msg}</Text>
-                        {(()=>{
-                            if(verifiedCourse.bool){
-                                return <Icon style={{marginTop: 30, alignSelf:'center'}} color="#5b59fb" size={60} name="check-circle" />;
+                    <View style={{ backgroundColor: "white", marginLeft: 30, marginRight: 30, paddingTop: 60, paddingBottom: 60, paddingLeft: 20, paddingRight: 20 }}>
+                        <Text style={{ textAlign: "center", fontSize: 18 }}>{verifiedCourse.msg}</Text>
+                        {(() => {
+                            if (verifiedCourse.bool) {
+                                return <Icon style={{ marginTop: 30, alignSelf: 'center' }} color="#34646e" size={60} name="check-circle" />;
                             } else {
-                                return <Icon style={{marginTop: 30, alignSelf:'center'}} color="#5b59fb" size={60} name="emoticon-sad" />;
+                                return <Icon style={{ marginTop: 30, alignSelf: 'center' }} color="#34646e" size={60} name="emoticon-sad" />;
                             }
                         })()}
                     </View>
@@ -86,28 +86,30 @@ export default function Profile(props) {
             </Portal>
             <ScrollView style={styles.container}>
                 <View style={styles.container}>
-                    <View style={styles.header}></View>
+                    <View style={styles.header}>
+                        <Text style={{ textAlign: 'center', marginTop: 40, fontSize: 20, color: "white", fontWeight: "bold" }}>Profile</Text>
+                    </View>
                     <Image style={styles.avatar} source={{ uri: user.profile_picture }} />
                     <View style={styles.body}>
                         <View style={styles.bodyContent}>
                             <Text style={styles.name}>{user.username}</Text>
-                            {user.verified&&user.verified.map(c=><Chip key={c} style={{marginTop:10}} icon="check">{c}</Chip>)}
+                            {user.verified && user.verified.map(c => <Chip key={c} style={{ marginTop: 10 }} icon="check">{c}</Chip>)}
                             <Text style={styles.school}>{user.school["item"]}</Text>
                             <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
-                            
+
                             <Text style={styles.description}>{user.bio}</Text>
-                            {!props.userID&&
-                            <View style={styles.button}>
-                                <View style={{ flexDirection: "row" }}>
-                                    <View>
-                                        <Button mode='contained' color='#5b59fb' contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                            {!props.userID &&
+                                <View style={styles.button}>
+                                    <View style={{ flexDirection: "row" }}>
+                                        <View>
+                                            <Button mode='contained' color='#99bfa9' labelStyle={{ color: 'white' }} contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                                        </View>
+                                        <View>
+                                            <Button mode="contained" color='#99bfa9' labelStyle={{ color: 'white' }} contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
+                                        </View>
                                     </View>
-                                    <View>
-                                        <Button mode="contained" color='#5b59fb' contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
-                                    </View>
-                                </View>
-                                <Button mode="contained" color='#5b59fb' contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
-                            </View>}
+                                    <Button mode="contained" color='#99bfa9' labelStyle={{ color: 'white' }} contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
+                                </View>}
                         </View>
                     </View>
                 </View>
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
     },
     header: {
-        backgroundColor: "#5b59fb",
+        backgroundColor: "#99bfa9",
         height: 150,
     },
     avatar: {
