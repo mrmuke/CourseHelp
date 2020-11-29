@@ -17,19 +17,11 @@ export default function Profile(props) {
     });
 
     useEffect(() => {
+        /* firebase. */
         getUser();
         //firebase.auth().signOut()
     }, [])
 
-    useEffect(() => {
-        if(user!= null){
-            firebase.database().ref('users').once('value', snapshot => {
-                for(let index in snapshot.val()){
-                    console.log(similarity(user, snapshot.val()[index]));
-                }
-            })
-        }
-    }, [user])
 
     function getUser() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
@@ -139,7 +131,6 @@ export default function Profile(props) {
             setVerify(false);
         }} />
     }
-
     return (
         <Provider>
             <Portal>

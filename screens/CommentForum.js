@@ -8,17 +8,6 @@ export default function CommentForum({ user, forumPost, exit }) {
     const [comment, setComment] = useState('')
     const [commentRender, setCommentRender] = useState(false)
 
-    //upvote downvote and select answer
-    //free response
-        //vreify dropdown ui
-    //my questions
-    //notifications page
-    //suggested groups based on school
-    //machine learning
-    //video claling
-    //timer
-    //take a break kahoot
-    //suggested groups
 
     function timeDifference(current, previous) {
 

@@ -38,8 +38,7 @@ export default function ImageToText({ exit }) {
             setUploading(true);
 
             if (!pickerResult.cancelled) {
-                var url = await uploadImageAsync(pickerResult['uri']);
-                console.log(url);
+                const url = await uploadImageAsync(pickerResult['uri']);
                 await submitToGoogle(url);
             }
         } catch (e) {
@@ -78,10 +77,9 @@ export default function ImageToText({ exit }) {
         return await snapshot.ref.getDownloadURL();
     }
 
-    async function submitToGoogle(uri) {
+    async function submitToGoogle(url) {
         try {
-            console.log(uri)
-            let image = uri;
+
             let body = JSON.stringify({
                 requests: [
                     {
@@ -91,7 +89,7 @@ export default function ImageToText({ exit }) {
                         ],
                         image: {
                             source: {
-                                imageUri: image
+                                imageUri:/*  url */"https://s29843.pcdn.co/blog/wp-content/uploads/sites/2/2020/11/TechSmith-Blog-ExtractText.png"
                             }
                         }
                     }
@@ -109,25 +107,23 @@ export default function ImageToText({ exit }) {
                 }
             );
             let responseJson = await response.json();
-            console.log(responseJson);
-            console.log(responseJson["responses"][0]["textAnnotations"][0]["description"]);
-            let returnText = responseJson["responses"][0]["textAnnotations"][0]["description"]
+            console.log(responseJson)
+            let returnText = responseJson["responses"][0]["textAnnotations"][0]["description"].replaceAll("\n","\n-")
             setText(returnText);
         } catch (e) {
             console.log(e);
         }
     }
-    console.log(text)
     if (uploading) {
-        return <ActivityIndicator />
+        return <View style={{ flex: 1, justifyContent: 'center', }}><ActivityIndicator style={{ margin: 'auto' }} /></View>
     }
     return (
         <View style={{ alignItems: 'center', flexDirection: "column", justifyContent: "center", height: Dimensions.get('screen').height - 142 }}>
             {(() => {
                 if (text.length > 0) {
-                    return (<View style={{alignItems:"center"}}>
+                    return (<View style={{ alignItems: "center" }}>
                         <Title style={{ textAlign: 'center', marginBottom: 20 }}>Notes:</Title>
-                        <TextInput multiline={true} value={text} style={{ width: Dimensions.get('screen').width - 50, height: Dimensions.get('screen').height * 0.3 }} />
+                        <TextInput multiline={true} onChangeText={text=>setText(text)} value={text} style={{ width: Dimensions.get('screen').width - 50, height: Dimensions.get('screen').height * 0.3 }} />
                         <Button color="black" icon="pencil" onPress={() => Clipboard.setString(text)}>Copy</Button>
                         <Button mode="outlined" style={{ marginTop: 30, width: Dimensions.get("screen").width - 200 }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} color="#59a8fb" onPress={() => {
                             setText('');
@@ -137,8 +133,8 @@ export default function ImageToText({ exit }) {
                 } else {
                     return (
                         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                            <TouchableOpacity onPress={CameraPhoto}><Icon size={100} name="party-mode"/><Text style={{textAlign:"center"}}>Take Photo</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={takePhoto}><Icon size={100} name="get-app" /><Text style={{textAlign:"center"}}>Upload Photo</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={CameraPhoto}><Icon size={100} name="party-mode" /><Text style={{ textAlign: "center" }}>Take Photo</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={takePhoto}><Icon size={100} name="get-app" /><Text style={{ textAlign: "center" }}>Upload Photo</Text></TouchableOpacity>
                         </View>
                     )
                 }
