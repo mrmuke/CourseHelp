@@ -59,7 +59,7 @@ export default function VerifyQuiz({ exit }) {
         })
     }, [menuText]);
     for (let each in courses) {
-        ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} style={styles.menuItem} title={each} />);
+        ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} titleStyle={{ color: 'black' }} style={{ flex: 1 }} title={each} />);
     }
 
     function checkAnswers() {
@@ -78,7 +78,7 @@ export default function VerifyQuiz({ exit }) {
                     visible={visible}
                     onDismiss={() => { setVisible(false) }}
                     style={{ marginTop: 90 }}
-                    anchor={<Button contentStyle={{ padding:30}} mode="contained" color="black" onPress={() => { setVisible(true); }}>{menuText}</Button>}>
+                    anchor={<Button contentStyle={{ padding: 30 }} mode="contained" color="black" onPress={() => { setVisible(true); }}>{menuText}</Button>}>
                     {ItemList}
                 </Menu></View>
                 {questionList}
@@ -86,12 +86,12 @@ export default function VerifyQuiz({ exit }) {
                     if (questionList.length > 0) {
                         return <Button mode="contained" onPress={() => {
                             checkAnswers();
-                        }} color="#5b59fb" style={{padding: 5, margin:5 }}>Submit</Button>;
+                        }} labelStyle={{ color: 'white' }} style={{ backgroundColor: '#003152', marginHorizontal: 30,marginTop:30, padding: 5 }}>Submit</Button>;
                     }
                 })()}
                 <Button mode="contained" onPress={() => {
                     exit('back', null, null);
-                }} color="#5b59fb" style={{ margin: 5, padding: 5 }}>BACK</Button>
+                }} color="#003152" labelStyle={{ color: 'white' }} style={{ margin:30,padding: 5, backgroundColor: 'lightblue' }}>BACK</Button>
             </ScrollView>
         </Provider>
     )
@@ -99,7 +99,7 @@ export default function VerifyQuiz({ exit }) {
 
 const styles = StyleSheet.create({
     menuItem: {
-        flex:1
+        flex: 1
     }
 });
 //Bill - change the questions equation solver

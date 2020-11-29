@@ -145,7 +145,7 @@ export default function Home(props) {
                 <View style={{ flex: 1, flexDirection: 'row', margin: 5, justifyContent: 'space-between' }}>
                     <Title>My Study Groups</Title>
 
-                    <Button color="#003152" mode="contained" onPress={() => props.navigation.navigate('CreateGroup')}>+ Create</Button>
+                    <Button color="#003152" labelStyle={{ color: 'white' }} mode="contained" onPress={() => props.navigation.navigate('CreateGroup')}>+ Create</Button>
 
                 </View>
 
@@ -162,11 +162,10 @@ export default function Home(props) {
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Icon size={40} name="group" style={{ marginRight: 10 }} />
                                 <View style={{ flexDirection: 'column' }}>
-                                    <Title>{group.name}</Title>
+                                    <Title style={{ color: "#003152" }}>{group.name}</Title>
                                     <Chip icon="information">{group.subject}</Chip></View></View>
                             <View style={{ flexDirection: 'row' }}>
                                 <IconButton icon="settings" style={{ backgroundColor: '#003152' }} onPress={() => setGroup(group)} color="white"></IconButton>
-
                                 <IconButton icon="chat" style={{ backgroundColor: '#003152' }} onPress={() => props.navigation.navigate('Chat', { group: group.name })} color="white"></IconButton>
                                 <IconButton icon="close" style={{ backgroundColor: '#003152' }} onPress={() => leaveGroup(group)} color="white"></IconButton>
 
@@ -252,7 +251,7 @@ function Courses({ course }) {
             <Subheading style={{ textDecorationLine: 'underline' }}>{course.name}</Subheading>
             <Caption>Course Difficulty: {course.difficulty} </Caption>
             <Text>{course.rating}/5 by {course.teacher}</Text>
-            <View style={{ alignSelf: 'flex-end', backgroundColor: '#300052', borderRadius: 10, padding: 2 }}><Text style={{ color: 'white' }}>CourseEra</Text></View>
+            <View style={{ alignSelf: 'flex-end', backgroundColor: '#003152', borderRadius: 10, padding: 2 }}><Text style={{ color: 'white' }}>CourseEra</Text></View>
         </TouchableOpacity>
     ))
 }

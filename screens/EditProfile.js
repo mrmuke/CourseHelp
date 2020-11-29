@@ -107,7 +107,7 @@ export default function EditProfile({ user, exit }) {
                             value={username}
                             maxLength={18}
                             onChangeText={username => setUsername(username)}
-                            underlineColor="#36485f"
+                            underlineColor="#003152"
                             autoCorrect={false}
                         />
                     </View>
@@ -119,7 +119,6 @@ export default function EditProfile({ user, exit }) {
                             value={bio}
                             maxLength={150}
                             multiline={true}
-
                             onChangeText={bio => setBio(bio)}
                             underlineColor="#36485f"
                         />
@@ -127,20 +126,20 @@ export default function EditProfile({ user, exit }) {
                     <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center' }}>
                         <Text style={{ marginRight: 5, width: 80, fontSize: 15 }}> School </Text>
                         <TouchableOpacity onPress={showDialog} containerStyle={{ flex: 1 }}>
-                            <Button mode="text" color='#36485f' contentStyle={{ padding: 10 }} labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{school["item"]}</Button>
+                            <Button mode="text" color='#003152' contentStyle={{ padding: 10 }} labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{school["item"]}</Button>
                         </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center' }}>
                         <Text style={{ marginRight: 5, width: 80, fontSize: 15 }}> Grade </Text>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity onPress={() => setSelectGrade(true)}>
-                                <Button mode="text" contentStyle={{ padding: 10 }} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
+                                <Button mode="text" contentStyle={{ padding: 10 }} color='#003152' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
                             </TouchableOpacity>
 
                         </View >
                     </View>
                 </View>
-                <Button onPress={async() => { await uploadData(); exit(); }} mode="text" color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} >Save</Button>
+                <Button onPress={async() => { await uploadData(); exit(); }} mode="text" color='#003152' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} >Save</Button>
 
             </ScrollView>
             <Provider>
@@ -156,11 +155,11 @@ export default function EditProfile({ user, exit }) {
                                 value={query}
                                 placeholder="Search for your School" />
                             {filteredData.map(item => (
-                                <Button key={item} color='#36485f' mode='outlined' labelStyle={{ fontSize: 10, color: 'black' }} contentStyle={{ height: 30 }} onPress={() => { setSchool({ item }), setQuery({ item }["item"]), setFilteredData([]) }}>{item}</Button>
+                                <Button key={item} color='#003152' mode='outlined' labelStyle={{ fontSize: 10, color: 'black' }} contentStyle={{ height: 30 }} onPress={() => { setSchool({ item }), setQuery({ item }["item"]), setFilteredData([]) }}>{item}</Button>
                             ))}
 
                             <Dialog.Actions>
-                                <Button color='#36485f' labelStyle={{ fontWeight: 'bold', fontSize: 15, color: 'black' }} onPress={() => { setQuery('') }, hideDialog}>Done</Button>
+                                <Button color='#003152' labelStyle={{ fontWeight: 'bold', fontSize: 15, color: 'black' }} onPress={() => { setQuery('') }, hideDialog}>Done</Button>
                             </Dialog.Actions>
                         </Dialog.Content>
                     </Dialog>
@@ -169,13 +168,13 @@ export default function EditProfile({ user, exit }) {
                         <Dialog.Content>
 
                             <TouchableOpacity style={{ margin: 5 }} onPress={() => setShowGrade(!showGrade)}>
-                                <Button mode="text" contentStyle={{ padding: 10 }} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
+                                <Button mode="text" contentStyle={{ padding: 10 }} color='#003152' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{grade}</Button>
                             </TouchableOpacity>
                             {showGrade && <>{grades.map(grade =>
-                                <Button key={grade} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={styles.selector} mode="text" color="black" onPress={() => { setGrade(grade); setShowGrade(false) }}>{grade}</Button>
+                                <Button key={grade} color='#003152' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={styles.selector} mode="text" color="black" onPress={() => { setGrade(grade); setShowGrade(false) }}>{grade}</Button>
                             )}</>}
                             <Dialog.Actions>
-                                <Button color='#36485f' labelStyle={{ fontWeight: 'bold', fontSize: 15, color: 'black' }} onPress={() => setSelectGrade(false)}>Done</Button>
+                                <Button color='#003152' labelStyle={{ fontWeight: 'bold', fontSize: 15, color: 'black' }} onPress={() => setSelectGrade(false)}>Done</Button>
                             </Dialog.Actions>
                         </Dialog.Content>
                     </Dialog>
@@ -187,15 +186,15 @@ export default function EditProfile({ user, exit }) {
 }
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: "#5b59fb",
+        backgroundColor: "#003152",
         height: 150,
     },
     title: {
         textAlign: 'center',
-        marginTop: 25,
-        fontSize: 28,
+        marginTop: 40,
+        fontSize: 20,
         color: "white",
-        fontWeight: "600"
+        fontWeight: "bold"
     },
     selector: {
         fontSize: 15,

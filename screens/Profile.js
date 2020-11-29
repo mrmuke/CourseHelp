@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import * as firebase from 'firebase'
-import { Button, Provider, Modal, Portal, Chip } from 'react-native-paper'
+import { Button, Provider, Modal, Portal, Chip, Appbar } from 'react-native-paper'
 import EditProfile from './EditProfile';
 import VerifyQuiz from './verifyQuiz';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -88,7 +88,9 @@ export default function Profile(props) {
             </Portal>
             <ScrollView style={styles.container}>
                 <View style={styles.container}>
-                    <View style={styles.header}></View>
+                    <View style={styles.header}>
+                        <Text style={{ textAlign: 'center', marginTop: 40, fontSize: 20, color: "white", fontWeight: "bold" }}>Profile</Text>
+                    </View>
                     <Image style={styles.avatar} source={{ uri: user.profile_picture }} />
                     <View style={styles.body}>
                         <View style={styles.bodyContent}>
@@ -98,17 +100,18 @@ export default function Profile(props) {
                             <Text style={styles.class}>{user.grade.toUpperCase()}</Text>
 
                             <Text style={styles.description}>{user.bio}</Text>
-                            <View style={styles.button}>
-                                <View style={{ flexDirection: "row" }}>
-                                    <View>
-                                        <Button mode='contained' color='#5b59fb' contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                            {!props.userID &&
+                                <View style={styles.button}>
+                                    <View style={{ flexDirection: "row" }}>
+                                        <View>
+                                            <Button mode='contained' color='#003152' labelStyle={{ color: 'white' }} contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setEdit(true)}>Edit Profile</Button>
+                                        </View>
+                                        <View>
+                                            <Button mode="contained" color='#003152' labelStyle={{ color: 'white' }} contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
+                                        </View>
                                     </View>
-                                    <View>
-                                        <Button mode="contained" color='#5b59fb' contentStyle={{ padding: 5 }} style={styles.buttonContainer} onPress={() => setVerify(true)}>Verify Account</Button>
-                                    </View>
-                                </View>
-                                <Button mode="contained" color='#5b59fb' contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
-                            </View>
+                                    <Button mode="contained" color='#003152' labelStyle={{ color: 'white' }} contentStyle={{ padding: 2 }} style={styles.buttonSignOut} onPress={() => firebase.auth().signOut()}>Sign Out</Button>
+                                </View>}
                         </View>
                     </View>
                 </View>
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
     },
     header: {
-        backgroundColor: "#5b59fb",
+        backgroundColor: "#003152",
         height: 150,
     },
     avatar: {

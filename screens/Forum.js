@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase'
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, Card, Title } from 'react-native-paper';
+import { Button, Card, Appbar, Title } from 'react-native-paper';
 import EditForum from './EditForum';
 import CommentForum from './CommentForum'
 import 'react-native-get-random-values';
@@ -134,9 +134,10 @@ export default function Forum() {
     }
     return (
         <View style={styles.container}>
-                        <View style={{backgroundColor:'#003152', height:75, justifyContent:'flex-end'}}><Title style={{textAlign:'center', color:'white',}}>Course Discussion Forum</Title></View>
-
-            <Button mode="contained" onPress={() => setCreate(true)} color="#4293f5" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
+            <Appbar.Header style={{ backgroundColor: '#003152', height: 44 }}>
+                <Appbar.Content titleStyle={{ color: 'white', fontWeight: 'bold' }} title="Forum" />
+            </Appbar.Header>
+            <Button mode="contained" onPress={() => setCreate(true)} color="#003152" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
             <CategoryPicker style={styles.categoryPicker} selectedCategory={category} onClick={selectCategory} />
             <ScrollView>
                 {postData.map(item => (
@@ -148,10 +149,10 @@ export default function Forum() {
                             <Text>{item.post.substring(0, 400)}...</Text>
                         </Card.Content>
                         <Card.Actions>
-                            <Button labelStyle={{ color: isVoted(item) == 'up' ? '#4293f5' : 'black' }} onPress={() => { Votes('up', item) }} icon="arrow-up"></Button>
+                            <Button labelStyle={{ color: isVoted(item) == 'up' ? 'lightblue' : 'black' }} onPress={() => { Votes('up', item) }} color="#003152" icon="arrow-up"></Button>
                             <Text>{getVote(item)}</Text>
-                            <Button labelStyle={{ color: isVoted(item) == 'down' ? '#4293f5' : 'black' }} onPress={() => { Votes('down', item) }} icon="arrow-down"></Button>
-                            <Button onPress={() => { setForum(item), setComment(true) }} labelStyle={{ color: 'black' }} icon="comment"></Button>
+                            <Button labelStyle={{ color: isVoted(item) == 'down' ? 'lightblue' : 'black' }} onPress={() => { Votes('down', item) }} color="#003152" icon="arrow-down"></Button>
+                            <Button onPress={() => { setForum(item), setComment(true) }} color='#003152' labelStyle={{ color: 'black' }} icon="comment"></Button>
                         </Card.Actions>
                     </Card>
                 ))}
