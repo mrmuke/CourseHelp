@@ -131,6 +131,7 @@ export default function Tools() {
       <Appbar.Header style={{ backgroundColor: '#003152', height: 44 }}>
         <Appbar.Content titleStyle={{ color: 'white', fontWeight: 'bold' }} title="Tools" />
       </Appbar.Header>
+
       {(() => {
         if (visibleRecording) {
           if (notes.length > 0) {
@@ -182,11 +183,11 @@ export default function Tools() {
               }}>
                 <Icon style={{ color: 'white' }} size={50} name="microphone" />
               </Button>
-              <Text style={{ fontSize: 15, marginTop: 3, color: "#003152" }}>Speech To Text</Text>
+              <Text style={{ fontSize: 15, marginTop: 3, color: "#003152" }}>Speech To Notes</Text>
               <Button style={styles.imageButton} color="#003152" mode="contained" contentStyle={{ paddingLeft: 30, paddingRight: 30, paddingTop: 40, paddingBottom: 40 }} onPress={() => {
                 setVisiblePhoto(true);
               }}><Icon color="#fff" size={50} name="camera" /></Button>
-              <Text style={{ fontSize: 15, marginTop: 3, color: "#003152" }}>Photo To Text</Text>
+              <Text style={{ fontSize: 15, marginTop: 3, color: "#003152" }}>Photo To Notes</Text>
             </View>
           )
         }

@@ -102,6 +102,4 @@ const styles = StyleSheet.create({
         flex: 1
     }
 });
-//Bill - change the questions equation solver
-//Michael - end cleanup take a break kahoot suggested groups
-//Aaron -select answer finish discussion
+

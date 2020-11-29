@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 //import { render } from 'react-dom';
-import { View, StyleSheet, Text, Group } from 'react-native';
+import { View, StyleSheet, Text, Group, Image } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Searchbar, Button, Caption, Card, Title, Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -15,7 +15,7 @@ export default function Discover() {
     const subjects = ["All", "Science", "Math", "History", "English", "Art", "Language", "Technology"]
     const [subjectFilter, setSubjectFilter] = useState("")
     const [showOptions, setShowOptions] = useState(false)
-
+    const [suggested,setSuggested]=useState([])
     const [filteredGroups, setFilteredGroups] = useState([])
     useEffect(() => {
         firebase.database().ref('groups/').on('value', snapshot => {
@@ -40,13 +40,20 @@ export default function Discover() {
     function getSuggestedGroups(){
         firebase.database().ref('groups/').on('value',snap=>{
             var suggested = []
-            snap.forEach(item=async()=>{
+            /* snap.forEach(item=async()=>{
                 let cur = item.val()
                 cur["similarity"]=0.0
                 for(var i =0;i<cur.members.length;i++){
-                   /*  console.log(await getUser(cur.members[i])) */
+                     console.log(await getUser(cur.members[i])) 
                 }
+            }) */
+            snap.forEach(item=>{
+                let cur = item.val()
+                console.log(cur)
+                suggested.push(cur)
+                
             })
+            setSuggested(suggested)
         })
     }
     function similarity(self, person) {
@@ -156,7 +163,18 @@ export default function Discover() {
             <View style={styles.container}>
                 <View style={{ backgroundColor: '#003152', padding: 10, borderRadius: 10, diplay: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Searchbar style={{ flex: 1 }} placeholder="Discover..." onChangeText={text => setKeyword(text)} />
+                    
                     <View style={{ backgroundColor: 'white', borderRadius: 50, marginLeft: 5 }}><Icon onPress={() => setShowOptions(!showOptions)} name="expand-more" size={30} /></View></View>
+                    <View style={{flexDirection:'row', justifyContent:'space-between', backgroundColor:'white', padding:10, borderRadius:10, paddingHorizontal:30, margin:10, borderWidth:3, borderColor:'grey'}}>
+                        
+                        {suggested.map(c=>(
+                            <View style={{flexDirection:'column', borderRadius:50, alignItems:'center',}}>
+                                    <UserPic  user={c.members[0]}/>
+                            
+                            </View>
+                        ))}
+                        
+                    </View>
                 {showOptions &&
                     <>
                         <View style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
@@ -198,3 +216,19 @@ const styles = StyleSheet.create({
         padding: 20
     }
 })
+
+function UserPic({user}) {
+    const [cur, setCur] = useState(null)
+    useEffect(() => {
+        firebase.database().ref('users/' + user).once('value', snap => [
+            setCur(snap.val())
+        ])
+    }, [])
+    if (!cur) {
+        return null
+    }
+
+        return <Image source={{ uri: cur.profile_picture }} style={{ borderRadius: 50, height: 50, width: 50}} />
+
+
+}

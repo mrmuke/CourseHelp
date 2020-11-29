@@ -21,13 +21,19 @@ export default function Profile(props) {
         getUser();
         //firebase.auth().signOut()
     }, [])
-    function getUser() {
-        firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
-            setUser(snapshot.val())
 
+
+    function getUser() {
+        console.log(props.userID)
+        firebase.database().ref('users/' + (props.userID?props.userID:firebase.auth().currentUser.uid)).once('value', snapshot => {
+            console.log(snapshot.val())
+            setUser(snapshot.val())
+            
 
         })
     }
+    
+
     if (user == null) {
         return null
     }

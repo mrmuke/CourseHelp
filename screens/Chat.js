@@ -153,7 +153,7 @@ class Chat extends React.Component {
   }
   render() {
     if (this.state.userID) {
-      return <View style={{ flex: 1 }}><Button onPress={() => this.setState({ userID: null })} icon="arrow-left">Back</Button><Profile userID={this.state.userID} /></View>
+      return <View style={{ flex: 1 }}><Button onPress={() => this.setState({ userID: null })} icon="arrow-left" color="black" mode="outlined">Back</Button><Profile userID={this.state.userID} /></View>
     }
     return (
 
