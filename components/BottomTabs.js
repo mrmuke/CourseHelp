@@ -55,7 +55,7 @@ const MainTabScreen = () => (
         options={{
           title:"Home",
           tabBarLabel: 'Home',
-          tabBarColor: '#59d0fb',
+          tabBarColor: '#005f9f',
           tabBarIcon: ({ color }) => (
             <AntIcon name="home" color={color} size={26} />
           ),
@@ -68,7 +68,7 @@ const MainTabScreen = () => (
         options={{
           title:"Discover Study Groups",
           tabBarLabel: 'Discover',
-          tabBarColor: '#59d0fb',
+          tabBarColor: '#004f85',
           tabBarIcon: ({ color }) => (
             <AntIcon name="search1" color={color} size={26} />
           ),
@@ -79,7 +79,7 @@ const MainTabScreen = () => (
         component={Forum}
         options={{
           tabBarLabel: 'Forum',
-          tabBarColor:'#59a8fb',
+          tabBarColor:'#00406c',
           tabBarIcon: ({ color }) => (
             <Icon name="forum" color={color} size={26} />
           ),

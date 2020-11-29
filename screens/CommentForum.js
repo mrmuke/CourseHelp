@@ -9,17 +9,14 @@ export default function CommentForum({ user, forumPost, exit }) {
     const [commentRender, setCommentRender] = useState(false)
 
     //upvote downvote and select answer
-    //free response
-        //vreify dropdown ui
+    //vreify dropdown ui
     //my questions
-    //notifications page
     //suggested groups based on school
-    //machine learning
-    //video claling
     //timer
     //take a break kahoot
     //suggested groups
-
+    //equation solver
+    //change questions
     function timeDifference(current, previous) {
 
         var msPerMinute = 60 * 1000;

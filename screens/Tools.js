@@ -69,7 +69,7 @@ export default function Tools() {
       });
 
       const data = await response.json();
-      setNotes("-" + data.transcript.substr(0, data.transcript.length - 1));
+      setNotes("-"+data.transcript.substr(0,data.transcript.length-1).replaceAll(". ","\n-").replaceAll("? ", "?\n-"))
     } catch (error) {
       console.log('There was an error', error);
       resetRecording()
@@ -127,7 +127,10 @@ export default function Tools() {
     Clipboard.setString(notes)
   }
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView>
+            <View style={{backgroundColor:'#003152', height:75, justifyContent:'flex-end'}}><Title style={{textAlign:'center', color:'white',}}>Study Tools</Title></View>
+
+      <View style={styles.container}>
       {(() => {
         if (visibleRecording) {
           if (notes.length > 0) {
@@ -179,17 +182,16 @@ export default function Tools() {
               }}>
                   <Icon color="#fff" size={50} name="microphone" />
               </Button>
-              <Text style={{fontSize:15, marginTop: 3, color: "#59a8fb"}}>Speech To Text</Text>
+              <Title style={{fontSize:15, marginTop: 3, color: "black"}}>Lecture to Notes</Title>
               <Button style={styles.imageButton} color="#59a8fb" mode="contained" contentStyle={{ paddingLeft: 30, paddingRight: 30, paddingTop: 40, paddingBottom:40 }} onPress={() => {
                 setVisiblePhoto(true);
               }}><Icon color="#fff" size={50} name="camera" /></Button>
-              <Text style={{fontSize:15, marginTop: 3, color: "#59a8fb"}}>Photo To Text</Text>
+              <Title style={{fontSize:15, marginTop: 3, color: "black"}}>Image to Notes</Title>
             </View>
           )
         }
       })()}
-
-    </ScrollView>
+    </View></ScrollView>
   );
 }
 
@@ -205,6 +207,6 @@ const styles = StyleSheet.create({
   },
   imageButton: {
     borderRadius: 30,
-    marginTop: 150,
+    marginTop: 50,
   }
 })

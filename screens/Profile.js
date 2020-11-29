@@ -17,6 +17,7 @@ export default function Profile(props) {
     });
 
     useEffect(() => {
+        /* firebase. */
         getUser();
         //firebase.auth().signOut()
     }, [])
