@@ -99,10 +99,5 @@ export default function VerifyQuiz({ exit }) {
     )
 }
 
-const styles = StyleSheet.create({
-    menuItem: {
-        flex: 1
-    }
-});
 //Michael - end cleanup suggested groups
 //Aaron -select answer  click on user in home and forum

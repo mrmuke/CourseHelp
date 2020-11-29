@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Image, Text, StyleSheet, View, KeyboardAvoidingView, Keyboard, TextInput, Alert } from 'react-native';
 import * as firebase from 'firebase'
 import { ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Button, Card, Title, Appbar } from 'react-native-paper';
+import { Button, Card, Title, Appbar, IconButton } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome'
+
 export default function CommentForum({ user, forumPost, exit }) {
     const [forum, setForum] = useState(forumPost)
     const [comment, setComment] = useState('')
@@ -57,15 +59,27 @@ export default function CommentForum({ user, forumPost, exit }) {
 
     const commentMessage = async () => {
         var ref = firebase.database().ref("forum/" + forumPost.id + "/comments/")
-        await ref.push({
+        var commentKey = await ref.push({
             comment: comment,
             time_added: Date.now(),
             commentedBy: user.username,
-            profile_picture: user.profile_picture
+            profile_picture: user.profile_picture,
+        }).key
+        firebase.database().ref("forum/" + forumPost.id + "/comments/" + commentKey).update({
+            commentKey: commentKey
         })
+        //console.log(commentKey)
         firebase.database().ref('forum/' + forumPost.id).once('value', snapshot => {
             setForum(snapshot.val())
         })
+    }
+
+    function selectCorrect(correctC) {
+        if (forumPost.uid == firebase.auth().currentUser.uid) {
+            firebase.database().ref("forum/" + forumPost.id).update({
+                correct: correctC.commentKey
+            })
+        }
     }
     return (
         <View style={styles.container}>
@@ -115,8 +129,8 @@ export default function CommentForum({ user, forumPost, exit }) {
                         <View>
                             {commentRender ?
                                 <View style={{ flexDirection: 'row', marginLeft: 'auto', marginHorizontal: 20 }}>
-                                    <Button onPress={() => setCommentRender(false)} color='black' labelStyle={{ color: '#525252' }}>Cancel</Button>
-                                    <Button onPress={() => { commentMessage() }} style={{ backgroundColor: '#525252' }} mode="contained">Comment</Button></View>
+                                    <Button onPress={() => setCommentRender(false)} color='black' labelStyle={{ color: '#003152' }}>Cancel</Button>
+                                    <Button onPress={() => { commentMessage() }} color='#003152' style={{ backgroundColor: '#003152' }} mode="contained">Comment</Button></View>
                                 : <View>
                                 </View>}
                         </View>
@@ -158,7 +172,10 @@ export default function CommentForum({ user, forumPost, exit }) {
                                     {timeDifference(Date.now(), c.time_added)}
                                 </Text>
                             </View>
-                            <Text>{c.comment}</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text>{c.comment}</Text>
+                                <IconButton icon="check" mode='outlined' color={forum.correct == c.commentKey ? 'green' : 'gray'} style={{ marginTop: -8 }} size={20} onPress={() => { selectCorrect(c) }}></IconButton>
+                            </View>
                         </View>
                     </View>
                 ))}

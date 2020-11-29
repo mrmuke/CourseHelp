@@ -42,7 +42,8 @@ export default function EditForum({ user, exit }) {
             postedby: user.username,
             image: url,
             category: category,
-            uid: userUID
+            uid: userUID,
+            correct: 'none'
         })
         exit()
     }

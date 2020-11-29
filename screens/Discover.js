@@ -15,7 +15,7 @@ export default function Discover() {
     const subjects = ["All", "Science", "Math", "History", "English", "Art", "Language", "Technology"]
     const [subjectFilter, setSubjectFilter] = useState("")
     const [showOptions, setShowOptions] = useState(false)
-    const [suggested,setSuggested]=useState([])
+    const [suggested, setSuggested] = useState([])
     const [filteredGroups, setFilteredGroups] = useState([])
     useEffect(() => {
         firebase.database().ref('groups/').on('value', snapshot => {
@@ -33,12 +33,12 @@ export default function Discover() {
             list.reverse()
             setFilteredGroups(list)
         })
-    }, [publicity, subject, keyword,showOptions])
-    useEffect(()=>{
+    }, [publicity, subject, keyword, showOptions])
+    useEffect(() => {
         getSuggestedGroups()
-    },[])
-    function getSuggestedGroups(){
-        firebase.database().ref('groups/').on('value',snap=>{
+    }, [])
+    function getSuggestedGroups() {
+        firebase.database().ref('groups/').on('value', snap => {
             var suggested = []
             /* snap.forEach(item=async()=>{
                 let cur = item.val()
@@ -47,11 +47,11 @@ export default function Discover() {
                      console.log(await getUser(cur.members[i])) 
                 }
             }) */
-            snap.forEach(item=>{
+            snap.forEach(item => {
                 let cur = item.val()
                 console.log(cur)
                 suggested.push(cur)
-                
+
             })
             setSuggested(suggested)
         })
@@ -120,16 +120,16 @@ export default function Discover() {
         let similarity = (cosineSimilarity * 0.3) + (0.4 * school) + (0.3 * grade);
         return similarity;
     }
-    function getUser(id){
-        firebase.database().ref('users/'+id).once('value',snap=>{
+    function getUser(id) {
+        firebase.database().ref('users/' + id).once('value', snap => {
             let item = snap.val()
-            item["uid"]=snap.key
+            item["uid"] = snap.key
             return item
         })
     }
-    function joinGroup(c){
-        firebase.database().ref('groups/'+c.id).once('value',snapshot=>{
-            var members=snapshot.val().members||[]
+    function joinGroup(c) {
+        firebase.database().ref('groups/' + c.id).once('value', snapshot => {
+            var members = snapshot.val().members || []
             members.push(firebase.auth().currentUser.uid)
             firebase.database().ref('groups/' + c.id).update({
                 members
@@ -162,8 +162,8 @@ export default function Discover() {
             </Appbar.Header>
             <View style={styles.container}>
                 <View style={{ backgroundColor: '#003152', padding: 10, borderRadius: 10, diplay: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <Searchbar style={{ flex: 1 }} placeholder="Discover..." onChangeText={text => setKeyword(text)} />
-                    
+                    <Searchbar style={{ flex: 1 }} placeholder="Discover..." value={keyword} onChangeText={text => setKeyword(text)} />
+
                     <View style={{ backgroundColor: 'white', borderRadius: 50, marginLeft: 5 }}><Icon onPress={() => setShowOptions(!showOptions)} name="expand-more" size={30} /></View></View>
                     <View style={{flexDirection:'row', justifyContent:'space-between', backgroundColor:'white', padding:10, borderRadius:10, paddingHorizontal:30, margin:10, borderWidth:3, borderColor:'grey'}}>
                         
@@ -188,7 +188,7 @@ export default function Discover() {
                         {showSubjects && <><Searchbar onChangeText={text => setSubjectFilter(text)} />{subjects.filter(subject => subject.toLowerCase().includes(subjectFilter.toLowerCase())).map(subject =>
                             <Button key={subject} style={{ display: 'flex' }} mode="contained" color="white" onPress={() => { setSubject(subject); setShowSubjects(false) }}>{subject}</Button>
                         )}</>}</>}
-                <ScrollView >
+                <ScrollView style={{ marginBottom: 430 }}>
                     {filteredGroups.map((c) => (
                         <Card style={{ margin: 5, marginBottom: 10, backgroundColor: '#eee' }} key={c.id}>
                             <Card.Title style={{ color: '#003152' }} title={c.name} subtitle={"Surviving " + c.subject} left={props => <Icon name="group" {...props} />} />
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     }
 })
 
-function UserPic({user}) {
+function UserPic({ user }) {
     const [cur, setCur] = useState(null)
     useEffect(() => {
         firebase.database().ref('users/' + user).once('value', snap => [
@@ -229,7 +229,7 @@ function UserPic({user}) {
         return null
     }
 
-        return <Image source={{ uri: cur.profile_picture }} style={{ borderRadius: 50, height: 50, width: 50}} />
+    return <Image source={{ uri: cur.profile_picture }} style={{ borderRadius: 50, height: 50, width: 50 }} />
 
 
 }

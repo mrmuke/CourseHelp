@@ -131,6 +131,7 @@ export default function Tools() {
       <Appbar.Header style={{ backgroundColor: '#003152', height: 44 }}>
         <Appbar.Content titleStyle={{ color: 'white', fontWeight: 'bold' }} title="Tools" />
       </Appbar.Header>
+
       {(() => {
         if (visibleRecording) {
           if (notes.length > 0) {
