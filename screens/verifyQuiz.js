@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, Picker } from 'react-native';
 import firebase from 'firebase'
-import { Button, Menu, Provider, Card, RadioButton, Paragraph, Title, Subheading } from 'react-native-paper';
+import { Button, Menu, Provider } from 'react-native-paper';
 import QuestionComponent from '../components/question';
 
 export default function VerifyQuiz({ exit }) {
@@ -58,9 +58,12 @@ export default function VerifyQuiz({ exit }) {
             10: 0
         })
     }, [menuText]);
+    if(menuText == "Pick a class"){
+        ItemList.push(<Picker.Item label={menuText} value={menuText} />)
+    }
     for (let each in courses) {
-        
-        ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} titleStyle={{ color: 'black' }} style={{ flex: 1 }} title={each} />);
+        console.log("Courses: " + each);
+        ItemList.push(<Picker.Item label={each} value={each} />);
     }
 
     function checkAnswers() {
@@ -76,24 +79,28 @@ export default function VerifyQuiz({ exit }) {
     return (
         <Provider>
             <ScrollView>
-                <View><Menu
-                    visible={visible}
-                    onDismiss={() => { setVisible(false) }}
-                    style={{ marginTop: 90 }}
-                    anchor={<Button contentStyle={{ padding: 30 }} mode="contained" color="black" onPress={() => { setVisible(true); }}>{menuText}</Button>}>
-                    {ItemList}
-                </Menu></View>
+                <View>
+                    <Text style={{ marginTop: 70, paddingLeft: 30, fontSize: 20, fontWeight: "bold" }}>Pick A Class:</Text>
+                    <View style={{flexDirection: "row", justifyContent:"center"}}>
+
+                        <Picker selectedValue={menuText} onValueChange={(value, index) => {
+                            setMenuText(value);
+                        }} style={{ marginBottom: 20, width: "90%" }}>
+                            {ItemList}
+                        </Picker>
+                    </View>
+                </View>
                 {questionList}
                 {(() => {
                     if (questionList.length > 0) {
                         return <Button mode="contained" onPress={() => {
                             checkAnswers();
-                        }} labelStyle={{ color: 'white' }} style={{ backgroundColor: '#003152', marginHorizontal: 30,marginTop:30, padding: 5 }}>Submit</Button>;
+                        }} labelStyle={{ color: 'white' }} style={{ backgroundColor: '#003152', marginHorizontal: 30, marginTop: 30, padding: 5 }}>Submit</Button>;
                     }
                 })()}
                 <Button mode="contained" onPress={() => {
                     exit('back', null, null);
-                }} color="#003152" labelStyle={{ color: 'white' }} style={{ margin:30,padding: 5, backgroundColor: 'lightblue' }}>BACK</Button>
+                }} color="#003152" labelStyle={{ color: 'white' }} style={{ margin: 30, padding: 5, backgroundColor: 'lightblue' }}>BACK</Button>
             </ScrollView>
         </Provider>
     )
