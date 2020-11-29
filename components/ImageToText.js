@@ -125,7 +125,7 @@ export default function ImageToText({ exit }) {
                         <Title style={{ textAlign: 'center', marginBottom: 20 }}>Notes:</Title>
                         <TextInput multiline={true} onChangeText={text=>setText(text)} value={text} style={{ width: Dimensions.get('screen').width - 50, height: Dimensions.get('screen').height * 0.3 }} />
                         <Button color="black" icon="pencil" onPress={() => Clipboard.setString(text)}>Copy</Button>
-                        <Button mode="outlined" style={{ marginTop: 30, width: Dimensions.get("screen").width - 200, backgroundColor: "#99bfb5" }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} onPress={() => {
+                        <Button mode="outlined" style={{ marginTop: 30, width: Dimensions.get("screen").width - 200, backgroundColor: "#003152" }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} onPress={() => {
                             setText('');
                         }}><Text>New Photo</Text></Button>
                     </View>
@@ -133,13 +133,13 @@ export default function ImageToText({ exit }) {
                 } else {
                     return (
                         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                            <TouchableOpacity onPress={CameraPhoto}><Icon size={100} name="party-mode" style={{ color: '#0a6067' }} /><Text style={{ color: '#0a6067', textAlign: "center" }}>Take Photo</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={takePhoto}><Icon size={100} name="get-app" style={{ color: '#0a6067' }} /><Text style={{ color: '#0a6067', textAlign: "center" }}>Upload Photo</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={CameraPhoto}><Icon size={100} name="party-mode" style={{ color: '#003152' }} /><Text style={{ color: '#003152', textAlign: "center" }}>Take Photo</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={takePhoto}><Icon size={100} name="get-app" style={{ color: '#003152' }} /><Text style={{ color: '#003152', textAlign: "center" }}>Upload Photo</Text></TouchableOpacity>
                         </View>
                     )
                 }
             })()}
-            <Button mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200, backgroundColor: "#99bfb5" }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} onPress={() => {
+            <Button mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200, backgroundColor: "#003152" }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} onPress={() => {
                 exit();
             }}><Text>Back</Text></Button>
         </View>

@@ -59,7 +59,7 @@ export default function VerifyQuiz({ exit }) {
         })
     }, [menuText]);
     for (let each in courses) {
-        ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} titleStyle={{ color: 'white' }} style={{ flex: 1 }} title={each} />);
+        ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} titleStyle={{ color: 'black' }} style={{ flex: 1 }} title={each} />);
     }
 
     function checkAnswers() {
@@ -86,12 +86,12 @@ export default function VerifyQuiz({ exit }) {
                     if (questionList.length > 0) {
                         return <Button mode="contained" onPress={() => {
                             checkAnswers();
-                        }} labelStyle={{ color: 'white' }} style={{ backgroundColor: '#589d62', margin: 30, padding: 5 }}>Submit</Button>;
+                        }} labelStyle={{ color: 'white' }} style={{ backgroundColor: '#003152', marginHorizontal: 30,marginTop:30, padding: 5 }}>Submit</Button>;
                     }
                 })()}
                 <Button mode="contained" onPress={() => {
                     exit('back', null, null);
-                }} color="#589d62" labelStyle={{ color: 'white' }} style={{ marginLeft: 30, marginRight: 30, marginBottom: 30, padding: 5, backgroundColor: '#589d62' }}>BACK</Button>
+                }} color="#003152" labelStyle={{ color: 'white' }} style={{ margin:30,padding: 5, backgroundColor: 'lightblue' }}>BACK</Button>
             </ScrollView>
         </Provider>
     )
@@ -102,6 +102,6 @@ const styles = StyleSheet.create({
         flex: 1
     }
 });
-//Bill -function change the questions equation solver
+//Bill - change the questions equation solver
 //Michael - end cleanup take a break kahoot suggested groups
 //Aaron -select answer finish discussion

@@ -18,8 +18,8 @@ const CategoryPicker = ({ selectedCategory, onClick, setFieldValue, ...props }) 
                                 styles.category,
                                 {
                                     fontWeight: item === selectedCategory ? 'bold' : 'normal',
-                                    borderBottomColor: item === selectedCategory ? '#40817a' : 'transparent',
-                                    color: item === selectedCategory ? '#40817a' : 'black',
+
+                                    color: item === selectedCategory ? '#003152' : 'black',
                                 }
                             ]}>{item}</Text>
                     </TouchableOpacity>

@@ -18,7 +18,7 @@ function Dashboard() {
   return (
     <Stack.Navigator screenOptions={{
       headerStyle: {
-        backgroundColor: '#0a6067',
+        backgroundColor: '#003152',
       },
       headerTintColor: 'white',
       headerTitleStyle: {
@@ -55,7 +55,7 @@ const MainTabScreen = () => (
       options={{
         title: "Home",
         tabBarLabel: 'Home',
-        tabBarColor: '#0a6067',
+        tabBarColor: '#003152',
         tabBarIcon: ({ color }) => (
           <AntIcon name="home" color={color} size={26} />
         ),
@@ -68,7 +68,7 @@ const MainTabScreen = () => (
       options={{
         title: "Discover Study Groups",
         tabBarLabel: 'Discover',
-        tabBarColor: '#008d92',
+        tabBarColor: '#003152',
         tabBarIcon: ({ color }) => (
           <AntIcon name="search1" color={color} size={26} />
         ),
@@ -79,7 +79,7 @@ const MainTabScreen = () => (
       component={Forum}
       options={{
         tabBarLabel: 'Forum',
-        tabBarColor: '#64b0a8',
+        tabBarColor: '#003152',
         tabBarIcon: ({ color }) => (
           <Icon name="forum" color={color} size={26} />
         ),
@@ -90,7 +90,7 @@ const MainTabScreen = () => (
       component={Tools}
       options={{
         tabBarLabel: 'Tools',
-        tabBarColor: '#99bfb5',
+        tabBarColor: '#003152',
         tabBarIcon: ({ color }) => (
           <Icon name="pencil" color={color} size={26} />
         ),
@@ -102,7 +102,7 @@ const MainTabScreen = () => (
       component={Profile}
       options={{
         tabBarLabel: 'Profile',
-        tabBarColor: '#b0d3bf',
+        tabBarColor: '#003152',
         tabBarIcon: ({ color }) => (
           <AntIcon name="user" color={color} size={26} />
         ),

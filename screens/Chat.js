@@ -163,7 +163,7 @@ class Chat extends React.Component {
         {this.state.createQuestion ?
           <View style={{ padding: 20 }}>
             <Title style={{ textAlign: 'center' }}>Create Question</Title>
-            <TextInput mode='outlined' selectionColor='#34646e' style={{ color: '#34646e', borderBottomWidth: 1, borderBottomColor: '#34646e', height: 40 }} placeholder="Input quiz question..." value={this.state.question} onChangeText={text => this.setState({ question: text })} />
+            <TextInput mode='outlined' selectionColor='#003152' style={{ color: '#003152', borderBottomWidth: 1, borderBottomColor: '#003152', height: 40 }} placeholder="Input quiz question..." value={this.state.question} onChangeText={text => this.setState({ question: text })} />
             <Button style={{ alignSelf: 'flex-end' }} icon="plus" color="black" onPress={() => this.setState({ answers: this.state.answers.concat("") })}>Add Answer</Button>
             {this.state.answers.map((c, index) => (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}><IconButton icon={this.state.correct == index ? "circle" : "circle-outline"} onPress={() => this.setState({ correct: index })} /><TextInput key={index} style={{ marginTop: 5, flex: 1 }} placeholder={`Answer ${index + 1}:`} value={c} onChangeText={text => {

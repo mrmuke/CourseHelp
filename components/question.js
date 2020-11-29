@@ -19,7 +19,7 @@ export default function QuestionComponent({ courses, index, pickAnswer, menuText
                 <Title style={{ color: 'black', marginTop: 20 }}>{(() => {
                     return courses["question"];
                 })()}</Title>
-                <Subheading style={{ marginBottom: 40, color: "#8a8a8a" }}>Question {index}</Subheading>
+                <Subheading style={{ marginBottom: 40, color: "#003152" }}>Question {index}</Subheading>
                 <View style={styles.viewAnswer}>
                     <RadioButton
                         color="#5b59fb"

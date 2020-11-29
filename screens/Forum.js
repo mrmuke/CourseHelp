@@ -134,10 +134,10 @@ export default function Forum() {
     }
     return (
         <View style={styles.container}>
-            <Appbar.Header style={{ backgroundColor: '#64b0a8', height: 44 }}>
+            <Appbar.Header style={{ backgroundColor: '#003152', height: 44 }}>
                 <Appbar.Content titleStyle={{ color: 'white', fontWeight: 'bold' }} title="Forum" />
             </Appbar.Header>
-            <Button mode="contained" onPress={() => setCreate(true)} color="#64b0a8" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
+            <Button mode="contained" onPress={() => setCreate(true)} color="#003152" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
             <CategoryPicker style={styles.categoryPicker} selectedCategory={category} onClick={selectCategory} />
             <ScrollView>
                 {postData.map(item => (
@@ -149,10 +149,10 @@ export default function Forum() {
                             <Text>{item.post.substring(0, 400)}...</Text>
                         </Card.Content>
                         <Card.Actions>
-                            <Button labelStyle={{ color: isVoted(item) == 'up' ? '#64b0a8' : 'black' }} onPress={() => { Votes('up', item) }} color="#64b0a8" icon="arrow-up"></Button>
+                            <Button labelStyle={{ color: isVoted(item) == 'up' ? 'lightblue' : 'black' }} onPress={() => { Votes('up', item) }} color="#003152" icon="arrow-up"></Button>
                             <Text>{getVote(item)}</Text>
-                            <Button labelStyle={{ color: isVoted(item) == 'down' ? '#64b0a8' : 'black' }} onPress={() => { Votes('down', item) }} color="#64b0a8" icon="arrow-down"></Button>
-                            <Button onPress={() => { setForum(item), setComment(true) }} color='#64b0a8' labelStyle={{ color: 'black' }} icon="comment"></Button>
+                            <Button labelStyle={{ color: isVoted(item) == 'down' ? 'lightblue' : 'black' }} onPress={() => { Votes('down', item) }} color="#003152" icon="arrow-down"></Button>
+                            <Button onPress={() => { setForum(item), setComment(true) }} color='#003152' labelStyle={{ color: 'black' }} icon="comment"></Button>
                         </Card.Actions>
                     </Card>
                 ))}

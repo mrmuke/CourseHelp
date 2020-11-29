@@ -29,7 +29,7 @@ export default function CreateGroup(props) {
         {showSubjects && <><Searchbar onChangeText={text => setSubjectFilter(text)} />{subjects.filter(subject => subject.toLowerCase().startsWith(subjectFilter.toLowerCase())).map(subject =>
             <Button key={subject} style={{ display: 'flex' }} mode="contained" color="white" onPress={() => { setSubject(subject); setShowSubjects(false) }}>{subject}</Button>
         )}</>}
-        <TextInput placeholder="Group name... Be creative!" onChangeText={text => { if (text.length < 10) { setName(text) } }} style={{ width: 280, marginVertical: 25, borderBottomWidth: 1, height: 40, borderBottomColor: '#0a6067' }} value={name} />
+        <TextInput placeholder="Group name... Be creative!" onChangeText={text => { if (text.length < 10) { setName(text) } }} style={{ width: 280, marginVertical: 25, borderBottomWidth: 1, height: 40, borderBottomColor: '#003152' }} value={name} />
         <TextInput style={{ height: 200 }} multiline={true} placeholder="Group description..." onChangeText={text => setDescription(text)} value={description} />
 
         <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -37,7 +37,7 @@ export default function CreateGroup(props) {
 
             <Button onPress={() => setPublicity("private")} style={{ flex: 1 }} contentStyle={{ padding: 10 }} color="#eee" mode="contained" icon={publicity === "private" && "check"}><Caption>Private</Caption></Button>
         </View>
-        <Button onPress={createGroup} icon="cake" contentStyle={{ padding: 20 }} style={{ marginTop: 10 }} color="#0a6067" mode="contained">Survive HS Now!</Button>
+        <Button onPress={createGroup} icon="cake" contentStyle={{ padding: 20 }} style={{ marginTop: 10 }} color="#003152" mode="contained">Survive HS Now!</Button>
 
     </View>
 }

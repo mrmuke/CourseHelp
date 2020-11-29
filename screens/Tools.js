@@ -128,7 +128,7 @@ export default function Tools() {
   }
   return (
     <View contentContainerStyle={styles.container}>
-      <Appbar.Header style={{ backgroundColor: '#99bfb5', height: 44 }}>
+      <Appbar.Header style={{ backgroundColor: '#003152', height: 44 }}>
         <Appbar.Content titleStyle={{ color: 'white', fontWeight: 'bold' }} title="Tools" />
       </Appbar.Header>
       {(() => {
@@ -139,10 +139,10 @@ export default function Tools() {
                 <Title style={{ marginBottom: 20 }}>Notes:</Title>
                 <TextInput multiline={true} style={{ width: Dimensions.get('screen').width - 50, height: Dimensions.get('screen').height * 0.35 }} value={notes} onChangeText={text => setNotes(text)} />
                 <Button color="black" icon="pencil" onPress={() => copyToClipboard()}>Copy</Button>
-                <Button mode="outlined" style={{ marginTop: 30, width: Dimensions.get("screen").width - 200 }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} color="#99bfb5" onPress={() => {
+                <Button mode="outlined" style={{ marginTop: 30, width: Dimensions.get("screen").width - 200 }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} color="#003152" onPress={() => {
                   setNotes("");
                 }}><Text>New Recording</Text></Button>
-                <Button mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200 }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} color="#99bfb5" onPress={() => {
+                <Button mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200 }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} color="#003152" onPress={() => {
                   setVisibleRecording(false);
                   setNotes("");
                 }}><Text style={{ color: "white" }}>Back</Text></Button>
@@ -152,18 +152,18 @@ export default function Tools() {
             return (
               <View style={{ alignItems: 'center', flexDirection: "column", justifyContent: "center", height: Dimensions.get('screen').height - 142 }}>
                 {loading ? <><ActivityIndicator /></> :
-                  !isRecording ? <TouchableOpacity onPress={startRecording}><Icon style={{ color: '#346e67' }} size={100} name="microphone" /></TouchableOpacity> : <TouchableOpacity onPress={() => { stopRecording(); getTranscription() }} style={{ backgroundColor: 'red', borderRadius: 50, padding: 20 }}><Icon size={100} color="white" name="microphone-slash" /></TouchableOpacity>}
+                  !isRecording ? <TouchableOpacity onPress={startRecording}><Icon style={{ color: '#003152' }} size={100} name="microphone" /></TouchableOpacity> : <TouchableOpacity onPress={() => { stopRecording(); getTranscription() }} style={{ backgroundColor: 'red', borderRadius: 50, padding: 20 }}><Icon size={100} color="white" name="microphone-slash" /></TouchableOpacity>}
                 {(() => {
                   if (isRecording) {
                     return (
-                      <Button disabled={true} mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200, backgroundColor: '#99bfb5' }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} onPress={() => {
+                      <Button disabled={true} mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200, backgroundColor: '#003152' }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} onPress={() => {
                         setVisibleRecording(false);
                         setNotes("");
                       }}><Text >Back</Text></Button>
                     )
                   } else {
                     return (
-                      <Button mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200, backgroundColor: '#99bfb5' }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} onPress={() => {
+                      <Button mode="contained" style={{ marginTop: 20, width: Dimensions.get("screen").width - 200, backgroundColor: '#003152' }} contentStyle={{ paddingTop: 10, paddingBottom: 10 }} onPress={() => {
                         setVisibleRecording(false);
                         setNotes("");
                       }}><Text>Back</Text></Button>
@@ -177,16 +177,16 @@ export default function Tools() {
         } else {
           return (
             <View style={{ alignItems: 'center', flexDirection: "column", justifyContent: "center", height: Dimensions.get('screen').height - 142 }}>
-              <Button style={styles.microphoneButton} color="#99bfb5" mode="contained" contentStyle={{ padding: 40 }} onPress={() => {
+              <Button style={styles.microphoneButton} color="#003152" mode="contained" contentStyle={{ padding: 40 }} onPress={() => {
                 setVisibleRecording(true);
               }}>
                 <Icon style={{ color: 'white' }} size={50} name="microphone" />
               </Button>
-              <Text style={{ fontSize: 15, marginTop: 3, color: "#346e67" }}>Speech To Text</Text>
-              <Button style={styles.imageButton} color="#99bfb5" mode="contained" contentStyle={{ paddingLeft: 30, paddingRight: 30, paddingTop: 40, paddingBottom: 40 }} onPress={() => {
+              <Text style={{ fontSize: 15, marginTop: 3, color: "#003152" }}>Speech To Text</Text>
+              <Button style={styles.imageButton} color="#003152" mode="contained" contentStyle={{ paddingLeft: 30, paddingRight: 30, paddingTop: 40, paddingBottom: 40 }} onPress={() => {
                 setVisiblePhoto(true);
               }}><Icon color="#fff" size={50} name="camera" /></Button>
-              <Text style={{ fontSize: 15, marginTop: 3, color: "#346e67" }}>Photo To Text</Text>
+              <Text style={{ fontSize: 15, marginTop: 3, color: "#003152" }}>Photo To Text</Text>
             </View>
           )
         }

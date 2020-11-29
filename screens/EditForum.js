@@ -42,7 +42,8 @@ export default function EditForum({ user, exit }) {
             postedby: user.username,
             image: url,
             category: category,
-            uid: userUID
+            uid: userUID,
+            correct: 'none'
         })
         exit()
     }
@@ -67,7 +68,7 @@ export default function EditForum({ user, exit }) {
 
     return (
         <View>
-            <Appbar.Header style={{ backgroundColor: '#64b0a8', height: 44 }}>
+            <Appbar.Header style={{ backgroundColor: '#003152', height: 44 }}>
                 <Appbar.BackAction onPress={() => { exit(), revert() }} size={10} color='white' />
                 <Appbar.Content titleStyle={{ color: 'white', fontWeight: 'bold' }} title="Create" />
             </Appbar.Header>
@@ -82,7 +83,7 @@ export default function EditForum({ user, exit }) {
                                 style={{ flex: 1, margin: 20, paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: "#dcdde1" }}
                                 placeholder="Post Title (required) max 40 char. "
                                 onChangeText={postTitle => setPostTitle(postTitle)}
-                                underlineColor="#36485f"
+                                underlineColor="#003152"
                                 autoCorrect={true}
                             />
                             <TextInput
@@ -90,7 +91,7 @@ export default function EditForum({ user, exit }) {
                                 placeholder="Your text post"
                                 multiline={true}
                                 onChangeText={postText => setPostText(postText)}
-                                underlineColor="#36485f"
+                                underlineColor="#003152"
                                 autoCorrect={true}
 
                             />
@@ -99,10 +100,10 @@ export default function EditForum({ user, exit }) {
                     <View style={{ height: 420 }}>
                         <Title style={{ margin: 20, marginTop: 20, alignSelf: 'center' }}>Category</Title>
                         <TouchableOpacity style={{ margin: 5 }} onPress={() => setShowCategory(!showCategory)}>
-                            <Button mode="text" contentStyle={{ padding: 10 }} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{category}</Button>
+                            <Button mode="text" contentStyle={{ padding: 10 }} color='#003152' labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }} style={{ borderColor: '#dcdde1', borderWidth: 1 }}>{category}</Button>
                         </TouchableOpacity>
                         {showCategory && <>{categories.map(category =>
-                            <Button key={category} color='#36485f' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={styles.selector} mode="text" color="black" onPress={() => { setCategory(category) }}>{category}</Button>
+                            <Button key={category} color='#003152' labelStyle={{ fontWeight: 'normal', fontSize: 10, color: 'black' }} style={styles.selector} mode="text" color="black" onPress={() => { setCategory(category) }}>{category}</Button>
                         )}</>}
                     </View>
                     <View style={{ flexDirection: 'row' }}>
@@ -119,7 +120,7 @@ export default function EditForum({ user, exit }) {
                         source={{ uri: url }}
                     />
 
-                    <Button onPress={() => { check(), post() }} mode="outlined" color='#36485f'
+                    <Button onPress={() => { check(), post() }} mode="outlined" color='#003152'
                         labelStyle={{ fontWeight: 'normal', fontSize: 15, color: 'black' }}
                         style={{ width: 150, alignSelf: 'center', margin: 20 }} >Post</Button>
 
