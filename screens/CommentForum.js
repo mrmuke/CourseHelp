@@ -8,15 +8,7 @@ export default function CommentForum({ user, forumPost, exit }) {
     const [comment, setComment] = useState('')
     const [commentRender, setCommentRender] = useState(false)
 
-    //upvote downvote and select answer
-    //vreify dropdown ui
-    //my questions
-    //suggested groups based on school
-    //timer
-    //take a break kahoot
-    //suggested groups
-    //equation solver
-    //change questions
+
     function timeDifference(current, previous) {
 
         var msPerMinute = 60 * 1000;

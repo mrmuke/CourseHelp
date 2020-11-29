@@ -16,6 +16,7 @@ export default function Home(props) {
     const [selectedUser, setSelectedUser] = useState(null)
     const [viewInvites, setViewInvites] = useState(false)
     const [user, setUser] = useState(null)
+    const [suggestedGroup, setSuggestedGroup]= useState(null)
     useEffect(() => {
         firebase.database().ref('groups/').on('value', snapshot => {
             var list = []
@@ -32,16 +33,17 @@ export default function Home(props) {
         })
         getInvites()
     }, [])
+    
     function getInvites() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
             setUser(snap.val())
-            var item =snap.val().invites||[]
+            var item = snap.val().invites || []
             setInvites(item)
-            if(item.length==0){
+            if (item.length == 0) {
                 setViewInvites(false)
             }
-    })
-        
+        })
+
     }
     useEffect(() => {
         firebase.database().ref('users/').on('value', snap => {
@@ -64,48 +66,49 @@ export default function Home(props) {
     }, [userQuery])
     function sendInvite() {
         setUserQuery("")
-        if(group.pending&&group.pending.includes(selectedUser.id))
-{
-    removePending(selectedUser.id)
-    joinGroup(selectedUser.id)
+        if (group.pending && group.pending.includes(selectedUser.id)) {
+            removePending(selectedUser.id)
+            joinGroup(selectedUser.id)
 
-}
+        }
 
-else{
-        firebase.database().ref('users/'+ selectedUser.id).once('value',snap=>{
-            let invites = snap.val().invites||[]
-            invites.push(group.id)
-            firebase.database().ref('users/' + selectedUser.id).update({
-                invites
-            }).then(() => {
-                setSelectedUser(null)
+        else {
+            firebase.database().ref('users/' + selectedUser.id).once('value', snap => {
+                let invites = snap.val().invites || []
+                invites.push(group.id)
+                firebase.database().ref('users/' + selectedUser.id).update({
+                    invites
+                }).then(() => {
+                    setSelectedUser(null)
+                })
             })
-        })
-    }
-        
+        }
+
     }
     function leaveGroup(c) {
         Alert.alert(
             "Leave Group",
-        "Are you sure you want to leave this group?",
+            "Are you sure you want to leave this group?",
             [
-              {
-                text: "Cancel",
-                style: "cancel"
-              },
-              { text: "LEAVE", onPress: () =>  firebase.database().ref('groups/' + c.id).once('value', snapshot => {
-                var members = snapshot.val().members
-                members = members.filter(e => e != firebase.auth().currentUser.uid)
-    
-                firebase.database().ref('groups/' + c.id).update({
-                    members
-                })
-            }) }
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "LEAVE", onPress: () => firebase.database().ref('groups/' + c.id).once('value', snapshot => {
+                        var members = snapshot.val().members
+                        members = members.filter(e => e != firebase.auth().currentUser.uid)
+
+                        firebase.database().ref('groups/' + c.id).update({
+                            members
+                        })
+                    })
+                }
             ],
             { cancelable: false }
-          );
-      
-       
+        );
+
+
     }
 
     function joinGroup(c) {
@@ -122,7 +125,7 @@ else{
     }
 
     function removePending(c) {
-       
+
         firebase.database().ref('groups/' + group.id).once('value', snapshot => {
             var pending = snapshot.val().pending || []
             pending = pending.filter(e => e != c)
@@ -133,7 +136,7 @@ else{
             })
         })
     }
-    
+
     return (
         <View style={{ height: Dimensions.get('screen').height, }}>
             <ScrollView style={{ padding: 15 }}>
@@ -148,7 +151,7 @@ else{
 
                 {groups.map(group => (
                     <View key={group.id}>
-                        <TouchableOpacity onPress={()=>{setMembers(group.members), setDescription(group.description)}} style={{ flexDirection: 'row', alignSelf: 'flex-end', marginHorizontal: 20 }}>
+                        <TouchableOpacity onPress={() => { setMembers(group.members), setDescription(group.description) }} style={{ flexDirection: 'row', alignSelf: 'flex-end', marginHorizontal: 20 }}>
                             {group.members.map(c => (
                                 <User key={c} user={c} type="profile" />
                             ))}
@@ -175,14 +178,14 @@ else{
 
 
                 ))}
-                {user&&user.verified&&user.verified.map((c,index)=>(
+                {user && user.verified && user.verified.map((c, index) => (
                     <View key={index}>
-                    <Title>Because you like {c}</Title>
-                    <Courses course={c}/>
-                    
+                        <Title>Because you like {c}</Title>
+                        <Courses course={c} />
+
                     </View>
                 ))}
-                
+
             </ScrollView>
             <Provider>
                 <Portal>
@@ -205,7 +208,7 @@ else{
                                         <IconButton onPress={() => { removePending(c) }} icon="close" color="red"></IconButton>
                                     </View>
                                 </View>
-                        ))}</View>}
+                            ))}</View>}
 
                         <Title>Invite Member</Title>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -231,25 +234,25 @@ else{
 
 
 }
-function Courses({course}){
-    const [courses, setCourses]=useState([])
-    useEffect(()=>{
+function Courses({ course }) {
+    const [courses, setCourses] = useState([])
+    useEffect(() => {
         getRecommendedCourses(course)
-    },[])
-    async function getRecommendedCourses(name){
-        const response = await fetch('https://us-central1-coursehelp-8d1c8.cloudfunctions.net/courseFinder',{
-            subject:name,
-            method:'POST'
+    }, [])
+    async function getRecommendedCourses(name) {
+        const response = await fetch('https://us-central1-coursehelp-8d1c8.cloudfunctions.net/courseFinder', {
+            subject: name,
+            method: 'POST'
         })
         let res = await response.json()
         setCourses(res)
     }
-    return courses.map((course,index)=>(
-        <TouchableOpacity containerStyle={{backgroundColor:'white', padding:10, marginBottom:5}} key={index}  onPress={()=>Linking.openURL(course.link)}>
-        <Subheading style={{textDecorationLine:'underline'}}>{course.name}</Subheading>
-        <Caption>Course Difficulty: {course.difficulty} </Caption>
-        <Text>{course.rating}/5 by {course.teacher}</Text>
-        <View style={{alignSelf:'flex-end',  backgroundColor:'#300052', borderRadius:10, padding:2}}><Text style={{color:'white'}}>CourseEra</Text></View>
+    return courses.map((course, index) => (
+        <TouchableOpacity containerStyle={{ backgroundColor: 'white', padding: 10, marginBottom: 5 }} key={index} onPress={() => Linking.openURL(course.link)}>
+            <Subheading style={{ textDecorationLine: 'underline' }}>{course.name}</Subheading>
+            <Caption>Course Difficulty: {course.difficulty} </Caption>
+            <Text>{course.rating}/5 by {course.teacher}</Text>
+            <View style={{ alignSelf: 'flex-end', backgroundColor: '#300052', borderRadius: 10, padding: 2 }}><Text style={{ color: 'white' }}>CourseEra</Text></View>
         </TouchableOpacity>
     ))
 }

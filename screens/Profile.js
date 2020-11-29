@@ -22,19 +22,14 @@ export default function Profile(props) {
         //firebase.auth().signOut()
     }, [])
 
-    useEffect(()=> {
-        if(user != null){
-            console.log(similarity());
-        }
-    }, [user])
+
 
     function getUser() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snapshot => {
             setUser(snapshot.val())
         })
     }
-
-    function similarity(){
+    function similarity() {
         let finalArr = [];
         firebase.database().ref('users').once('value', snapshot => {
             let userArr = user["bio"].split(" ");
@@ -57,12 +52,13 @@ export default function Profile(props) {
             }
             for (let each in snapshot.val()) {
                 let person = snapshot.val()[each];
+                console.log(snapshot.val())
                 let school = 0;
                 let grade = 0;
-                if(user["grade"] == person["grade"]){
+                if (user["grade"] == person["grade"]) {
                     grade = 1;
                 }
-                if(user["school"]["item"] == person["school"]["item"]){
+                if (user["school"]["item"] == person["school"]["item"]) {
                     school = 1;
                 }
                 if (person["username"] != user["username"]) {
@@ -89,27 +85,30 @@ export default function Profile(props) {
                     let countTop = 0;
                     let countBottom1 = 0;
                     let countBottom2 = 0;
-                    for(let obj in userArrCount){
-                        for(let obj1 in arrCount){
+                    for (let obj in userArrCount) {
+                        for (let obj1 in arrCount) {
                             countBottom1 += (arrCount[obj1].count) * (arrCount[obj1].count)
-                            if(userArrCount[obj].word == arrCount[obj1].word){
+                            if (userArrCount[obj].word == arrCount[obj1].word) {
                                 count += (userArrCount[obj].count * arrCount[obj1].count)
                             }
                         }
                         countBottom2 += (userArrCount[obj].count) * (userArrCount[obj].count)
                     }
-                    countBottom2 = countBottom2/userArrCount.length;
-                    let cosineSimilarity = countTop/(countBottom1)*(countBottom2);
-                    let similarity = (cosineSimilarity*0.3) + (0.4*school) + (0.3*grade);
+                    countBottom2 = countBottom2 / userArrCount.length;
+                    let cosineSimilarity = countTop / (countBottom1) * (countBottom2);
+                    let similarity = (cosineSimilarity * 0.3) + (0.4 * school) + (0.3 * grade);
                     finalArr.push({
-                        username: person["username"],
+                        username: person.uid,
                         similarity: similarity
                     })
                 }
             }
         })
-        return finalArr;
-    }
+        return finalArr
+/*         firebase.database().ref('users/')
+ */    }
+
+
 
     if (user == null) {
         return null
@@ -149,7 +148,6 @@ export default function Profile(props) {
             setVerify(false);
         }} />
     }
-
     return (
         <Provider>
             <Portal>
