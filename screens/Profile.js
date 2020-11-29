@@ -17,6 +17,13 @@ export default function Profile(props) {
     });
 
     useEffect(() => {
+        for(var i = 1;i<=10;i++)
+        {
+            firebase.database().ref('verify/History/'+i).set({
+                question:"When was the constitution written?", answers:['1786','1796','1776','1502'],correct:3
+            })
+        }
+        
         /* firebase. */
         getUser();
         //firebase.auth().signOut()
@@ -24,7 +31,6 @@ export default function Profile(props) {
 
 
     function getUser() {
-        console.log(props.userID)
         firebase.database().ref('users/' + (props.userID?props.userID:firebase.auth().currentUser.uid)).once('value', snapshot => {
             console.log(snapshot.val())
             setUser(snapshot.val())

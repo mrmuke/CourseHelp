@@ -173,6 +173,8 @@ exports.audioToText = functions.https.onRequest((req, res) => {
   busboy.end(req.rawBody);
 })
 exports.courseFinder = functions.https.onRequest(async (req, res) => {
+  functions.logger.log(req.body);
+
   const baseUrl='https://www.coursera.org'
   const searchUrl ='https://www.coursera.org/search?query='+req.body.subject
   const result = await fetch(searchUrl)

@@ -168,6 +168,7 @@ export default function Discover() {
                     <View style={{flexDirection:'row', justifyContent:'space-between', backgroundColor:'white', padding:10, borderRadius:10, paddingHorizontal:30, margin:10, borderWidth:3, borderColor:'grey'}}>
                         
                         {suggested.map(c=>(
+                            c.members&&
                             <View style={{flexDirection:'column', borderRadius:50, alignItems:'center',}}>
                                     <UserPic  user={c.members[0]}/>
                             

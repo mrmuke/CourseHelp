@@ -212,7 +212,7 @@ export default function Home(props) {
                         <Title>Invite Member</Title>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             {!selectedUser ? <TextInput style={{ flex: 1, }} onChangeText={text => setUserQuery(text)} value={userQuery} placeholder="Invite member..." /> :
-                                <TouchableOpacity style={{ padding: 10, paddingHorizontal: 45, backgroundColor: '#eee' }} onPress={() => setSelectedUser(null)}><Text>{selectedUser.username}</Text></TouchableOpacity>}
+                               <View style={{flex:1}}><TouchableOpacity style={{ padding: 10, paddingHorizontal: 45, backgroundColor: '#eee' }} onPress={() => setSelectedUser(null)}><Text>{selectedUser.username}</Text></TouchableOpacity></View>}
 
 
                             {selectedUser && <IconButton onPress={sendInvite} style={{ backgroundColor: '#003152' }} color="white" icon="send" />}
@@ -239,10 +239,14 @@ function Courses({ course }) {
         getRecommendedCourses(course)
     }, [])
     async function getRecommendedCourses(name) {
-        const response = await fetch('https://us-central1-coursehelp-8d1c8.cloudfunctions.net/courseFinder', {
-            subject: name,
-            method: 'POST'
-        })
+        
+        const response = await fetch("https://us-central1-coursehelp-8d1c8.cloudfunctions.net/courseFinder", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+          },
+        body: JSON.stringify({subject:name})
+      });
         let res = await response.json()
         setCourses(res)
     }

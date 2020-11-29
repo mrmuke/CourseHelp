@@ -24,7 +24,7 @@ export default function VerifyQuiz({ exit }) {
     var ItemList = [];
 
     useEffect(() => {
-        firebase.database().ref('verify').once('value').then((snapshot) => {
+        firebase.database().ref('verify/').once('value').then((snapshot) => {
             setCourses(snapshot.val());
         });
     }, []);
@@ -34,7 +34,7 @@ export default function VerifyQuiz({ exit }) {
         var index = 1;
         if (menuText != "Pick a class") {
             for (let each of courses[menuText]) {
-                if (each != undefined) {
+                if (each) {
                     item.push(<QuestionComponent key={"A:" + index} courses={each} index={index} pickAnswer={(key, index) => {
                         var newObj = answer;
                         newObj[index] = key;
@@ -59,6 +59,7 @@ export default function VerifyQuiz({ exit }) {
         })
     }, [menuText]);
     for (let each in courses) {
+        
         ItemList.push(<Menu.Item key={each} onPress={() => { setMenuText(each); setVisible(false); }} titleStyle={{ color: 'black' }} style={{ flex: 1 }} title={each} />);
     }
 
@@ -71,6 +72,7 @@ export default function VerifyQuiz({ exit }) {
         }
         exit('check', menuText, correct);
     }
+    console.log(courses)
     return (
         <Provider>
             <ScrollView>
@@ -102,6 +104,5 @@ const styles = StyleSheet.create({
         flex: 1
     }
 });
-//Bill - change the questions
 //Michael - end cleanup suggested groups
 //Aaron -select answer  click on user in home and forum
