@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Linking, Dimensions, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from 'firebase'
-import { Button, Card, Title, Caption, Chip, IconButton, Provider, Portal, Dialog, Text, Badge, Modal, TextInput, Subheading } from 'react-native-paper';
+import { Button, Title, Caption, Chip, IconButton, Provider, Portal, Text, Badge, Modal, TextInput, Subheading } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 export default function Home(props) {
     const [groups, setGroups] = useState([])
@@ -15,6 +15,8 @@ export default function Home(props) {
     const [filteredUsers, setFilteredUsers] = useState([])
     const [selectedUser, setSelectedUser] = useState(null)
     const [viewInvites, setViewInvites] = useState(false)
+    const [user, setUser] = useState(null)
+    const [suggestedGroup, setSuggestedGroup]= useState(null)
     useEffect(() => {
         firebase.database().ref('groups/').on('value', snapshot => {
             var list = []
@@ -30,10 +32,11 @@ export default function Home(props) {
             setGroups(list)
         })
         getInvites()
-
     }, [])
+    
     function getInvites() {
         firebase.database().ref('users/' + firebase.auth().currentUser.uid).once('value', snap => {
+            setUser(snap.val())
             var item = snap.val().invites || []
             setInvites(item)
             if (item.length == 0) {
@@ -133,6 +136,7 @@ export default function Home(props) {
             })
         })
     }
+
     return (
         <View style={{ height: Dimensions.get('screen').height, }}>
             <ScrollView style={{ padding: 15 }}>
@@ -146,7 +150,7 @@ export default function Home(props) {
                 </View>
 
                 {groups.map(group => (
-                    <View key={group.id} style={{ marginVertical: 20 }}>
+                    <View key={group.id}>
                         <TouchableOpacity onPress={() => { setMembers(group.members), setDescription(group.description) }} style={{ flexDirection: 'row', alignSelf: 'flex-end', marginHorizontal: 20 }}>
                             {group.members.map(c => (
                                 <User key={c} user={c} type="profile" />
@@ -173,7 +177,13 @@ export default function Home(props) {
 
 
                 ))}
+                {user && user.verified && user.verified.map((c, index) => (
+                    <View key={index}>
+                        <Title>Because you like {c}</Title>
+                        <Courses course={c} />
 
+                    </View>
+                ))}
 
             </ScrollView>
             <Provider>
@@ -222,6 +232,28 @@ export default function Home(props) {
     );
 
 
+}
+function Courses({ course }) {
+    const [courses, setCourses] = useState([])
+    useEffect(() => {
+        getRecommendedCourses(course)
+    }, [])
+    async function getRecommendedCourses(name) {
+        const response = await fetch('https://us-central1-coursehelp-8d1c8.cloudfunctions.net/courseFinder', {
+            subject: name,
+            method: 'POST'
+        })
+        let res = await response.json()
+        setCourses(res)
+    }
+    return courses.map((course, index) => (
+        <TouchableOpacity containerStyle={{ backgroundColor: 'white', padding: 10, marginBottom: 5 }} key={index} onPress={() => Linking.openURL(course.link)}>
+            <Subheading style={{ textDecorationLine: 'underline' }}>{course.name}</Subheading>
+            <Caption>Course Difficulty: {course.difficulty} </Caption>
+            <Text>{course.rating}/5 by {course.teacher}</Text>
+            <View style={{ alignSelf: 'flex-end', backgroundColor: '#300052', borderRadius: 10, padding: 2 }}><Text style={{ color: 'white' }}>CourseEra</Text></View>
+        </TouchableOpacity>
+    ))
 }
 function User({ user, type }) {
     const [cur, setCur] = useState(null)

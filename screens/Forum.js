@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import * as firebase from 'firebase'
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, Card, Appbar } from 'react-native-paper';
+import { Button, Card, Appbar, Title } from 'react-native-paper';
 import EditForum from './EditForum';
 import CommentForum from './CommentForum'
 import 'react-native-get-random-values';
@@ -138,6 +138,9 @@ export default function Forum() {
                 <Appbar.Content titleStyle={{ color: 'white', fontWeight: 'bold' }} title="Forum" />
             </Appbar.Header>
             <Button mode="contained" onPress={() => setCreate(true)} color="#64b0a8" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
+            <View style={{ backgroundColor: '#003152', height: 75, justifyContent: 'flex-end' }}><Title style={{ textAlign: 'center', color: 'white', }}>Course Discussion Forum</Title></View>
+
+            <Button mode="contained" onPress={() => setCreate(true)} color="#4293f5" labelStyle={{ color: 'white', fontSize: 17 }} style={{ margin: 10, marginTop: 20 }}>+ Create</Button>
             <CategoryPicker style={styles.categoryPicker} selectedCategory={category} onClick={selectCategory} />
             <ScrollView>
                 {postData.map(item => (

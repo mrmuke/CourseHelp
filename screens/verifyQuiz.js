@@ -74,13 +74,13 @@ export default function VerifyQuiz({ exit }) {
     return (
         <Provider>
             <ScrollView>
-                <Menu
+                <View><Menu
                     visible={visible}
                     onDismiss={() => { setVisible(false) }}
-                    style={{ width: Dimensions.get('screen').width - 15, marginTop: 90 }}
-                    anchor={<Button style={{ marginTop: 30 }} color="#99bfb5" lableStyle={{ color: '#99bfb5' }} contentStyle={{ marginBottom: 30, marginTop: 30 }} onPress={() => { setVisible(true); }}>{menuText}</Button>}>
+                    style={{ marginTop: 90 }}
+                    anchor={<Button contentStyle={{ padding: 30 }} mode="contained" color="black" onPress={() => { setVisible(true); }}>{menuText}</Button>}>
                     {ItemList}
-                </Menu>
+                </Menu></View>
                 {questionList}
                 {(() => {
                     if (questionList.length > 0) {
@@ -98,5 +98,10 @@ export default function VerifyQuiz({ exit }) {
 }
 
 const styles = StyleSheet.create({
-
+    menuItem: {
+        flex: 1
+    }
 });
+//Bill -function change the questions equation solver
+//Michael - end cleanup take a break kahoot suggested groups
+//Aaron -select answer finish discussion
